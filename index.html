@@ -8,7 +8,7 @@
 <style>
 body{margin:0;font-family:Arial;color:white;text-align:center;overflow-x:hidden}
 
-/* Moving background */
+/* Moving photo background */
 .bg-strip{position:fixed;inset:0;z-index:-2;overflow:hidden;opacity:.25}
 .bg-track{display:flex;min-width:200%;animation:scrollPhotos 80s linear infinite}
 .bg-track img{height:100vh;width:auto;object-fit:cover;filter:blur(4px)}
@@ -17,9 +17,9 @@ body{margin:0;font-family:Arial;color:white;text-align:center;overflow-x:hidden}
 .screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;background:rgba(0,0,0,.45)}
 .hidden{display:none}
 
-.action-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);z-index:999}
-button{padding:12px 25px;font-size:18px;border:none;border-radius:25px;cursor:pointer;margin:10px;
-  background:linear-gradient(45deg,#ff4e50,#ff8fab);color:white}
+button{padding:12px 25px;font-size:18px;border:none;border-radius:25px;margin:10px;cursor:pointer;
+background:linear-gradient(45deg,#ff4e50,#ff8fab);color:white}
+.action-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%)}
 
 /* Text colors */
 h1{color:#ffccd5;text-shadow:0 0 20px #ff4e50}
@@ -30,28 +30,21 @@ p{color:#e0fbfc}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;width:100%;max-width:900px}
 .pgrid img{width:100%;height:130px;object-fit:cover;border-radius:12px;border:3px solid white;cursor:pointer}
 #viewImg{max-width:95%;max-height:85vh;border-radius:20px}
-#viewer{padding-bottom:100px;}
-#photogallery{padding-bottom:100px}
-#videos{padding-bottom:120px}
 
 /* Petals */
-.petal{
-  position:fixed;
-  top:-20px;
-  font-size:22px;
-  animation:fall 8s linear infinite;
-  z-index:1000;
-  pointer-events:none;
-}
-@keyframes fall{
-  to{transform:translateY(110vh) rotate(360deg);opacity:0}
-}
+.petal{position:fixed;top:-20px;font-size:22px;animation:fall 8s linear infinite;pointer-events:none}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
 
-/* Glow effect */
-.glowVideo{
-  box-shadow:0 0 25px #ff8fab, 0 0 60px #ff4e50;
-  border-radius:20px;
-}
+/* Glow video */
+.glowVideo{box-shadow:0 0 25px #ff8fab,0 0 60px #ff4e50;border-radius:20px}
+
+/* Final page magic */
+#final{background:black;overflow:hidden;position:relative}
+.star{position:absolute;width:2px;height:2px;background:white;animation:twinkle 2s infinite alternate}
+@keyframes twinkle{from{opacity:.2}to{opacity:1}}
+.envelope{font-size:90px;cursor:pointer;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+#loveText{max-width:80%;margin-top:30px;font-size:20px;color:#ffe066;text-shadow:0 0 10px #ff8fab}
 </style>
 </head>
 
@@ -62,7 +55,7 @@ p{color:#e0fbfc}
 
 <div id="s1" class="screen">
 <h2>Tumhare liye ek surprise hai 💌</h2>
-<div onclick="start()" style="font-size:80px;cursor:pointer">💖</div>
+<div onclick="start()" style="font-size:80px">💖</div>
 </div>
 
 <div id="s2" class="screen hidden">
@@ -88,22 +81,14 @@ p{color:#e0fbfc}
 
 <div id="videos" class="screen hidden">
 <h2>Veryyy prettyy princesss 🎬</h2>
-<video id="vid" controls playsinline></video>
+<video id="vid" controls playsinline width="320"></video>
 </div>
 
-<div id="flowers" class="screen hidden">
-<h2>Pick a flower 🌸</h2>
-<div style="font-size:70px">
-<span onclick="showFlower(1)">🌸</span>
-<span onclick="showFlower(2)">🌹</span>
-<span onclick="showFlower(3)">🌼</span>
-</div>
-<p id="flowerMsg"></p>
-<button id="flowerNext" class="action-btn" onclick="show('final')" style="display:none">Aur dekho aage meri princess 💖</button>
-</div>
-
+<!-- FINAL PAGE -->
 <div id="final" class="screen hidden">
-<h1>I love you forever meri princess ❤️</h1>
+  <div id="stars"></div>
+  <div class="envelope" onclick="openLetter()">💌</div>
+  <div id="loveText"></div>
 </div>
 
 <script>
@@ -112,7 +97,6 @@ const slide=document.getElementById("slide");
 const pgrid=document.getElementById("pgrid");
 const viewImg=document.getElementById("viewImg");
 const vid=document.getElementById("vid");
-const videosDiv=document.getElementById("videos");
 
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
@@ -121,7 +105,13 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg",
 "WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg"
+"WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.17 PM (1).jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
 ];
 
 let bg=document.getElementById("bgTrack");
@@ -151,7 +141,7 @@ function showPhotoGallery(){
  });
 }
 
-/* Effects */
+/* Video effects */
 function startPetals(){
  setInterval(()=>{
   let p=document.createElement("div");
@@ -179,46 +169,44 @@ function showVideoMessage(){
  },5000);
 }
 
-/* Videos */
 let vids=[
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.06.17%20PM.mp4"
 ];
-let special="WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4";
 let v=0;
 
 function startVideos(){show('videos');loadVideo()}
-
 function loadVideo(){
- vid.src=vids[v];
- vid.play();
+ vid.src=vids[v]; vid.play();
  vid.onplay=()=>music.pause();
- vid.onended=nextVideo;
+ vid.onended=()=>{v++; if(v<3) loadVideo(); else show('final')}
 
  if(v===0) startPetals();
  if(v===1) vid.classList.add("glowVideo");
  if(v===2) showVideoMessage();
 }
 
-function nextVideo(){
- v++;
- if(v<vids.length) loadVideo();
- else{
-  videosDiv.innerHTML=`<h2>One last surprise 💖</h2>
-  <video id="sp" controls autoplay src="${special}"></video>
-  <button class="action-btn" onclick="show('flowers')">Aur dekho aage meri princess 💖</button>`;
-  setTimeout(()=>music.play(),500);
- }
+/* Final stars + typing */
+for(let i=0;i<80;i++){
+ let s=document.createElement("div");
+ s.className="star";
+ s.style.top=Math.random()*100+"%";
+ s.style.left=Math.random()*100+"%";
+ document.getElementById("stars").appendChild(s);
 }
 
-function showFlower(n){
- document.getElementById("flowerMsg").innerHTML=[
- "You are the most beautiful part of my life 🌸",
- "My heart chose you forever 🌹",
- "Life with you feels like a garden 🌼"
- ][n-1];
- document.getElementById("flowerNext").style.display="block";
+function openLetter(){
+ document.querySelector(".envelope").style.display="none";
+ let msg="I didn’t make this website… I made this memory for us ❤️\n\nYou are the most beautiful part of my life, my princess.\nI love you forever. 💖";
+ let i=0, area=document.getElementById("loveText");
+ function type(){
+  if(i<msg.length){
+    area.innerHTML+=msg.charAt(i++);
+    setTimeout(type,40);
+  }
+ }
+ type();
 }
 </script>
 
