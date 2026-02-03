@@ -6,7 +6,6 @@
 <title>For My Princess ❤️</title>
 
 <style>
-/* ===== GLOBAL ===== */
 body{
     margin:0;
     font-family: Arial, sans-serif;
@@ -15,20 +14,15 @@ body{
     overflow:hidden;
 }
 
-/* Collage background */
+/* Background */
 body::before{
     content:"";
     position:fixed;
     inset:0;
     z-index:-1;
-    background:
-        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-        url("WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg"),
-        url("WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg"),
-        url("WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg");
-    background-size:cover,40%,40%,40%;
-    background-position:center,left top,right top,center bottom;
-    background-repeat:no-repeat;
+    background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+    url("WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg");
+    background-size:cover;
     filter:blur(8px);
     opacity:0.35;
 }
@@ -52,37 +46,39 @@ button{
     border-radius:25px;
     cursor:pointer;
     margin:10px;
+    position:relative;
 }
 
-/* Opening */
-#stars{position:absolute;width:100%;height:100%;}
-.star{position:absolute;width:2px;height:2px;background:white;animation:twinkle 2s infinite alternate;}
-@keyframes twinkle{from{opacity:0.2;}to{opacity:1;}}
-@keyframes pulse{
-0%{transform:scale(1);}
-50%{transform:scale(1.2);}
-100%{transform:scale(1);}
+/* Floral glow */
+h1,h2{
+    text-shadow:0 0 15px pink,0 0 25px violet;
 }
 
-/* Slideshow */
-#slide{
-    width:260px;height:260px;
-    border-radius:25px;
-    border:4px solid white;
-    object-fit:cover;
-    animation:photoAnim 1.2s ease;
+/* Petals */
+.petal{
+    position:fixed;
+    top:-20px;
+    font-size:22px;
+    animation:petalFall 8s linear infinite;
+    opacity:0.8;
+    pointer-events:none;
 }
-@keyframes photoAnim{
-0%{transform:scale(0.3) rotate(-15deg);opacity:0;}
-100%{transform:scale(1);opacity:1;}
+@keyframes petalFall{
+    0%{transform:translateY(0) rotate(0deg);}
+    100%{transform:translateY(110vh) rotate(360deg);}
 }
 
-/* Timeline */
-.timeline{display:flex;flex-direction:column;gap:12px;}
-.tbox{background:white;color:#ff4e50;padding:10px;border-radius:12px;}
+/* Gallery */
+.pgrid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+.pgrid img{
+    width:100%;height:100px;object-fit:cover;border-radius:10px;
+}
 
-/* Confetti */
-@keyframes fall{to{transform:translateY(110vh);opacity:0;}}
+@keyframes glow{from{text-shadow:0 0 10px pink;}to{text-shadow:0 0 30px red;}}
 </style>
 </head>
 
@@ -92,43 +88,48 @@ button{
 
 <!-- Opening -->
 <div id="s1" class="screen">
-    <div id="stars"></div>
-    <h2 id="typing"></h2>
-    <div onclick="start()" style="font-size:80px;animation:pulse 1.5s infinite;cursor:pointer">💖</div>
-    <p>Tap the heart</p>
+    <h2>A surprise is waiting for you 💌</h2>
+    <div onclick="start()" style="font-size:80px;cursor:pointer">💖</div>
 </div>
 
 <!-- Slideshow -->
 <div id="s2" class="screen hidden">
     <h2>Our Memories 📸</h2>
-    <img id="slide">
+    <img id="slide" style="width:260px;height:260px;border-radius:20px;">
     <button onclick="next()">Next</button>
+</div>
+
+<!-- Gallery -->
+<div id="photogallery" class="screen hidden">
+    <h2>All Memories 📸</h2>
+    <div class="pgrid" id="pgrid"></div>
+    <button onclick="show('timeline')">Next ❤️</button>
+</div>
+
+<div id="viewer" class="screen hidden" onclick="closeViewer()">
+    <img id="viewImg" style="max-width:90%;max-height:90%;">
 </div>
 
 <!-- Timeline -->
 <div id="timeline" class="screen hidden">
-    <h2>Our Love Timeline 🕰️💖</h2>
-    <div class="timeline">
-        <div class="tbox">💬 First chat</div>
-        <div class="tbox">📸 First photo</div>
-        <div class="tbox">😂 Best laugh</div>
-        <div class="tbox">❤️ Still in love</div>
-    </div>
-    <button onclick="show('letter')">Next 💌</button>
+    <h2>Our Timeline 🕰️</h2>
+    <button onclick="startVideos()">Next 🎬</button>
+</div>
+
+<!-- Videos -->
+<div id="videos" class="screen hidden">
+    <h2>Video Memories 🎬</h2>
+    <video id="vid" width="320" controls></video>
+    <button id="nextVideo" onclick="nextVideo()" style="display:none;">Next Video</button>
 </div>
 
 <!-- Letter -->
-<div id="letter" class="screen hidden" style="background:#fff0f5;color:#333;font-family:cursive">
+<div id="letter" class="screen hidden">
     <h2>My Love Letter 💌</h2>
-    <p style="max-width:600px">
-        My Princess,<br><br>
-        You are my happiness and my peace. I love you forever. ❤️<br><br>
-        — Your Life Partner
-    </p>
     <button onclick="show('s3')">Next ❤️</button>
 </div>
 
-<!-- Love Question -->
+<!-- Question -->
 <div id="s3" class="screen hidden">
     <h2>Do You Love Me? 😘</h2>
     <button onclick="love()">Yes ❤️</button>
@@ -140,44 +141,13 @@ button{
 
 <!-- Final -->
 <div id="final" class="screen hidden">
-    <h1>You Know Us So Well 😍</h1>
-    <p>I love you forever, My Princess ❤️<br>— Your Life Partner</p>
+    <h1>I love you forever ❤️</h1>
 </div>
 
 <script>
-// stars
-for(let i=0;i<80;i++){
- let s=document.createElement("div");
- s.className="star";
- s.style.top=Math.random()*100+"%";
- s.style.left=Math.random()*100+"%";
- document.getElementById("stars").appendChild(s);
-}
-
-// typing
-let msg="A surprise is waiting for you, My Princess… 💌";
-let idx=0;
-(function type(){
- if(idx<msg.length){
-  document.getElementById("typing").innerHTML+=msg.charAt(idx++);
-  setTimeout(type,60);
- }
-})();
-
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
-"WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
+"WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg"
 ];
 let i=0,q=0,noCount=0;
 
@@ -191,7 +161,7 @@ function next(){
  i++;
  if(i<images.length){
   document.getElementById('slide').src=images[i];
- } else show('timeline');
+ } else showPhotoGallery();
 }
 
 function show(id){
@@ -199,54 +169,84 @@ function show(id){
  document.getElementById(id).classList.remove('hidden');
 }
 
-function love(){ show('quiz'); showQuiz(); }
+/* gallery */
+function showPhotoGallery(){
+ show('photogallery');
+ let grid=document.getElementById("pgrid");
+ grid.innerHTML="";
+ images.forEach(src=>{
+  let img=document.createElement("img");
+  img.src=src;
+  img.onclick=()=>openViewer(src);
+  grid.appendChild(img);
+ });
+}
+function openViewer(src){
+ show('viewer');
+ document.getElementById('viewImg').src=src;
+}
+function closeViewer(){ show('photogallery'); }
 
-// Proper quiz
-let quiz=[
-{q:"Where did we first meet? 💕",o:["College","Instagram","Destiny 😍"],c:2},
-{q:"Who loves more? 😘",o:["Me","You"],c:0},
-{q:"Most beautiful girl? 👑",o:["My Princess 💖","Nobody"],c:0}
+/* videos */
+let vids=[
+"WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
+"WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
+"WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4"
 ];
+let special="WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4";
+let v=0;
 
+function startVideos(){ show('videos'); loadVideo(); }
+function loadVideo(){
+ let video=document.getElementById("vid");
+ video.src=vids[v];
+ video.play();
+ video.onended=()=>document.getElementById("nextVideo").style.display="inline-block";
+}
+function nextVideo(){
+ v++;
+ document.getElementById("nextVideo").style.display="none";
+ if(v<vids.length) loadVideo();
+ else playSpecial();
+}
+function playSpecial(){
+ document.getElementById("videos").innerHTML=
+ `<h2 style="animation:glow 2s infinite alternate">One last surprise 💖</h2>
+ <video width="320" controls autoplay src="${special}"></video>
+ <button onclick="show('letter')">Continue 💌</button>`;
+}
+
+/* quiz */
+function love(){ show('quiz'); showQuiz(); }
+let quiz=[
+{q:"Where did we first meet?",o:["College","Instagram","Destiny"],c:2}
+];
 function showQuiz(){
- if(q>=quiz.length){ confettiHearts(); show('final'); return; }
+ if(q>=quiz.length){ show('final'); return; }
  let d=quiz[q];
  document.getElementById('quiz').innerHTML=
  `<h2>${d.q}</h2>`+
- d.o.map((opt,i)=>`<button onclick="checkAns(${i})">${opt}</button>`).join("");
+ d.o.map((x,i)=>`<button onclick="checkAns(${i})">${x}</button>`).join("");
 }
-
-function checkAns(i){
- if(i===quiz[q].c){ alert("Correct ❤️"); }
- else{ alert("Hehe wrong 😜"); }
- q++; showQuiz();
-}
+function checkAns(i){ q++; showQuiz(); }
 
 function noTrick(){
  let btn=document.getElementById('no');
- let t=["Think again 🥺","Please? 💖","I’ll wait 😘","Press Yes ❤️"];
+ let t=["Think again 🥺","Please? 💖","Press Yes ❤️"];
  if(noCount<t.length){btn.innerText=t[noCount++];}
  else{btn.innerText="Yes ❤️";btn.onclick=love;}
 }
 
-function confettiHearts(){
- for(let i=0;i<30;i++){
-  let c=document.createElement("div");
-  c.innerHTML="💖";
-  c.style.position="fixed";
-  c.style.left=Math.random()*100+"vw";
-  c.style.top="-20px";
-  c.style.fontSize="24px";
-  c.style.animation="fall 3s linear forwards";
-  document.body.appendChild(c);
-  setTimeout(()=>c.remove(),3000);
- }
-}
+/* petals */
+setInterval(()=>{
+ let p=document.createElement("div");
+ p.className="petal";
+ p.innerHTML=["🌸","🌺","🌼"][Math.floor(Math.random()*3)];
+ p.style.left=Math.random()*100+"vw";
+ document.body.appendChild(p);
+ setTimeout(()=>p.remove(),8000);
+},500);
 </script>
 
 </body>
 </html>
-
-
-
-
