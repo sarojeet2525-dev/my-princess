@@ -16,7 +16,15 @@ body{margin:0;font-family:Arial;color:white;text-align:center;overflow:hidden}
 .hidden{display:none}
 
 button{padding:12px 25px;font-size:18px;border:none;border-radius:25px;cursor:pointer;margin:10px}
-.action-btn{position:absolute;bottom:30px;left:50%;transform:translateX(-50%)}
+
+/* ✅ FIXED BUTTON */
+.action-btn{
+  position:fixed;
+  bottom:15px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:999;
+}
 
 #slide{width:clamp(220px,40vw,320px);height:clamp(220px,40vw,320px);object-fit:cover;border-radius:25px;border:5px solid white}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;width:100%;max-width:900px}
@@ -24,10 +32,13 @@ button{padding:12px 25px;font-size:18px;border:none;border-radius:25px;cursor:po
 #viewImg{max-width:95%;max-height:85vh;border-radius:20px}
 video{width:clamp(260px,80vw,420px)}
 
+/* ✅ SPACE FOR CONTENT */
+#photogallery{padding-bottom:100px;}
+#videos{padding-bottom:120px;}
+
 @media(max-width:600px){
  .screen{padding-top:70px;justify-content:flex-start}
  #slide{width:88vw;height:88vw}
- .action-btn{width:92%;left:4%;transform:none}
  video{width:94vw}
 }
 </style>
@@ -81,10 +92,11 @@ video{width:clamp(260px,80vw,420px)}
 </div>
 
 <div id="final" class="screen hidden">
-<h1>I love you forever meri princess and aagr return gift dene ka mann kare toh i am always ready😙 ❤️</h1>
+<h1>I love you forever meri princess ❤️</h1>
 </div>
 
 <script>
+// IMAGES
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -162,4 +174,3 @@ flowerNext.style.display="block";
 
 </body>
 </html>
-
