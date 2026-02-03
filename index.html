@@ -1,46 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For My Princess ❤️</title>
 
 <style>
 body{margin:0;font-family:Arial;color:white;text-align:center;overflow-x:hidden}
-.screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;background:rgba(0,0,0,.45)}
-.hidden{display:none}
 
-/* Moving background */
+/* Background strip */
 .bg-strip{position:fixed;inset:0;z-index:-2;overflow:hidden;opacity:.25}
 .bg-track{display:flex;min-width:200%;animation:scrollPhotos 80s linear infinite}
-.bg-track img{height:100vh;filter:blur(4px)}
+.bg-track img{height:100vh;width:auto;object-fit:cover;filter:blur(4px)}
 @keyframes scrollPhotos{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-button{padding:12px 25px;border:none;border-radius:25px;background:#ff4e50;color:white}
-.action-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%)}
+/* Screens */
+.screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;background:rgba(0,0,0,.45);opacity:0;transform:translateY(30px);transition:.8s}
+.screen.show{opacity:1;transform:translateY(0)}
+.hidden{display:none}
 
-/* Ken Burns */
-#slide{width:280px;height:280px;object-fit:cover;border-radius:20px;border:5px solid white;
-animation:kenburns 6s ease-in-out forwards;transition:opacity 1s}
-@keyframes kenburns{
-0%{transform:scale(1)}
-100%{transform:scale(1.25)}
-}
+/* Button */
+.action-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);padding:12px 25px;border:none;border-radius:25px;background:#ff4e50;color:white;font-size:16px}
+
+/* Slideshow */
+#slide{width:280px;height:280px;object-fit:cover;border-radius:20px;border:5px solid white;animation:kenburns 6s ease-in-out forwards;transition:opacity .8s}
+@keyframes kenburns{0%{transform:scale(1)}100%{transform:scale(1.25)}}
 .fadeOut{opacity:0}
 
 /* Message */
-#photoMsg{position:absolute;bottom:90px;background:rgba(0,0,0,.5);
-padding:8px 18px;border-radius:20px;color:#ffe066;opacity:0;transition:1s}
+#photoMsg{position:absolute;bottom:90px;background:rgba(0,0,0,.5);padding:8px 18px;border-radius:20px;color:#ffe066;opacity:0;transition:1s}
 .showMsg{opacity:1}
 
 /* Petals */
 .petal{position:fixed;top:-20px;font-size:22px;animation:fall 8s linear infinite}
 @keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
 
-/* Glow video */
+/* Glow */
 .glowVideo{box-shadow:0 0 40px #ff8fab;border-radius:20px}
 
-/* Final stars */
+/* Final page */
 #final{background:black;position:relative}
 .star{position:absolute;width:2px;height:2px;background:white;animation:twinkle 2s infinite alternate}
 @keyframes twinkle{from{opacity:.2}to{opacity:1}}
@@ -54,24 +51,19 @@ padding:8px 18px;border-radius:20px;color:#ffe066;opacity:0;transition:1s}
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<div id="s1" class="screen">
-<h2>Tap the heart 💖</h2>
+<div id="s1" class="screen show">
+<h2>Tumhare liye ek surprise hai 💌</h2>
 <div onclick="start()" style="font-size:80px">💖</div>
 </div>
 
 <div id="s2" class="screen hidden">
 <img id="slide">
 <div id="photoMsg"></div>
-<button class="action-btn" onclick="next()">Next ❤️</button>
-</div>
-
-<div id="photogallery" class="screen hidden">
-<div id="pgrid"></div>
-<button class="action-btn" onclick="show('timeline')">Next ❤️</button>
+<button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
 <div id="timeline" class="screen hidden">
-<button class="action-btn" onclick="startVideos()">Watch videos ❤️</button>
+<button class="action-btn" onclick="startVideos()">Abhi aur hai meri princess 💖</button>
 </div>
 
 <div id="videos" class="screen hidden">
@@ -90,6 +82,18 @@ const slide=document.getElementById("slide");
 const photoMsg=document.getElementById("photoMsg");
 const vid=document.getElementById("vid");
 
+/* Smooth show */
+function show(id){
+ document.querySelectorAll('.screen').forEach(s=>{
+  s.classList.remove('show');
+  setTimeout(()=>s.classList.add('hidden'),400);
+ });
+ const el=document.getElementById(id);
+ el.classList.remove('hidden');
+ setTimeout(()=>el.classList.add('show'),50);
+}
+
+/* Images */
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -106,6 +110,14 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
 ];
 
+/* Background */
+let bg=document.getElementById("bgTrack");
+images.concat(images).forEach(src=>{
+ let im=new Image();
+ im.src=src;
+ bg.appendChild(im);
+});
+
 let i=0;
 function start(){music.play();show('s2');slide.src=images[i]}
 
@@ -120,6 +132,7 @@ function next(){
  },800);
 }
 
+/* Cute messages */
 let msgs=["You are my favorite person ❤️","Every photo is a memory 💕","I love you more everyday 🌸"];
 let mi=0;
 setInterval(()=>{
@@ -131,11 +144,6 @@ setInterval(()=>{
  }
 },5000);
 
-function show(id){
- document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
- document.getElementById(id).classList.remove('hidden');
-}
-
 /* Videos */
 let vids=[
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
@@ -144,39 +152,33 @@ let vids=[
 ];
 let v=0;
 
-function startVideos(){show('videos');loadVideo()}
-
 function startPetals(){
  setInterval(()=>{
   let p=document.createElement("div");
-  p.className="petal";
-  p.innerHTML="🌸";
+  p.className="petal"; p.innerHTML="🌸";
   p.style.left=Math.random()*100+"vw";
   document.body.appendChild(p);
   setTimeout(()=>p.remove(),8000);
  },400);
 }
 
-function showVideoMessage(){
- setTimeout(()=>alert("You look cutest here ❤️"),5000);
-}
+function showVideoMessage(){setTimeout(()=>alert("You look cutest here ❤️"),5000);}
 
+function startVideos(){show('videos');loadVideo()}
 function loadVideo(){
- vid.src=vids[v];
- vid.play();
+ vid.src=vids[v]; vid.play();
  vid.onplay=()=>music.pause();
  vid.onended=()=>{
   v++;
   if(v<3) loadVideo();
   else{ music.play(); show('final'); }
  };
-
  if(v===0) startPetals();
  if(v===1) vid.classList.add("glowVideo");
  if(v===2) showVideoMessage();
 }
 
-/* Final */
+/* Final stars */
 for(let i=0;i<80;i++){
  let s=document.createElement("div");
  s.className="star";
@@ -184,7 +186,6 @@ for(let i=0;i<80;i++){
  s.style.left=Math.random()*100+"%";
  document.getElementById("stars").appendChild(s);
 }
-
 function openLetter(){
  document.querySelector(".envelope").style.display="none";
  document.getElementById("loveText").innerText="I made this memory for us ❤️";
