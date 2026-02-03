@@ -6,13 +6,31 @@
 <title>For My Princess ❤️</title>
 
 <style>
+/* ========== GLOBAL ========== */
 body{
     margin:0;
     font-family: Arial, sans-serif;
-    background:black;
     color:white;
     text-align:center;
     overflow:hidden;
+}
+
+/* Photo collage background */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    background:
+        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+        url("WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg"),
+        url("WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg"),
+        url("WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg");
+    background-size:cover, 40%, 40%, 40%;
+    background-position:center, left top, right top, center bottom;
+    background-repeat:no-repeat;
+    filter:blur(8px);
+    opacity:0.35;
 }
 
 .screen{
@@ -22,6 +40,8 @@ body{
     justify-content:center;
     align-items:center;
     padding:20px;
+    background:rgba(0,0,0,0.35);
+    backdrop-filter: blur(3px);
 }
 
 .hidden{display:none;}
@@ -35,16 +55,10 @@ button{
     margin:10px;
 }
 
-/* Opening animations */
-#stars{position:absolute;width:100%;height:100%;overflow:hidden;background:black;}
+/* ========== OPENING ANIMATION ========== */
+#stars{position:absolute;width:100%;height:100%;overflow:hidden;}
 .star{position:absolute;width:2px;height:2px;background:white;animation:twinkle 2s infinite alternate;}
 @keyframes twinkle{from{opacity:0.2;}to{opacity:1;}}
-
-.shoot{position:absolute;width:3px;height:3px;background:white;box-shadow:0 0 10px white;animation:shoot 1s linear forwards;}
-@keyframes shoot{from{transform:translate(0,0);}to{transform:translate(300px,300px);opacity:0;}}
-
-.float-heart{position:absolute;font-size:20px;animation:rise 6s linear infinite;}
-@keyframes rise{from{transform:translateY(0);}to{transform:translateY(-120vh);opacity:0;}}
 
 @keyframes pulse{
 0%{transform:scale(1);filter:drop-shadow(0 0 10px pink);}
@@ -52,10 +66,9 @@ button{
 100%{transform:scale(1);filter:drop-shadow(0 0 10px pink);}
 }
 
-#typing{font-size:22px;animation:glowText 2s ease-in-out infinite alternate;}
-@keyframes glowText{from{text-shadow:0 0 10px pink;}to{text-shadow:0 0 25px red;}}
+#typing{font-size:22px;margin-bottom:40px}
 
-/* Slideshow photo */
+/* ========== SLIDESHOW ========== */
 #slide{
     width:270px;height:270px;object-fit:cover;border-radius:25px;
     border:4px solid white;box-shadow:0 0 30px rgba(255,255,255,0.8);
@@ -67,10 +80,16 @@ button{
 100%{transform:scale(1) rotate(0);}
 }
 
-/* Memory grid */
+/* ========== GALLERY ========== */
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-top:20px;}
-.grid img{width:150px;height:150px;object-fit:cover;border-radius:15px;box-shadow:0 0 15px white;transition:0.4s;}
-.grid img:hover{transform:scale(1.1) rotate(2deg);}
+.grid img{width:150px;height:150px;object-fit:cover;border-radius:15px;box-shadow:0 0 15px white;}
+
+/* ========== TIMELINE ========== */
+.timeline{display:flex;flex-direction:column;gap:15px;margin-top:20px;}
+.tbox{background:white;color:#ff4e50;padding:12px;border-radius:15px;}
+
+/* Confetti */
+@keyframes fall{to{transform:translateY(110vh);opacity:0;}}
 </style>
 </head>
 
@@ -78,7 +97,7 @@ button{
 
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<!-- Opening Screen -->
+<!-- Opening -->
 <div id="s1" class="screen">
     <div id="stars"></div>
     <h2 id="typing"></h2>
@@ -89,23 +108,36 @@ button{
 <!-- Slideshow -->
 <div id="s2" class="screen hidden">
     <h2>Our Memories 📸</h2>
-    <img id="slide" src="">
+    <img id="slide">
     <button onclick="next()">Next</button>
 </div>
 
-<!-- Gallery -->
-<div id="gallery" class="screen hidden">
-    <h2>Our Memory Lane 📚💖</h2>
-    <div class="grid">
-        <img src="WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg">
-        <img src="WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg">
-        <img src="WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg">
-        <img src="WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg">
+<!-- Timeline -->
+<div id="timeline" class="screen hidden">
+    <h2>Our Love Timeline 🕰️💖</h2>
+    <div class="timeline">
+        <div class="tbox">💬 The day we first started talking</div>
+        <div class="tbox">📸 Our first photo together</div>
+        <div class="tbox">😂 The day we laughed the most</div>
+        <div class="tbox">❤️ Today — still in love</div>
     </div>
+    <button onclick="show('letter')">Next 💌</button>
+</div>
+
+<!-- Letter -->
+<div id="letter" class="screen hidden" style="background:#fff0f5;color:#333;font-family:cursive">
+    <h2>My Love Letter To You 💌</h2>
+    <p style="max-width:600px">
+        My Princess,<br><br>
+        Every day with you feels like a blessing.
+        You are my happiness, my peace, and my favorite person.
+        I love you more than words can say. ❤️<br><br>
+        — Your Life Partner
+    </p>
     <button onclick="show('s3')">Next ❤️</button>
 </div>
 
-<!-- Love Question -->
+<!-- Question -->
 <div id="s3" class="screen hidden">
     <h2>Do You Love Me? 😘</h2>
     <button onclick="love()">Yes ❤️</button>
@@ -122,7 +154,7 @@ button{
 </div>
 
 <script>
-// Opening stars
+// Stars
 for(let i=0;i<80;i++){
  let s=document.createElement("div");
  s.className="star";
@@ -130,27 +162,17 @@ for(let i=0;i<80;i++){
  s.style.left=Math.random()*100+"%";
  document.getElementById("stars").appendChild(s);
 }
-setInterval(()=>{
- let sh=document.createElement("div");
- sh.className="shoot";
- sh.style.top=Math.random()*50+"%";
- sh.style.left=Math.random()*50+"%";
- document.getElementById("stars").appendChild(sh);
- setTimeout(()=>sh.remove(),1000);
-},4000);
 
-// Typing text
+// Typing
 let msg="A surprise is waiting for you, My Princess… 💌";
 let idx=0;
-function typeEffect(){
+(function type(){
  if(idx<msg.length){
-  document.getElementById("typing").innerHTML+=msg.charAt(idx);
-  idx++; setTimeout(typeEffect,60);
+  document.getElementById("typing").innerHTML+=msg.charAt(idx++);
+  setTimeout(type,60);
  }
-}
-typeEffect();
+})();
 
-// Flow
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -168,7 +190,7 @@ function next(){
  i++;
  if(i<images.length){
   document.getElementById('slide').src=images[i];
- } else show('gallery');
+ } else show('timeline');
 }
 
 function show(id){
@@ -179,17 +201,17 @@ function show(id){
 function love(){ show('quiz'); showQuiz(); }
 
 let quiz=[
-{q:"Where did we first meet? 💕",o:["College","Instagram","Destiny 😍"],c:2},
-{q:"Who loves more? 😘",o:["Me","You"],c:0},
-{q:"Most beautiful girl? 👑",o:["My Princess 💖","Nobody"],c:0}
+{q:"Where did we first meet? 💕",o:["College","Instagram","Destiny 😍"]},
+{q:"Who loves more? 😘",o:["Me","You"]},
+{q:"Most beautiful girl? 👑",o:["My Princess 💖","Nobody"]}
 ];
 
 function showQuiz(){
- if(q>=quiz.length){show('final');return;}
+ if(q>=quiz.length){ confettiHearts(); show('final'); return; }
  let d=quiz[q];
  document.getElementById('quiz').innerHTML=
  `<h2>${d.q}</h2>`+
- d.o.map((x,i)=>`<button onclick="q++;showQuiz()">${x}</button>`).join("");
+ d.o.map(()=>`<button onclick="q++;showQuiz()">Answer</button>`).join("");
 }
 
 function noTrick(){
@@ -197,6 +219,20 @@ function noTrick(){
  let t=["Think again 🥺","Please? 💖","I’ll wait 😘","Press Yes ❤️"];
  if(noCount<t.length){btn.innerText=t[noCount++];}
  else{btn.innerText="Yes ❤️";btn.onclick=love;}
+}
+
+function confettiHearts(){
+ for(let i=0;i<30;i++){
+  let c=document.createElement("div");
+  c.innerHTML="💖";
+  c.style.position="fixed";
+  c.style.left=Math.random()*100+"vw";
+  c.style.top="-20px";
+  c.style.fontSize="24px";
+  c.style.animation="fall 3s linear forwards";
+  document.body.appendChild(c);
+  setTimeout(()=>c.remove(),3000);
+ }
 }
 </script>
 
