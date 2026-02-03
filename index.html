@@ -14,7 +14,7 @@ body{
     overflow:hidden;
 }
 
-/* ===== Moving photo strip background ===== */
+/* Moving photo strip background */
 .bg-strip{
     position:fixed;
     inset:0;
@@ -38,7 +38,7 @@ body{
     to{transform:translateX(-50%);}
 }
 
-/* Screen */
+/* Screen layout */
 .screen{
     height:100vh;
     display:flex;
@@ -47,6 +47,7 @@ body{
     align-items:center;
     padding:20px;
     background:rgba(0,0,0,0.45);
+    position:relative;
 }
 .hidden{display:none;}
 
@@ -59,7 +60,12 @@ button{
     margin:10px;
 }
 
-/* Photo styles */
+.action-btn{
+    position:absolute;
+    bottom:40px;
+}
+
+/* Photo animations */
 #slide{
     width:300px;
     height:300px;
@@ -68,7 +74,6 @@ button{
     border:5px solid white;
     box-shadow:0 0 30px white;
 }
-
 .pgrid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -88,7 +93,7 @@ button{
     border-radius:20px;
 }
 
-/* petals */
+/* Petals */
 .petal{
     position:fixed;
     top:-20px;
@@ -110,7 +115,7 @@ button{
 
 <!-- Opening -->
 <div id="s1" class="screen">
-    <h2>A surprise is waiting for you 💌</h2>
+    <h2>Tumhare liye ek surprise hai 💌</h2>
     <div onclick="start()" style="font-size:80px;cursor:pointer">💖</div>
 </div>
 
@@ -118,14 +123,14 @@ button{
 <div id="s2" class="screen hidden">
     <h2>Our Memories 📸</h2>
     <img id="slide">
-    <button onclick="next()">Next</button>
+    <button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
 <!-- Gallery -->
 <div id="photogallery" class="screen hidden">
-    <h2>All Memories 📸</h2>
+    <h2>hamaare kaarname 📸</h2>
     <div class="pgrid" id="pgrid"></div>
-    <button onclick="show('timeline')">Next ❤️</button>
+    <button class="action-btn" onclick="show('timeline')">Aur dekho aage meri princess 💖</button>
 </div>
 
 <div id="viewer" class="screen hidden" onclick="closeViewer()">
@@ -135,23 +140,22 @@ button{
 <!-- Timeline -->
 <div id="timeline" class="screen hidden">
     <h2>Our Timeline 🕰️</h2>
-    <button onclick="startVideos()">Next 🎬</button>
+    <button class="action-btn" onclick="startVideos()">Abhi aur hai meri princess 💖</button>
 </div>
 
 <!-- Videos -->
 <div id="videos" class="screen hidden">
     <h2>Video Memories 🎬</h2>
     <video id="vid" width="320" controls></video>
-    <button id="nextVideo" onclick="nextVideo()" style="display:none;">Next Video</button>
 </div>
 
 <!-- Letter -->
 <div id="letter" class="screen hidden">
     <h2>My Love Letter 💌</h2>
-    <button onclick="show('flowers')">Next ❤️</button>
+    <button class="action-btn" onclick="show('flowers')">Abhi nai abhi aur hai princess 💖</button>
 </div>
 
-<!-- Flower Surprise -->
+<!-- Flower Page -->
 <div id="flowers" class="screen hidden">
     <h2>Pick a flower 🌸</h2>
     <div style="font-size:70px;">
@@ -160,7 +164,9 @@ button{
         <span onclick="showFlower(3)">🌼</span>
     </div>
     <p id="flowerMsg" style="margin-top:30px;font-size:20px;"></p>
-    <button id="flowerNext" onclick="show('final')" style="display:none;">Continue ❤️</button>
+    <button id="flowerNext" class="action-btn" onclick="show('final')" style="display:none;">
+        Aur dekho aage meri princess 💖
+    </button>
 </div>
 
 <!-- Final -->
@@ -179,7 +185,7 @@ setInterval(()=>{
  setTimeout(()=>p.remove(),8000);
 },500);
 
-// Photos list
+// photos list
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -196,10 +202,9 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
 ];
 
-// Build moving background
+// build moving bg
 let bg=document.getElementById("bgTrack");
-let bgImages=images.concat(images);
-bgImages.forEach(src=>{
+images.concat(images).forEach(src=>{
  let img=document.createElement("img");
  img.src=src;
  bg.appendChild(img);
