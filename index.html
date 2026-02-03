@@ -6,46 +6,50 @@
 <title>For My Princess ❤️</title>
 
 <style>
-body{margin:0;font-family:Arial;color:white;text-align:center;overflow-x:hidden}
-.screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;background:rgba(0,0,0,.45)}
-.hidden{display:none}
+body{margin:0;font-family:Arial;color:white;text-align:center;overflow:hidden}
 
-/* Moving background */
+/* Romantic gradient */
+body::after{
+  content:"";position:fixed;inset:0;
+  background:linear-gradient(45deg,#ff4e5070,#ff8fab70,#ffe06660);
+  z-index:-1;animation:gradMove 12s ease infinite alternate;
+}
+@keyframes gradMove{from{opacity:.6}to{opacity:.9}}
+
+/* Background strip */
 .bg-strip{position:fixed;inset:0;z-index:-2;overflow:hidden;opacity:.25}
-.bg-track{display:flex;min-width:200%;animation:scrollPhotos 80s linear infinite}
-.bg-track img{height:100vh;filter:blur(4px)}
+.bg-track{display:flex;width:max-content;animation:scrollPhotos 80s linear infinite}
+.bg-track img{height:100vh;width:auto;object-fit:cover;filter:blur(4px)}
 @keyframes scrollPhotos{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-button{padding:12px 25px;border:none;border-radius:25px;background:#ff4e50;color:white}
-.action-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%)}
+/* Layout */
+.screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;background:rgba(0,0,0,.45);position:relative}
+.hidden{display:none}
+button{padding:12px 25px;font-size:18px;border:none;border-radius:25px;cursor:pointer;margin:10px}
+.action-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);z-index:999}
 
-/* Ken Burns */
-#slide{width:280px;height:280px;object-fit:cover;border-radius:20px;border:5px solid white;
-animation:kenburns 6s ease-in-out forwards;transition:opacity 1s}
-@keyframes kenburns{
-0%{transform:scale(1)}
-100%{transform:scale(1.25)}
+#slide{
+ width:clamp(220px,40vw,320px);
+ height:clamp(220px,40vw,320px);
+ object-fit:cover;border-radius:25px;border:5px solid white;
+ animation:kenburns 6s ease-in-out forwards;
 }
-.fadeOut{opacity:0}
+@keyframes kenburns{0%{transform:scale(1)}100%{transform:scale(1.25)}}
 
-/* Message */
-#photoMsg{position:absolute;bottom:90px;background:rgba(0,0,0,.5);
-padding:8px 18px;border-radius:20px;color:#ffe066;opacity:0;transition:1s}
-.showMsg{opacity:1}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;width:100%;max-width:900px}
+.pgrid img{width:100%;height:130px;object-fit:cover;border-radius:12px;border:3px solid white;cursor:pointer}
+#viewImg{max-width:95%;max-height:85vh;border-radius:20px}
+video{width:clamp(260px,80vw,420px)}
 
-/* Petals */
-.petal{position:fixed;top:-20px;font-size:22px;animation:fall 8s linear infinite}
 @keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
 
-/* Glow video */
-.glowVideo{box-shadow:0 0 40px #ff8fab;border-radius:20px}
-
-/* Final stars */
-#final{background:black;position:relative}
+/* Final page */
+#final{background:black;overflow:hidden;position:relative}
 .star{position:absolute;width:2px;height:2px;background:white;animation:twinkle 2s infinite alternate}
 @keyframes twinkle{from{opacity:.2}to{opacity:1}}
-.envelope{font-size:90px;cursor:pointer}
-#loveText{margin-top:20px;color:#ffe066}
+.envelope{font-size:90px;cursor:pointer;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+#loveText{margin-top:25px;color:#ffe066;font-size:20px;max-width:85%;text-shadow:0 0 12px #ff4e50}
 </style>
 </head>
 
@@ -54,42 +58,78 @@ padding:8px 18px;border-radius:20px;color:#ffe066;opacity:0;transition:1s}
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
+<!-- Opening -->
 <div id="s1" class="screen">
-<h2>Tap the heart 💖</h2>
-<div onclick="start()" style="font-size:80px">💖</div>
+  <h2>Tumhare liye ek surprise hai 💌</h2>
+  <div onclick="start()" style="font-size:80px;cursor:pointer">💖</div>
 </div>
 
+<!-- Slideshow -->
 <div id="s2" class="screen hidden">
-<img id="slide">
-<div id="photoMsg"></div>
-<button class="action-btn" onclick="next()">Next ❤️</button>
+  <h2>Kuch acchii yaadien 📸</h2>
+  <img id="slide">
+  <button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
+<!-- Gallery -->
 <div id="photogallery" class="screen hidden">
-<div id="pgrid"></div>
-<button class="action-btn" onclick="show('timeline')">Next ❤️</button>
+  <h2>hamaare kaarname 📸</h2>
+  <div class="pgrid" id="pgrid"></div>
+  <button class="action-btn" onclick="show('timeline')">Aur dekho aage meri princess 💖</button>
 </div>
 
+<div id="viewer" class="screen hidden" onclick="show('photogallery')">
+  <img id="viewImg">
+</div>
+
+<!-- Timeline -->
 <div id="timeline" class="screen hidden">
-<button class="action-btn" onclick="startVideos()">Watch videos ❤️</button>
+  <h2>Tughee to yaad hii hoga ye sab 🕰️</h2>
+  <button class="action-btn" onclick="startVideos()">Abhi aur hai meri princess 💖</button>
 </div>
 
+<!-- Videos -->
 <div id="videos" class="screen hidden">
-<video id="vid" controls playsinline width="320"></video>
+  <h2>Veryyy prettyy princesss 🎬</h2>
+  <video id="vid" controls playsinline></video>
 </div>
 
+<!-- Flowers -->
+<div id="flowers" class="screen hidden">
+  <h2>Pick a flower 🌸</h2>
+  <div style="font-size:70px">
+    <span onclick="showFlower(1)">🌸</span>
+    <span onclick="showFlower(2)">🌹</span>
+    <span onclick="showFlower(3)">🌼</span>
+  </div>
+  <p id="flowerMsg"></p>
+  <button id="flowerNext" class="action-btn" onclick="show('final')" style="display:none">
+    Aur dekho aage meri princess 💖
+  </button>
+</div>
+
+<!-- Final -->
 <div id="final" class="screen hidden">
-<div id="stars"></div>
-<div class="envelope" onclick="openLetter()">💌</div>
-<div id="loveText"></div>
+  <div id="stars"></div>
+  <div class="envelope" onclick="openLetter()">💌</div>
+  <div id="loveText"></div>
 </div>
 
 <script>
-const music=document.getElementById("music");
-const slide=document.getElementById("slide");
-const photoMsg=document.getElementById("photoMsg");
-const vid=document.getElementById("vid");
+// Falling petals
+setInterval(()=>{
+ let p=document.createElement("div");
+ p.innerHTML="🌸";
+ p.style.position="fixed";
+ p.style.top="-20px";
+ p.style.left=Math.random()*100+"vw";
+ p.style.fontSize="22px";
+ p.style.animation="fall 8s linear";
+ document.body.appendChild(p);
+ setTimeout(()=>p.remove(),8000);
+},800);
 
+// Images
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -102,81 +142,85 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg",
 "WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg",
 "WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
+"WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg"
 ];
 
-let i=0;
-function start(){music.play();show('s2');slide.src=images[i]}
+// Background load after ready
+window.onload=function(){
+ let bg=document.getElementById("bgTrack");
+ images.concat(images).forEach(s=>{
+   let img=document.createElement("img");
+   img.src=s;
+   bg.appendChild(img);
+ });
+};
 
-function next(){
- slide.classList.add("fadeOut");
- setTimeout(()=>{
-  i++;
-  if(i<images.length){
-   slide.src=images[i];
-   slide.classList.remove("fadeOut");
-  }else show('timeline');
- },800);
-}
-
-let msgs=["You are my favorite person ❤️","Every photo is a memory 💕","I love you more everyday 🌸"];
-let mi=0;
-setInterval(()=>{
- if(!document.getElementById("s2").classList.contains("hidden")){
-  photoMsg.innerText=msgs[mi];
-  photoMsg.classList.add("showMsg");
-  mi=(mi+1)%msgs.length;
-  setTimeout(()=>photoMsg.classList.remove("showMsg"),4000);
- }
-},5000);
-
+// Navigation
 function show(id){
  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
  document.getElementById(id).classList.remove('hidden');
 }
 
-/* Videos */
+let i=0;
+function start(){music.play();show('s2');slide.src=images[i]}
+function next(){i++; i<images.length? slide.src=images[i] : showPhotoGallery()}
+
+function showPhotoGallery(){
+ show('photogallery');
+ pgrid.innerHTML="";
+ images.forEach(s=>{
+  let img=document.createElement("img");
+  img.src=s;
+  img.onclick=()=>{show('viewer');viewImg.src=s};
+  pgrid.appendChild(img);
+ });
+}
+
+// Videos
 let vids=[
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.06.17%20PM.mp4"
 ];
+let special="WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4";
 let v=0;
 
 function startVideos(){show('videos');loadVideo()}
-
-function startPetals(){
- setInterval(()=>{
-  let p=document.createElement("div");
-  p.className="petal";
-  p.innerHTML="🌸";
-  p.style.left=Math.random()*100+"vw";
-  document.body.appendChild(p);
-  setTimeout(()=>p.remove(),8000);
- },400);
-}
-
-function showVideoMessage(){
- setTimeout(()=>alert("You look cutest here ❤️"),5000);
-}
-
 function loadVideo(){
- vid.src=vids[v];
- vid.play();
- vid.onplay=()=>music.pause();
- vid.onended=()=>{
-  v++;
-  if(v<3) loadVideo();
-  else{ music.play(); show('final'); }
- };
-
- if(v===0) startPetals();
- if(v===1) vid.classList.add("glowVideo");
- if(v===2) showVideoMessage();
+ let video=document.getElementById("vid");
+ video.src=vids[v];
+ video.play();
+ video.onplay=()=>music.pause();
+ video.onended=nextVideo;
+}
+function nextVideo(){
+ v++;
+ if(v<vids.length) loadVideo();
+ else showSpecialVideo();
+}
+function showSpecialVideo(){
+ let container=document.getElementById("videos");
+ container.innerHTML=`
+   <h2>One last surprise 💖</h2>
+   <video id="sp" controls autoplay playsinline src="${special}"></video>
+   <button class="action-btn" onclick="show('flowers')">Aur dekho aage meri princess 💖</button>
+ `;
+ let sp=document.getElementById("sp");
+ sp.onplay=()=>music.play();
 }
 
-/* Final */
+// Flowers
+function showFlower(n){
+ flowerMsg.innerHTML=[
+ "You are the most beautiful part of my life 🌸",
+ "My heart chose you forever 🌹",
+ "Life with you feels like a garden 🌼"
+ ][n-1];
+ flowerNext.style.display="block";
+}
+
+// Final stars + letter
 for(let i=0;i<80;i++){
  let s=document.createElement("div");
  s.className="star";
@@ -184,10 +228,12 @@ for(let i=0;i<80;i++){
  s.style.left=Math.random()*100+"%";
  document.getElementById("stars").appendChild(s);
 }
-
 function openLetter(){
  document.querySelector(".envelope").style.display="none";
- document.getElementById("loveText").innerText="I made this memory for us ❤️";
+ let msg="I made this memory for us ❤️";
+ let i=0, area=document.getElementById("loveText");
+ function type(){ if(i<msg.length){ area.innerHTML+=msg[i++]; setTimeout(type,40);} }
+ type();
 }
 </script>
 
