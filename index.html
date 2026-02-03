@@ -7,42 +7,28 @@
 
 <style>
 body{margin:0;font-family:Arial;color:white;text-align:center;overflow:hidden}
-
-/* Moving background */
 .bg-strip{position:fixed;inset:0;z-index:-2;overflow:hidden;opacity:.25}
 .bg-track{display:flex;width:max-content;animation:scrollPhotos 80s linear infinite}
 .bg-track img{height:100vh;width:auto;object-fit:cover;filter:blur(4px)}
 @keyframes scrollPhotos{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* Layout */
 .screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;background:rgba(0,0,0,.45);position:relative}
 .hidden{display:none}
 
 button{padding:12px 25px;font-size:18px;border:none;border-radius:25px;cursor:pointer;margin:10px}
-.action-btn{position:absolute;bottom:35px;left:50%;transform:translateX(-50%)}
+.action-btn{position:absolute;bottom:30px;left:50%;transform:translateX(-50%)}
 
-#slide{width:clamp(220px,40vw,320px);height:clamp(220px,40vw,320px);object-fit:cover;border-radius:25px;border:5px solid white;box-shadow:0 0 30px white}
-
-.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:15px;width:100%;max-width:900px}
-.pgrid img{width:100%;height:140px;object-fit:cover;border-radius:15px;border:3px solid white;cursor:pointer}
+#slide{width:clamp(220px,40vw,320px);height:clamp(220px,40vw,320px);object-fit:cover;border-radius:25px;border:5px solid white}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;width:100%;max-width:900px}
+.pgrid img{width:100%;height:130px;object-fit:cover;border-radius:12px;border:3px solid white;cursor:pointer}
 #viewImg{max-width:95%;max-height:85vh;border-radius:20px}
+video{width:clamp(260px,80vw,420px)}
 
-video{width:clamp(260px,80vw,420px);height:auto}
-
-.petal{position:fixed;top:-20px;font-size:22px;animation:fall 8s linear infinite}
-@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
-
-/* ===== PHONE ADJUSTMENT (added) ===== */
-@media (max-width:600px){
-    .screen{padding-top:70px;justify-content:flex-start}
-    h2{font-size:19px;margin-bottom:15px}
-    #slide{width:88vw;height:88vw}
-    .pgrid{grid-template-columns:repeat(2,1fr);gap:8px}
-    .pgrid img{height:110px;border-radius:12px}
-    .action-btn{width:92%;left:4%;bottom:18px;transform:none}
-    button{font-size:14px;padding:10px 14px}
-    #viewImg{max-height:75vh}
-    video{width:94vw!important}
+@media(max-width:600px){
+ .screen{padding-top:70px;justify-content:flex-start}
+ #slide{width:88vw;height:88vw}
+ .action-btn{width:92%;left:4%;transform:none}
+ video{width:94vw}
 }
 </style>
 </head>
@@ -53,60 +39,125 @@ video{width:clamp(260px,80vw,420px);height:auto}
 <audio id="music" src="Perfect.mp3" loop></audio>
 
 <div id="s1" class="screen">
-    <h2>Tumhare liye ek surprise hai 💌</h2>
-    <div onclick="start()" style="font-size:80px;cursor:pointer">💖</div>
+<h2>Tumhare liye ek surprise hai 💌</h2>
+<div onclick="start()" style="font-size:80px;cursor:pointer">💖</div>
 </div>
 
 <div id="s2" class="screen hidden">
-    <h2>Kuch acchii yaadien 📸</h2>
-    <img id="slide">
-    <button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
+<h2>Kuch acchii yaadien 📸</h2>
+<img id="slide">
+<button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
 <div id="photogallery" class="screen hidden">
-    <h2>hamaare kaarname 📸</h2>
-    <div class="pgrid" id="pgrid"></div>
-    <button class="action-btn" onclick="show('timeline')">Aur dekho aage meri princess 💖</button>
+<h2>hamaare kaarname 📸</h2>
+<div class="pgrid" id="pgrid"></div>
+<button class="action-btn" onclick="show('timeline')">Aur dekho aage meri princess 💖</button>
 </div>
 
-<div id="viewer" class="screen hidden" onclick="closeViewer()">
-    <img id="viewImg">
+<div id="viewer" class="screen hidden" onclick="show('photogallery')">
+<img id="viewImg">
 </div>
 
 <div id="timeline" class="screen hidden">
-    <h2>Tughee to yaad hii hoga ye sab 🕰️</h2>
-    <button class="action-btn" onclick="startVideos()">Abhi aur hai meri princess 💖</button>
+<h2>Tughee to yaad hii hoga ye sab 🕰️</h2>
+<button class="action-btn" onclick="startVideos()">Abhi aur hai meri princess 💖</button>
 </div>
 
 <div id="videos" class="screen hidden">
-    <h2>Veryyy prettyy princesss 🎬</h2>
-    <video id="vid" controls playsinline></video>
-</div>
-
-<div id="letter" class="screen hidden">
-    <h2>My Love Letter 💌</h2>
-    <button class="action-btn" onclick="show('flowers')">Abhi nai abhi aur hai princess 💖</button>
+<h2>Veryyy prettyy princesss 🎬</h2>
+<video id="vid" controls playsinline></video>
 </div>
 
 <div id="flowers" class="screen hidden">
-    <h2>Pick a flower 🌸</h2>
-    <div style="font-size:70px">
-        <span onclick="showFlower(1)">🌸</span>
-        <span onclick="showFlower(2)">🌹</span>
-        <span onclick="showFlower(3)">🌼</span>
-    </div>
-    <p id="flowerMsg" style="margin-top:30px;font-size:20px"></p>
-    <button id="flowerNext" class="action-btn" onclick="show('final')" style="display:none">
-        Aur dekho aage meri princess 💖
-    </button>
+<h2>Pick a flower 🌸</h2>
+<div style="font-size:70px">
+<span onclick="showFlower(1)">🌸</span>
+<span onclick="showFlower(2)">🌹</span>
+<span onclick="showFlower(3)">🌼</span>
+</div>
+<p id="flowerMsg"></p>
+<button id="flowerNext" class="action-btn" onclick="show('final')" style="display:none">Aur dekho aage meri princess 💖</button>
 </div>
 
 <div id="final" class="screen hidden">
-    <h1>I love you forever meri princess and expecting some return gift if you like this 😙❤️</h1>
+<h1>I love you forever ❤️</h1>
 </div>
 
 <script>
-// (your entire JS remains exactly same — unchanged)
+let images=[
+"WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
+"WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
+"WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg"
+];
+
+// background
+let bg=document.getElementById("bgTrack");
+images.concat(images).forEach(s=>{let i=document.createElement("img");i.src=s;bg.appendChild(i)});
+
+let i=0;
+function start(){music.play();show('s2');slide.src=images[i]}
+function next(){i++;i<images.length?slide.src=images[i]:showPhotoGallery()}
+
+function show(id){
+document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+document.getElementById(id).classList.remove('hidden');
+}
+
+function showPhotoGallery(){
+show('photogallery');
+pgrid.innerHTML="";
+images.forEach(s=>{
+let img=document.createElement("img");
+img.src=s;
+img.onclick=()=>{show('viewer');viewImg.src=s};
+pgrid.appendChild(img);
+});
+}
+
+// MUSIC SYNC
+function syncMusic(v){
+v.onplay=()=>music.pause();
+v.onpause=()=>music.play();
+v.onended=()=>music.play();
+}
+
+// VIDEOS
+let vids=[
+"WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
+"WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
+"WhatsApp%20Video%202026-02-03%20at%202.06.17%20PM.mp4"
+];
+let special="WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4";
+let v=0;
+
+function startVideos(){show('videos');loadVideo()}
+function loadVideo(){
+vid.src=vids[v];vid.play();syncMusic(vid);vid.onended=nextVideo
+}
+function nextVideo(){
+v++;
+if(v<vids.length)loadVideo();
+else{
+videos.innerHTML=`<h2>One last surprise 💖</h2>
+<video id="sp" controls autoplay src="${special}"></video>
+<button class="action-btn" onclick="show('flowers')">Aur dekho aage meri princess 💖</button>`;
+setTimeout(()=>syncMusic(document.getElementById("sp")),300);
+}
+}
+
+function showFlower(n){
+flowerMsg.innerHTML=[
+"You are the most beautiful part of my life 🌸",
+"My heart chose you forever 🌹",
+"Life with you feels like a garden 🌼"
+][n-1];
+flowerNext.style.display="block";
+}
 </script>
 
 </body>
