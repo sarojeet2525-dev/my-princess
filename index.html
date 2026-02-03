@@ -34,7 +34,7 @@ video{width:clamp(260px,80vw,420px);animation:fadeSlide .8s ease}
  video{width:94vw}
 }
 
-/* ANIMATIONS */
+/* Animations */
 @keyframes fadeSlide{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
 h1,h2,p{animation:fadeSlide 1s ease}
 @keyframes popIn{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
@@ -47,27 +47,64 @@ h1,h2,p{animation:fadeSlide 1s ease}
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<!-- YOUR HTML SAME -->
+<div id="s1" class="screen">
+<h2>Tumhare liye ek surprise hai 💌</h2>
+<div onclick="start()" style="font-size:80px;cursor:pointer">💖</div>
+</div>
+
+<div id="s2" class="screen hidden">
+<h2>Kuch acchii yaadien 📸</h2>
+<img id="slide">
+<button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
+</div>
+
+<div id="photogallery" class="screen hidden">
+<h2>hamaare kaarname 📸</h2>
+<div class="pgrid" id="pgrid"></div>
+<button class="action-btn" onclick="show('timeline')">Aur dekho aage meri princess 💖</button>
+</div>
+
+<div id="viewer" class="screen hidden" onclick="show('photogallery')">
+<img id="viewImg">
+</div>
+
+<div id="timeline" class="screen hidden">
+<h2>Tughee to yaad hii hoga ye sab 🕰️</h2>
+<button class="action-btn" onclick="startVideos()">Abhi aur hai meri princess 💖</button>
+</div>
+
+<div id="videos" class="screen hidden">
+<h2>Veryyy prettyy princesss 🎬</h2>
+<video id="vid" controls playsinline></video>
+</div>
+
+<div id="flowers" class="screen hidden">
+<h2>Pick a flower 🌸</h2>
+<div style="font-size:70px">
+<span onclick="showFlower(1)">🌸</span>
+<span onclick="showFlower(2)">🌹</span>
+<span onclick="showFlower(3)">🌼</span>
+</div>
+<p id="flowerMsg"></p>
+<button id="flowerNext" class="action-btn" onclick="show('final')" style="display:none">Aur dekho aage meri princess 💖</button>
+</div>
+
+<div id="final" class="screen hidden">
+<h1>I love you forever meri princess  and ha aagr return gift dena hai toh i am always ready😙❤️</h1>
+</div>
 
 <script>
-// IMAGES (same as yours)
-let images=[
-"WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
-"WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg"
-];
+const music=document.getElementById("music");
+const slide=document.getElementById("slide");
+const pgrid=document.getElementById("pgrid");
+const viewImg=document.getElementById("viewImg");
+const videosDiv=document.getElementById("videos");
+const flowerMsg=document.getElementById("flowerMsg");
+const flowerNext=document.getElementById("flowerNext");
+const vid=document.getElementById("vid");
 
-// background
+let images=[ /* your images */ ];
+
 let bg=document.getElementById("bgTrack");
 images.concat(images).forEach(s=>{let i=document.createElement("img");i.src=s;bg.appendChild(i)});
 
@@ -91,17 +128,8 @@ pgrid.appendChild(img);
 });
 }
 
-/* MUSIC ONLY MUTE FOR FIRST 3 */
-function muteMusicDuringVideo(v){
-v.onplay=()=>music.pause();
-}
-
-// VIDEOS
-let vids=[
-"WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
-"WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
-"WhatsApp%20Video%202026-02-03%20at%202.06.17%20PM.mp4"
-];
+// videos
+let vids=[ /* same video names */ ];
 let special="WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4";
 let v=0;
 
@@ -109,7 +137,7 @@ function startVideos(){show('videos');loadVideo()}
 function loadVideo(){
 vid.src=vids[v];
 vid.play();
-muteMusicDuringVideo(vid);
+vid.onplay=()=>music.pause();
 vid.onended=nextVideo;
 }
 
@@ -117,10 +145,10 @@ function nextVideo(){
 v++;
 if(v<vids.length)loadVideo();
 else{
-videos.innerHTML=`<h2>One last surprise 💖</h2>
+videosDiv.innerHTML=`<h2>One last surprise 💖</h2>
 <video id="sp" controls autoplay src="${special}"></video>
 <button class="action-btn" onclick="show('flowers')">Aur dekho aage meri princess 💖</button>`;
-setTimeout(()=>music.play(),300);
+setTimeout(()=>music.play(),500);
 }
 }
 
