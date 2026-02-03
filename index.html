@@ -6,7 +6,7 @@
 <title>For My Princess ❤️</title>
 
 <style>
-/* ========== GLOBAL ========== */
+/* ===== GLOBAL ===== */
 body{
     margin:0;
     font-family: Arial, sans-serif;
@@ -15,7 +15,7 @@ body{
     overflow:hidden;
 }
 
-/* Photo collage background */
+/* Collage background */
 body::before{
     content:"";
     position:fixed;
@@ -26,8 +26,8 @@ body::before{
         url("WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg"),
         url("WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg"),
         url("WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg");
-    background-size:cover, 40%, 40%, 40%;
-    background-position:center, left top, right top, center bottom;
+    background-size:cover,40%,40%,40%;
+    background-position:center,left top,right top,center bottom;
     background-repeat:no-repeat;
     filter:blur(8px);
     opacity:0.35;
@@ -43,7 +43,6 @@ body::before{
     background:rgba(0,0,0,0.35);
     backdrop-filter: blur(3px);
 }
-
 .hidden{display:none;}
 
 button{
@@ -55,38 +54,32 @@ button{
     margin:10px;
 }
 
-/* ========== OPENING ANIMATION ========== */
-#stars{position:absolute;width:100%;height:100%;overflow:hidden;}
+/* Opening */
+#stars{position:absolute;width:100%;height:100%;}
 .star{position:absolute;width:2px;height:2px;background:white;animation:twinkle 2s infinite alternate;}
 @keyframes twinkle{from{opacity:0.2;}to{opacity:1;}}
-
 @keyframes pulse{
-0%{transform:scale(1);filter:drop-shadow(0 0 10px pink);}
-50%{transform:scale(1.2);filter:drop-shadow(0 0 25px red);}
-100%{transform:scale(1);filter:drop-shadow(0 0 10px pink);}
+0%{transform:scale(1);}
+50%{transform:scale(1.2);}
+100%{transform:scale(1);}
 }
 
-#typing{font-size:22px;margin-bottom:40px}
-
-/* ========== SLIDESHOW ========== */
+/* Slideshow */
 #slide{
-    width:270px;height:270px;object-fit:cover;border-radius:25px;
-    border:4px solid white;box-shadow:0 0 30px rgba(255,255,255,0.8);
+    width:260px;height:260px;
+    border-radius:25px;
+    border:4px solid white;
+    object-fit:cover;
     animation:photoAnim 1.2s ease;
 }
 @keyframes photoAnim{
 0%{transform:scale(0.3) rotate(-15deg);opacity:0;}
-60%{transform:scale(1.1) rotate(3deg);opacity:1;}
-100%{transform:scale(1) rotate(0);}
+100%{transform:scale(1);opacity:1;}
 }
 
-/* ========== GALLERY ========== */
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-top:20px;}
-.grid img{width:150px;height:150px;object-fit:cover;border-radius:15px;box-shadow:0 0 15px white;}
-
-/* ========== TIMELINE ========== */
-.timeline{display:flex;flex-direction:column;gap:15px;margin-top:20px;}
-.tbox{background:white;color:#ff4e50;padding:12px;border-radius:15px;}
+/* Timeline */
+.timeline{display:flex;flex-direction:column;gap:12px;}
+.tbox{background:white;color:#ff4e50;padding:10px;border-radius:12px;}
 
 /* Confetti */
 @keyframes fall{to{transform:translateY(110vh);opacity:0;}}
@@ -101,7 +94,7 @@ button{
 <div id="s1" class="screen">
     <div id="stars"></div>
     <h2 id="typing"></h2>
-    <div onclick="start()" style="font-size:80px;cursor:pointer;animation:pulse 1.5s infinite">💖</div>
+    <div onclick="start()" style="font-size:80px;animation:pulse 1.5s infinite;cursor:pointer">💖</div>
     <p>Tap the heart</p>
 </div>
 
@@ -116,28 +109,26 @@ button{
 <div id="timeline" class="screen hidden">
     <h2>Our Love Timeline 🕰️💖</h2>
     <div class="timeline">
-        <div class="tbox">💬 The day we first started talking</div>
-        <div class="tbox">📸 Our first photo together</div>
-        <div class="tbox">😂 The day we laughed the most</div>
-        <div class="tbox">❤️ Today — still in love</div>
+        <div class="tbox">💬 First chat</div>
+        <div class="tbox">📸 First photo</div>
+        <div class="tbox">😂 Best laugh</div>
+        <div class="tbox">❤️ Still in love</div>
     </div>
     <button onclick="show('letter')">Next 💌</button>
 </div>
 
 <!-- Letter -->
 <div id="letter" class="screen hidden" style="background:#fff0f5;color:#333;font-family:cursive">
-    <h2>My Love Letter To You 💌</h2>
+    <h2>My Love Letter 💌</h2>
     <p style="max-width:600px">
         My Princess,<br><br>
-        Every day with you feels like a blessing.
-        You are my happiness, my peace, and my favorite person.
-        I love you more than words can say. ❤️<br><br>
+        You are my happiness and my peace. I love you forever. ❤️<br><br>
         — Your Life Partner
     </p>
     <button onclick="show('s3')">Next ❤️</button>
 </div>
 
-<!-- Question -->
+<!-- Love Question -->
 <div id="s3" class="screen hidden">
     <h2>Do You Love Me? 😘</h2>
     <button onclick="love()">Yes ❤️</button>
@@ -154,7 +145,7 @@ button{
 </div>
 
 <script>
-// Stars
+// stars
 for(let i=0;i<80;i++){
  let s=document.createElement("div");
  s.className="star";
@@ -163,7 +154,7 @@ for(let i=0;i<80;i++){
  document.getElementById("stars").appendChild(s);
 }
 
-// Typing
+// typing
 let msg="A surprise is waiting for you, My Princess… 💌";
 let idx=0;
 (function type(){
@@ -200,10 +191,11 @@ function show(id){
 
 function love(){ show('quiz'); showQuiz(); }
 
+// Proper quiz
 let quiz=[
-{q:"Where did we first meet? 💕",o:["College","Instagram","Destiny 😍"]},
-{q:"Who loves more? 😘",o:["Me","You"]},
-{q:"Most beautiful girl? 👑",o:["My Princess 💖","Nobody"]}
+{q:"Where did we first meet? 💕",o:["College","Instagram","Destiny 😍"],c:2},
+{q:"Who loves more? 😘",o:["Me","You"],c:0},
+{q:"Most beautiful girl? 👑",o:["My Princess 💖","Nobody"],c:0}
 ];
 
 function showQuiz(){
@@ -211,7 +203,13 @@ function showQuiz(){
  let d=quiz[q];
  document.getElementById('quiz').innerHTML=
  `<h2>${d.q}</h2>`+
- d.o.map(()=>`<button onclick="q++;showQuiz()">Answer</button>`).join("");
+ d.o.map((opt,i)=>`<button onclick="checkAns(${i})">${opt}</button>`).join("");
+}
+
+function checkAns(i){
+ if(i===quiz[q].c){ alert("Correct ❤️"); }
+ else{ alert("Hehe wrong 😜"); }
+ q++; showQuiz();
 }
 
 function noTrick(){
