@@ -14,19 +14,31 @@ body{
     overflow:hidden;
 }
 
-/* Blurred photo collage background */
-body::before{
-    content:"";
+/* ===== Moving photo strip background ===== */
+.bg-strip{
     position:fixed;
     inset:0;
-    z-index:-1;
-    background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
-    url("WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg");
-    background-size:cover;
-    filter:blur(8px);
-    opacity:0.35;
+    z-index:-2;
+    overflow:hidden;
+    opacity:0.25;
+}
+.bg-track{
+    display:flex;
+    width:max-content;
+    animation:scrollPhotos 80s linear infinite;
+}
+.bg-track img{
+    height:100vh;
+    width:auto;
+    object-fit:cover;
+    filter:blur(4px);
+}
+@keyframes scrollPhotos{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
 }
 
+/* Screen */
 .screen{
     height:100vh;
     display:flex;
@@ -34,8 +46,7 @@ body::before{
     justify-content:center;
     align-items:center;
     padding:20px;
-    background:rgba(0,0,0,0.35);
-    backdrop-filter: blur(3px);
+    background:rgba(0,0,0,0.45);
 }
 .hidden{display:none;}
 
@@ -48,9 +59,36 @@ button{
     margin:10px;
 }
 
-/* Floral vibe */
-h1,h2{ text-shadow:0 0 15px pink,0 0 25px violet; }
+/* Photo styles */
+#slide{
+    width:300px;
+    height:300px;
+    object-fit:cover;
+    border-radius:25px;
+    border:5px solid white;
+    box-shadow:0 0 30px white;
+}
 
+.pgrid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+.pgrid img{
+    width:100%;
+    height:140px;
+    object-fit:cover;
+    border-radius:15px;
+    border:3px solid white;
+    cursor:pointer;
+}
+#viewImg{
+    max-width:90%;
+    max-height:90%;
+    border-radius:20px;
+}
+
+/* petals */
 .petal{
     position:fixed;
     top:-20px;
@@ -58,19 +96,15 @@ h1,h2{ text-shadow:0 0 15px pink,0 0 25px violet; }
     animation:fall 8s linear infinite;
 }
 @keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0;}}
-
-.pgrid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-}
-.pgrid img{
-    width:100%;height:100px;object-fit:cover;border-radius:10px;cursor:pointer;
-}
 </style>
 </head>
 
 <body>
+
+<!-- Moving Photo Background -->
+<div class="bg-strip">
+    <div class="bg-track" id="bgTrack"></div>
+</div>
 
 <audio id="music" src="Perfect.mp3" loop></audio>
 
@@ -83,11 +117,11 @@ h1,h2{ text-shadow:0 0 15px pink,0 0 25px violet; }
 <!-- Slideshow -->
 <div id="s2" class="screen hidden">
     <h2>Our Memories 📸</h2>
-    <img id="slide" style="width:260px;height:260px;border-radius:20px;">
+    <img id="slide">
     <button onclick="next()">Next</button>
 </div>
 
-<!-- Photo Gallery -->
+<!-- Gallery -->
 <div id="photogallery" class="screen hidden">
     <h2>All Memories 📸</h2>
     <div class="pgrid" id="pgrid"></div>
@@ -95,7 +129,7 @@ h1,h2{ text-shadow:0 0 15px pink,0 0 25px violet; }
 </div>
 
 <div id="viewer" class="screen hidden" onclick="closeViewer()">
-    <img id="viewImg" style="max-width:90%;max-height:90%;">
+    <img id="viewImg">
 </div>
 
 <!-- Timeline -->
@@ -114,18 +148,20 @@ h1,h2{ text-shadow:0 0 15px pink,0 0 25px violet; }
 <!-- Letter -->
 <div id="letter" class="screen hidden">
     <h2>My Love Letter 💌</h2>
-    <button onclick="show('s3')">Next ❤️</button>
+    <button onclick="show('flowers')">Next ❤️</button>
 </div>
 
-<!-- Question -->
-<div id="s3" class="screen hidden">
-    <h2>Do You Love Me? 😘</h2>
-    <button onclick="love()">Yes ❤️</button>
-    <button id="no" onclick="noTrick()">No 😜</button>
+<!-- Flower Surprise -->
+<div id="flowers" class="screen hidden">
+    <h2>Pick a flower 🌸</h2>
+    <div style="font-size:70px;">
+        <span onclick="showFlower(1)">🌸</span>
+        <span onclick="showFlower(2)">🌹</span>
+        <span onclick="showFlower(3)">🌼</span>
+    </div>
+    <p id="flowerMsg" style="margin-top:30px;font-size:20px;"></p>
+    <button id="flowerNext" onclick="show('final')" style="display:none;">Continue ❤️</button>
 </div>
-
-<!-- Quiz -->
-<div id="quiz" class="screen hidden"></div>
 
 <!-- Final -->
 <div id="final" class="screen hidden">
@@ -133,7 +169,7 @@ h1,h2{ text-shadow:0 0 15px pink,0 0 25px violet; }
 </div>
 
 <script>
-// Flower petals
+// petals
 setInterval(()=>{
  let p=document.createElement("div");
  p.className="petal";
@@ -143,7 +179,7 @@ setInterval(()=>{
  setTimeout(()=>p.remove(),8000);
 },500);
 
-// ALL photos
+// Photos list
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -160,7 +196,16 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
 ];
 
-let i=0,q=0,noCount=0;
+// Build moving background
+let bg=document.getElementById("bgTrack");
+let bgImages=images.concat(images);
+bgImages.forEach(src=>{
+ let img=document.createElement("img");
+ img.src=src;
+ bg.appendChild(img);
+});
+
+let i=0;
 
 function start(){
  document.getElementById('music').play();
@@ -180,7 +225,6 @@ function show(id){
  document.getElementById(id).classList.remove('hidden');
 }
 
-// Gallery
 function showPhotoGallery(){
  show('photogallery');
  let grid=document.getElementById("pgrid");
@@ -192,74 +236,22 @@ function showPhotoGallery(){
   grid.appendChild(img);
  });
 }
+
 function openViewer(src){
  show('viewer');
  document.getElementById('viewImg').src=src;
 }
 function closeViewer(){ show('photogallery'); }
 
-// Sync music with videos
-function syncMusicWithVideo(video){
- let music=document.getElementById("music");
- video.onplay=()=>music.pause();
- video.onpause=()=>music.play();
- video.onended=()=>music.play();
-}
+function startVideos(){ show('videos'); }
 
-// Videos
-let vids=[
-"WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
-"WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
-"WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4"
-];
-let special="WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4";
-let v=0;
-
-function startVideos(){ show('videos'); loadVideo(); }
-
-function loadVideo(){
- let video=document.getElementById("vid");
- video.src=vids[v];
- video.play();
- syncMusicWithVideo(video);
- video.onended=()=>document.getElementById("nextVideo").style.display="inline-block";
-}
-
-function nextVideo(){
- v++;
- document.getElementById("nextVideo").style.display="none";
- if(v<vids.length) loadVideo();
- else playSpecial();
-}
-
-function playSpecial(){
- document.getElementById("videos").innerHTML=
- `<h2 style="animation:glow 2s infinite alternate">One last surprise 💖</h2>
- <video id="specialVid" width="320" controls autoplay src="${special}"></video>
- <button onclick="show('letter')">Continue 💌</button>`;
- let sv=document.getElementById("specialVid");
- syncMusicWithVideo(sv);
-}
-
-// Quiz
-function love(){ show('quiz'); showQuiz(); }
-let quiz=[
-{q:"Where did we first meet?",o:["College","Instagram","Destiny"],c:2}
-];
-function showQuiz(){
- if(q>=quiz.length){ show('final'); return; }
- let d=quiz[q];
- document.getElementById('quiz').innerHTML=
- `<h2>${d.q}</h2>`+
- d.o.map((x,i)=>`<button onclick="checkAns(${i})">${x}</button>`).join("");
-}
-function checkAns(i){ q++; showQuiz(); }
-
-function noTrick(){
- let btn=document.getElementById('no');
- let t=["Think again 🥺","Please? 💖","Press Yes ❤️"];
- if(noCount<t.length){btn.innerText=t[noCount++];}
- else{btn.innerText="Yes ❤️";btn.onclick=love;}
+function showFlower(n){
+ let msg=document.getElementById("flowerMsg");
+ let btn=document.getElementById("flowerNext");
+ if(n===1) msg.innerHTML="You are the most beautiful part of my life 🌸";
+ if(n===2) msg.innerHTML="My heart chose you forever 🌹";
+ if(n===3) msg.innerHTML="Life with you feels like a garden 🌼";
+ btn.style.display="inline-block";
 }
 </script>
 
