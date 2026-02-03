@@ -5,39 +5,59 @@
 <title>For My Princess ❤️</title>
 
 <style>
-body{margin:0;font-family:Arial;color:white;text-align:center;overflow-x:hidden}
+body{margin:0;font-family:Arial;text-align:center;overflow-x:hidden;color:white}
 
-/* Background strip */
+/* ===== TEXT COLORS ===== */
+h1{color:#ffccd5;text-shadow:0 0 12px #ff4e50}
+h2{color:#ffe066;text-shadow:0 0 10px #ff8fab}
+p{color:#e0fbfc;text-shadow:0 0 8px #ffffff55}
+
+/* ===== BACKGROUND STRIP ===== */
 .bg-strip{position:fixed;inset:0;z-index:-2;overflow:hidden;opacity:.25}
 .bg-track{display:flex;min-width:200%;animation:scrollPhotos 80s linear infinite}
 .bg-track img{height:100vh;width:auto;object-fit:cover;filter:blur(4px)}
 @keyframes scrollPhotos{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* Screens */
-.screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;background:rgba(0,0,0,.45);opacity:0;transform:translateY(30px);transition:.8s}
+/* ===== SCREENS ===== */
+.screen{
+ min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+ padding:20px;background:rgba(0,0,0,.45);
+ opacity:0;transform:translateY(30px);transition:.8s
+}
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* Button */
-.action-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);padding:12px 25px;border:none;border-radius:25px;background:#ff4e50;color:white;font-size:16px}
+/* ===== BUTTON ===== */
+.action-btn{
+ position:fixed;bottom:15px;left:50%;transform:translateX(-50%);
+ padding:12px 25px;border:none;border-radius:25px;
+ background:#ff4e50;color:white;font-size:16px;font-weight:bold
+}
 
-/* Slideshow */
-#slide{width:280px;height:280px;object-fit:cover;border-radius:20px;border:5px solid white;animation:kenburns 6s ease-in-out forwards;transition:opacity .8s}
+/* ===== SLIDESHOW ===== */
+#slide{
+ width:280px;height:280px;object-fit:cover;border-radius:20px;border:5px solid white;
+ animation:kenburns 6s ease-in-out forwards;transition:opacity .8s
+}
 @keyframes kenburns{0%{transform:scale(1)}100%{transform:scale(1.25)}}
 .fadeOut{opacity:0}
 
-/* Message */
-#photoMsg{position:absolute;bottom:90px;background:rgba(0,0,0,.5);padding:8px 18px;border-radius:20px;color:#ffe066;opacity:0;transition:1s}
+/* ===== MESSAGE ===== */
+#photoMsg{
+ position:absolute;bottom:90px;background:rgba(0,0,0,.5);
+ padding:8px 18px;border-radius:20px;color:#ffe066;
+ opacity:0;transition:1s
+}
 .showMsg{opacity:1}
 
-/* Petals */
+/* ===== PETALS ===== */
 .petal{position:fixed;top:-20px;font-size:22px;animation:fall 8s linear infinite}
 @keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
 
-/* Glow */
+/* ===== GLOW ===== */
 .glowVideo{box-shadow:0 0 40px #ff8fab;border-radius:20px}
 
-/* Final page */
+/* ===== FINAL PAGE ===== */
 #final{background:black;position:relative}
 .star{position:absolute;width:2px;height:2px;background:white;animation:twinkle 2s infinite alternate}
 @keyframes twinkle{from{opacity:.2}to{opacity:1}}
@@ -51,25 +71,30 @@ body{margin:0;font-family:Arial;color:white;text-align:center;overflow-x:hidden}
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
+<!-- OPENING -->
 <div id="s1" class="screen show">
 <h2>Tumhare liye ek surprise hai 💌</h2>
 <div onclick="start()" style="font-size:80px">💖</div>
 </div>
 
+<!-- SLIDESHOW -->
 <div id="s2" class="screen hidden">
 <img id="slide">
 <div id="photoMsg"></div>
 <button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
+<!-- TIMELINE -->
 <div id="timeline" class="screen hidden">
 <button class="action-btn" onclick="startVideos()">Abhi aur hai meri princess 💖</button>
 </div>
 
+<!-- VIDEOS -->
 <div id="videos" class="screen hidden">
 <video id="vid" controls playsinline width="320"></video>
 </div>
 
+<!-- FINAL -->
 <div id="final" class="screen hidden">
 <div id="stars"></div>
 <div class="envelope" onclick="openLetter()">💌</div>
@@ -110,23 +135,28 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
 ];
 
-/* Background */
+/* Background FIX */
 let bg=document.getElementById("bgTrack");
+bg.innerHTML="";
 images.concat(images).forEach(src=>{
- let im=new Image();
- im.src=src;
- bg.appendChild(im);
+ let img=document.createElement("img");
+ img.src=src;
+ bg.appendChild(img);
 });
 
 let i=0;
-function start(){music.play();show('s2');slide.src=images[i]}
+function start(){
+ music.play();
+ show('s2');
+ slide.setAttribute("src", images[i]);
+}
 
 function next(){
  slide.classList.add("fadeOut");
  setTimeout(()=>{
   i++;
   if(i<images.length){
-   slide.src=images[i];
+   slide.setAttribute("src", images[i]);
    slide.classList.remove("fadeOut");
   }else show('timeline');
  },800);
