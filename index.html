@@ -6,9 +6,9 @@
 <title>For My Princess ❤️</title>
 
 <style>
-body{margin:0;font-family:Arial;color:white;text-align:center;overflow:hidden}
+body{margin:0;font-family:Arial;color:white;text-align:center;overflow-x:hidden}
 .bg-strip{position:fixed;inset:0;z-index:-2;overflow:hidden;opacity:.25}
-.bg-track{display:flex;width:max-content;animation:scrollPhotos 80s linear infinite}
+.bg-track{display:flex;min-width:200%;animation:scrollPhotos 80s linear infinite}
 .bg-track img{height:100vh;width:auto;object-fit:cover;filter:blur(4px)}
 @keyframes scrollPhotos{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
@@ -22,10 +22,25 @@ button{padding:12px 25px;font-size:18px;border:none;border-radius:25px;cursor:po
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;width:100%;max-width:900px}
 .pgrid img{width:100%;height:130px;object-fit:cover;border-radius:12px;border:3px solid white;cursor:pointer}
 #viewImg{max-width:95%;max-height:85vh;border-radius:20px}
+#viewer{padding-bottom:100px;}
 video{width:clamp(260px,80vw,420px)}
 
 #photogallery{padding-bottom:100px}
 #videos{padding-bottom:120px}
+
+/* ===== COLORFUL TEXT ANIMATION ===== */
+@keyframes gradientText {0%{background-position:0%}100%{background-position:200%}}
+h1, h2 {
+  background: linear-gradient(90deg,#ff4e50,#f9d423,#24c6dc,#ff4e50);
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation: gradientText 6s linear infinite;
+}
+@keyframes floatText {0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+p{color:#ffd6e0;animation: floatText 3s ease-in-out infinite;}
+button{color:white;box-shadow:0 0 10px #ff4e50,0 0 20px #ff4e50;transition:.3s}
+button:hover{box-shadow:0 0 20px #f9d423,0 0 40px #f9d423}
 </style>
 </head>
 
@@ -114,18 +129,8 @@ images.concat(images).forEach(s=>{
 });
 
 let i=0;
-
-function start(){
- music.play();
- show('s2');
- slide.src=images[i];
-}
-
-function next(){
- i++;
- if(i<images.length) slide.src=images[i];
- else showPhotoGallery();
-}
+function start(){music.play();show('s2');slide.src=images[i]}
+function next(){i++;i<images.length?slide.src=images[i]:showPhotoGallery()}
 
 function show(id){
  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
@@ -151,11 +156,7 @@ let vids=[
 let special="WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4";
 let v=0;
 
-function startVideos(){
- show('videos');
- loadVideo();
-}
-
+function startVideos(){show('videos');loadVideo()}
 function loadVideo(){
  vid.src=vids[v];
  vid.play();
