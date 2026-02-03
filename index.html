@@ -7,18 +7,17 @@
 <style>
 body{margin:0;font-family:Arial;text-align:center;overflow-x:hidden;color:white}
 
-/* ===== TEXT COLORS ===== */
+/* TEXT */
 h1{color:#ffccd5;text-shadow:0 0 12px #ff4e50}
 h2{color:#ffe066;text-shadow:0 0 10px #ff8fab}
-p{color:#e0fbfc;text-shadow:0 0 8px #ffffff55}
 
-/* ===== BACKGROUND STRIP ===== */
+/* BACKGROUND STRIP */
 .bg-strip{position:fixed;inset:0;z-index:-2;overflow:hidden;opacity:.25}
 .bg-track{display:flex;min-width:200%;animation:scrollPhotos 80s linear infinite}
 .bg-track img{height:100vh;width:auto;object-fit:cover;filter:blur(4px)}
 @keyframes scrollPhotos{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* ===== SCREENS ===== */
+/* SCREENS */
 .screen{
  min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
  padding:20px;background:rgba(0,0,0,.45);
@@ -27,14 +26,14 @@ p{color:#e0fbfc;text-shadow:0 0 8px #ffffff55}
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* ===== BUTTON ===== */
+/* BUTTON */
 .action-btn{
  position:fixed;bottom:15px;left:50%;transform:translateX(-50%);
  padding:12px 25px;border:none;border-radius:25px;
  background:#ff4e50;color:white;font-size:16px;font-weight:bold
 }
 
-/* ===== SLIDESHOW ===== */
+/* SLIDESHOW */
 #slide{
  width:280px;height:280px;object-fit:cover;border-radius:20px;border:5px solid white;
  animation:kenburns 6s ease-in-out forwards;transition:opacity .8s
@@ -42,7 +41,7 @@ p{color:#e0fbfc;text-shadow:0 0 8px #ffffff55}
 @keyframes kenburns{0%{transform:scale(1)}100%{transform:scale(1.25)}}
 .fadeOut{opacity:0}
 
-/* ===== MESSAGE ===== */
+/* MESSAGE */
 #photoMsg{
  position:absolute;bottom:90px;background:rgba(0,0,0,.5);
  padding:8px 18px;border-radius:20px;color:#ffe066;
@@ -50,14 +49,14 @@ p{color:#e0fbfc;text-shadow:0 0 8px #ffffff55}
 }
 .showMsg{opacity:1}
 
-/* ===== PETALS ===== */
+/* PETALS */
 .petal{position:fixed;top:-20px;font-size:22px;animation:fall 8s linear infinite}
 @keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
 
-/* ===== GLOW ===== */
+/* GLOW */
 .glowVideo{box-shadow:0 0 40px #ff8fab;border-radius:20px}
 
-/* ===== FINAL PAGE ===== */
+/* FINAL PAGE */
 #final{background:black;position:relative}
 .star{position:absolute;width:2px;height:2px;background:white;animation:twinkle 2s infinite alternate}
 @keyframes twinkle{from{opacity:.2}to{opacity:1}}
@@ -71,30 +70,25 @@ p{color:#e0fbfc;text-shadow:0 0 8px #ffffff55}
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<!-- OPENING -->
 <div id="s1" class="screen show">
 <h2>Tumhare liye ek surprise hai 💌</h2>
 <div onclick="start()" style="font-size:80px">💖</div>
 </div>
 
-<!-- SLIDESHOW -->
 <div id="s2" class="screen hidden">
 <img id="slide">
 <div id="photoMsg"></div>
 <button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
-<!-- TIMELINE -->
 <div id="timeline" class="screen hidden">
 <button class="action-btn" onclick="startVideos()">Abhi aur hai meri princess 💖</button>
 </div>
 
-<!-- VIDEOS -->
 <div id="videos" class="screen hidden">
 <video id="vid" controls playsinline width="320"></video>
 </div>
 
-<!-- FINAL -->
 <div id="final" class="screen hidden">
 <div id="stars"></div>
 <div class="envelope" onclick="openLetter()">💌</div>
@@ -107,18 +101,7 @@ const slide=document.getElementById("slide");
 const photoMsg=document.getElementById("photoMsg");
 const vid=document.getElementById("vid");
 
-/* Smooth show */
-function show(id){
- document.querySelectorAll('.screen').forEach(s=>{
-  s.classList.remove('show');
-  setTimeout(()=>s.classList.add('hidden'),400);
- });
- const el=document.getElementById(id);
- el.classList.remove('hidden');
- setTimeout(()=>el.classList.add('show'),50);
-}
-
-/* Images */
+/* IMAGES */
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -135,20 +118,32 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
 ];
 
-/* Background FIX */
-let bg=document.getElementById("bgTrack");
-bg.innerHTML="";
-images.concat(images).forEach(src=>{
- let img=document.createElement("img");
- img.src=src;
- bg.appendChild(img);
-});
+/* LOAD BACKGROUND AFTER PAGE READY */
+window.onload=function(){
+ let bg=document.getElementById("bgTrack");
+ images.concat(images).forEach(src=>{
+  let img=document.createElement("img");
+  img.src=src;
+  bg.appendChild(img);
+ });
+};
+
+/* SCREEN SHOW */
+function show(id){
+ document.querySelectorAll('.screen').forEach(s=>{
+  s.classList.remove('show');
+  setTimeout(()=>s.classList.add('hidden'),400);
+ });
+ const el=document.getElementById(id);
+ el.classList.remove('hidden');
+ setTimeout(()=>el.classList.add('show'),50);
+}
 
 let i=0;
 function start(){
  music.play();
  show('s2');
- slide.setAttribute("src", images[i]);
+ slide.src=images[i];
 }
 
 function next(){
@@ -156,13 +151,13 @@ function next(){
  setTimeout(()=>{
   i++;
   if(i<images.length){
-   slide.setAttribute("src", images[i]);
+   slide.src=images[i];
    slide.classList.remove("fadeOut");
   }else show('timeline');
  },800);
 }
 
-/* Cute messages */
+/* MESSAGES */
 let msgs=["You are my favorite person ❤️","Every photo is a memory 💕","I love you more everyday 🌸"];
 let mi=0;
 setInterval(()=>{
@@ -174,7 +169,7 @@ setInterval(()=>{
  }
 },5000);
 
-/* Videos */
+/* VIDEOS */
 let vids=[
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
@@ -192,8 +187,6 @@ function startPetals(){
  },400);
 }
 
-function showVideoMessage(){setTimeout(()=>alert("You look cutest here ❤️"),5000);}
-
 function startVideos(){show('videos');loadVideo()}
 function loadVideo(){
  vid.src=vids[v]; vid.play();
@@ -205,10 +198,9 @@ function loadVideo(){
  };
  if(v===0) startPetals();
  if(v===1) vid.classList.add("glowVideo");
- if(v===2) showVideoMessage();
 }
 
-/* Final stars */
+/* FINAL */
 for(let i=0;i<80;i++){
  let s=document.createElement("div");
  s.className="star";
