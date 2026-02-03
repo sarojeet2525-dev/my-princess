@@ -7,40 +7,51 @@
 
 <style>
 body{margin:0;font-family:Arial;color:white;text-align:center;overflow-x:hidden}
+
+/* Moving background */
 .bg-strip{position:fixed;inset:0;z-index:-2;overflow:hidden;opacity:.25}
 .bg-track{display:flex;min-width:200%;animation:scrollPhotos 80s linear infinite}
 .bg-track img{height:100vh;width:auto;object-fit:cover;filter:blur(4px)}
 @keyframes scrollPhotos{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-.screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;background:rgba(0,0,0,.45);position:relative}
+.screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;background:rgba(0,0,0,.45)}
 .hidden{display:none}
 
-button{padding:12px 25px;font-size:18px;border:none;border-radius:25px;cursor:pointer;margin:10px}
 .action-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);z-index:999}
+button{padding:12px 25px;font-size:18px;border:none;border-radius:25px;cursor:pointer;margin:10px;
+  background:linear-gradient(45deg,#ff4e50,#ff8fab);color:white}
+
+/* Text colors */
+h1{color:#ffccd5;text-shadow:0 0 20px #ff4e50}
+h2{color:#ffe066;text-shadow:0 0 10px #ff8fab}
+p{color:#e0fbfc}
 
 #slide{width:clamp(220px,40vw,320px);height:clamp(220px,40vw,320px);object-fit:cover;border-radius:25px;border:5px solid white}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;width:100%;max-width:900px}
 .pgrid img{width:100%;height:130px;object-fit:cover;border-radius:12px;border:3px solid white;cursor:pointer}
 #viewImg{max-width:95%;max-height:85vh;border-radius:20px}
 #viewer{padding-bottom:100px;}
-video{width:clamp(260px,80vw,420px)}
-
 #photogallery{padding-bottom:100px}
 #videos{padding-bottom:120px}
 
-/* ===== COLORFUL TEXT ANIMATION ===== */
-@keyframes gradientText {0%{background-position:0%}100%{background-position:200%}}
-h1, h2 {
-  background: linear-gradient(90deg,#ff4e50,#f9d423,#24c6dc,#ff4e50);
-  background-size:200% auto;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation: gradientText 6s linear infinite;
+/* Petals */
+.petal{
+  position:fixed;
+  top:-20px;
+  font-size:22px;
+  animation:fall 8s linear infinite;
+  z-index:1000;
+  pointer-events:none;
 }
-@keyframes floatText {0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-p{color:#ffd6e0;animation: floatText 3s ease-in-out infinite;}
-button{color:white;box-shadow:0 0 10px #ff4e50,0 0 20px #ff4e50;transition:.3s}
-button:hover{box-shadow:0 0 20px #f9d423,0 0 40px #f9d423}
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(360deg);opacity:0}
+}
+
+/* Glow effect */
+.glowVideo{
+  box-shadow:0 0 25px #ff8fab, 0 0 60px #ff4e50;
+  border-radius:20px;
+}
 </style>
 </head>
 
@@ -102,8 +113,6 @@ const pgrid=document.getElementById("pgrid");
 const viewImg=document.getElementById("viewImg");
 const vid=document.getElementById("vid");
 const videosDiv=document.getElementById("videos");
-const flowerMsg=document.getElementById("flowerMsg");
-const flowerNext=document.getElementById("flowerNext");
 
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
@@ -112,13 +121,7 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg",
 "WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg"
+"WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg"
 ];
 
 let bg=document.getElementById("bgTrack");
@@ -148,6 +151,35 @@ function showPhotoGallery(){
  });
 }
 
+/* Effects */
+function startPetals(){
+ setInterval(()=>{
+  let p=document.createElement("div");
+  p.className="petal";
+  p.innerHTML=["🌸","🌺","🌼"][Math.floor(Math.random()*3)];
+  p.style.left=Math.random()*100+"vw";
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(),8000);
+ },400);
+}
+
+function showVideoMessage(){
+ setTimeout(()=>{
+  let msg=document.createElement("div");
+  msg.innerText="You look the prettiest when you smile ❤️";
+  msg.style.position="fixed";
+  msg.style.bottom="80px";
+  msg.style.left="50%";
+  msg.style.transform="translateX(-50%)";
+  msg.style.background="rgba(0,0,0,0.6)";
+  msg.style.padding="10px 20px";
+  msg.style.borderRadius="20px";
+  msg.style.color="#fff";
+  document.body.appendChild(msg);
+ },5000);
+}
+
+/* Videos */
 let vids=[
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
@@ -157,11 +189,16 @@ let special="WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4";
 let v=0;
 
 function startVideos(){show('videos');loadVideo()}
+
 function loadVideo(){
  vid.src=vids[v];
  vid.play();
  vid.onplay=()=>music.pause();
  vid.onended=nextVideo;
+
+ if(v===0) startPetals();
+ if(v===1) vid.classList.add("glowVideo");
+ if(v===2) showVideoMessage();
 }
 
 function nextVideo(){
@@ -176,12 +213,12 @@ function nextVideo(){
 }
 
 function showFlower(n){
- flowerMsg.innerHTML=[
+ document.getElementById("flowerMsg").innerHTML=[
  "You are the most beautiful part of my life 🌸",
  "My heart chose you forever 🌹",
  "Life with you feels like a garden 🌼"
  ][n-1];
- flowerNext.style.display="block";
+ document.getElementById("flowerNext").style.display="block";
 }
 </script>
 
