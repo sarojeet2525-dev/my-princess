@@ -6,24 +6,65 @@
 <title>For My Princess ❤️</title>
 
 <style>
-body{margin:0;font-family:Arial;color:white;text-align:center;overflow:hidden;}
-.bg-strip{position:fixed;inset:0;z-index:-2;overflow:hidden;opacity:0.25;}
-.bg-track{display:flex;width:max-content;animation:scrollPhotos 80s linear infinite;}
-.bg-track img{height:100vh;width:auto;object-fit:cover;filter:blur(4px);}
-@keyframes scrollPhotos{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+body{margin:0;font-family:Arial;color:white;text-align:center;overflow:hidden}
 
-.screen{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;background:rgba(0,0,0,0.45);position:relative;}
-.hidden{display:none;}
-button{padding:12px 25px;font-size:18px;border:none;border-radius:25px;cursor:pointer;margin:10px;}
-.action-btn{position:absolute;bottom:40px;}
+/* Moving background */
+.bg-strip{position:fixed;inset:0;z-index:-2;overflow:hidden;opacity:.25}
+.bg-track{display:flex;width:max-content;animation:scrollPhotos 80s linear infinite}
+.bg-track img{height:100vh;width:auto;object-fit:cover;filter:blur(4px)}
+@keyframes scrollPhotos{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-#slide{width:300px;height:300px;object-fit:cover;border-radius:25px;border:5px solid white;box-shadow:0 0 30px white;}
-.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;}
-.pgrid img{width:100%;height:140px;object-fit:cover;border-radius:15px;border:3px solid white;cursor:pointer;}
-#viewImg{max-width:90%;max-height:90%;border-radius:20px;}
+/* Layout */
+.screen{
+    min-height:100vh;display:flex;flex-direction:column;
+    justify-content:center;align-items:center;
+    padding:20px;background:rgba(0,0,0,.45);
+    position:relative;box-sizing:border-box
+}
+.hidden{display:none}
 
-.petal{position:fixed;top:-20px;font-size:22px;animation:fall 8s linear infinite;}
-@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0;}}
+/* Buttons */
+button{
+    padding:12px 25px;font-size:18px;border:none;
+    border-radius:25px;cursor:pointer;margin:10px;max-width:90%
+}
+.action-btn{
+    position:absolute;bottom:35px;left:50%;
+    transform:translateX(-50%)
+}
+
+/* Slideshow */
+#slide{
+    width:clamp(220px,40vw,320px);
+    height:clamp(220px,40vw,320px);
+    object-fit:cover;border-radius:25px;
+    border:5px solid white;box-shadow:0 0 30px white
+}
+
+/* Gallery */
+.pgrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+    gap:15px;width:100%;max-width:900px
+}
+.pgrid img{
+    width:100%;height:140px;object-fit:cover;
+    border-radius:15px;border:3px solid white;cursor:pointer
+}
+#viewImg{max-width:95%;max-height:85vh;border-radius:20px}
+
+/* Video */
+video{width:clamp(260px,80vw,420px);height:auto}
+
+/* Petals */
+.petal{position:fixed;top:-20px;font-size:22px;animation:fall 8s linear infinite}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
+
+/* Small screens */
+@media(max-width:480px){
+    h2{font-size:20px}
+    button{font-size:15px;padding:10px 18px}
+}
 </style>
 </head>
 
@@ -40,7 +81,7 @@ button{padding:12px 25px;font-size:18px;border:none;border-radius:25px;cursor:po
 
 <!-- Slideshow -->
 <div id="s2" class="screen hidden">
-    <h2>Bass maii aur tum 📸</h2>
+    <h2>Our Memories 📸</h2>
     <img id="slide">
     <button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
 </div>
@@ -58,14 +99,14 @@ button{padding:12px 25px;font-size:18px;border:none;border-radius:25px;cursor:po
 
 <!-- Timeline -->
 <div id="timeline" class="screen hidden">
-    <h2>Tughe to yaad hii hogaa ye sab 🕰️</h2>
+    <h2>Our Timeline 🕰️</h2>
     <button class="action-btn" onclick="startVideos()">Abhi aur hai meri princess 💖</button>
 </div>
 
 <!-- Videos -->
 <div id="videos" class="screen hidden">
     <h2>Video Memories 🎬</h2>
-    <video id="vid" width="320" controls playsinline></video>
+    <video id="vid" controls playsinline></video>
 </div>
 
 <!-- Letter -->
@@ -74,16 +115,16 @@ button{padding:12px 25px;font-size:18px;border:none;border-radius:25px;cursor:po
     <button class="action-btn" onclick="show('flowers')">Abhi nai abhi aur hai princess 💖</button>
 </div>
 
-<!-- Flower Page -->
+<!-- Flower -->
 <div id="flowers" class="screen hidden">
     <h2>Pick a flower 🌸</h2>
-    <div style="font-size:70px;">
+    <div style="font-size:70px">
         <span onclick="showFlower(1)">🌸</span>
         <span onclick="showFlower(2)">🌹</span>
         <span onclick="showFlower(3)">🌼</span>
     </div>
-    <p id="flowerMsg" style="margin-top:30px;font-size:20px;"></p>
-    <button id="flowerNext" class="action-btn" onclick="show('final')" style="display:none;">
+    <p id="flowerMsg" style="margin-top:30px;font-size:20px"></p>
+    <button id="flowerNext" class="action-btn" onclick="show('final')" style="display:none">
         Aur dekho aage meri princess 💖
     </button>
 </div>
@@ -103,24 +144,10 @@ setInterval(()=>{
  setTimeout(()=>p.remove(),8000);
 },500);
 
-// IMAGES
-let images=[
-"WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
-"WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
-];
+// images
+let images=[/* your same image list here */];
 
-// moving bg AFTER images
+// background AFTER images
 let bg=document.getElementById("bgTrack");
 images.concat(images).forEach(src=>{
  let img=document.createElement("img");
@@ -138,9 +165,8 @@ function start(){
 
 function next(){
  i++;
- if(i<images.length){
-  document.getElementById('slide').src=images[i];
- } else showPhotoGallery();
+ if(i<images.length) document.getElementById('slide').src=images[i];
+ else showPhotoGallery();
 }
 
 function show(id){
@@ -160,18 +186,18 @@ function showPhotoGallery(){
  });
 }
 
-function openViewer(src){ show('viewer'); document.getElementById('viewImg').src=src; }
-function closeViewer(){ show('photogallery'); }
+function openViewer(src){show('viewer');viewImg.src=src}
+function closeViewer(){show('photogallery')}
 
-// ===== MUSIC SYNC =====
-function syncMusic(video){
- let music=document.getElementById("music");
- video.onplay=()=>music.pause();
- video.onpause=()=>music.play();
- video.onended=()=>music.play();
+// music sync
+function syncMusic(v){
+ let m=document.getElementById("music");
+ v.onplay=()=>m.pause();
+ v.onpause=()=>m.play();
+ v.onended=()=>m.play();
 }
 
-// ===== VIDEOS =====
+// videos
 let vids=[
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
@@ -180,7 +206,7 @@ let vids=[
 let special="WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4";
 let v=0;
 
-function startVideos(){ show('videos'); loadVideo(); }
+function startVideos(){show('videos');loadVideo()}
 
 function loadVideo(){
  let video=document.getElementById("vid");
@@ -192,26 +218,23 @@ function loadVideo(){
 
 function nextVideo(){
  v++;
- if(v<vids.length){ loadVideo(); }
+ if(v<vids.length) loadVideo();
  else{
-  document.getElementById("videos").innerHTML=
-  `<h2>One last surprise 💖</h2>
-   <video id="specialVid" width="320" controls autoplay src="${special}"></video>
-   <button class="action-btn" onclick="show('letter')">
-   Aur dekho aage meri princess 💖</button>`;
-  setTimeout(()=>syncMusic(document.getElementById("specialVid")),300);
+  videos.innerHTML=`<h2>One last surprise 💖</h2>
+  <video id="sp" controls autoplay src="${special}"></video>
+  <button class="action-btn" onclick="show('letter')">Aur dekho aage meri princess 💖</button>`;
+  setTimeout(()=>syncMusic(document.getElementById("sp")),300);
  }
 }
 
 function showFlower(n){
- let msg=document.getElementById("flowerMsg");
- let btn=document.getElementById("flowerNext");
- if(n===1) msg.innerHTML="You are the most beautiful part of my life 🌸";
- if(n===2) msg.innerHTML="My heart chose you forever 🌹";
- if(n===3) msg.innerHTML="Life with you feels like a garden 🌼";
- btn.style.display="inline-block";
+ flowerMsg.innerHTML=[
+ "You are the most beautiful part of my life 🌸",
+ "My heart chose you forever 🌹",
+ "Life with you feels like a garden 🌼"
+ ][n-1];
+ flowerNext.style.display="block";
 }
 </script>
-
 </body>
 </html>
