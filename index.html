@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,7 +39,6 @@ button{
 #yes{background:white;color:#ff4e50;}
 #no{background:black;color:white;position:absolute;}
 
-/* Cinematic slideshow photo */
 #slide{
     width:270px;
     height:270px;
@@ -47,7 +47,6 @@ button{
     border:4px solid white;
     box-shadow:0 0 30px rgba(255,255,255,0.8);
     animation: photoAnim 1.2s ease;
-    z-index:2;
 }
 
 @keyframes photoAnim{
@@ -56,21 +55,6 @@ button{
     100%{transform:scale(1) rotate(0);}
 }
 
-/* Hearts behind photo */
-.photo-bg{
-    position:absolute;
-    font-size:22px;
-    animation: floatHearts 4s linear infinite;
-    opacity:0.7;
-    z-index:1;
-}
-
-@keyframes floatHearts{
-    0%{transform:translateY(0);}
-    100%{transform:translateY(-120px);}
-}
-
-/* Memory Lane grid */
 .grid{
     display:grid;
     grid-template-columns: repeat(2, 1fr);
@@ -91,14 +75,25 @@ button{
     transform:scale(1.1) rotate(2deg);
 }
 
-/* Falling stickers */
+.photo-bg{
+    position:absolute;
+    font-size:22px;
+    animation: floatHearts 4s linear infinite;
+    opacity:0.7;
+}
+
+@keyframes floatHearts{
+    0%{transform:translateY(0);}
+    100%{transform:translateY(-120px);}
+}
+
 @keyframes fall{to{transform:translateY(110vh);}}
 </style>
 </head>
 
 <body>
 
-<audio id="music" src="Perfect.mp3"></audio>
+<audio id="music" src="Perfect.mp3" loop></audio>
 
 <!-- Screen 1 -->
 <div id="s1" class="screen">
@@ -114,7 +109,7 @@ button{
     <button onclick="next()">Next</button>
 </div>
 
-<!-- Memory Lane Gallery -->
+<!-- Memory Lane -->
 <div id="gallery" class="screen hidden">
     <h2>Our Memory Lane 📚💖</h2>
     <div class="grid">
@@ -126,15 +121,23 @@ button{
     <button onclick="show('s3')">Next ❤️</button>
 </div>
 
-<!-- Screen 3 Question -->
+<!-- Love Question -->
 <div id="s3" class="screen hidden">
     <h2>Do You Love Me? 😘</h2>
     <button id="yes" onclick="love()">Yes ❤️</button>
     <button id="no" onmouseover="run()">No 😜</button>
 </div>
 
+<!-- Quiz Screen -->
+<div id="quiz" class="screen hidden"></div>
+
+<!-- Final Screen -->
+<div id="final" class="screen hidden">
+    <h1>You Know Us So Well 😍</h1>
+    <p>I love you forever, My Princess ❤️<br>— Your Life Partner</p>
+</div>
+
 <script>
-// Your image names
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -142,7 +145,25 @@ let images=[
 ];
 
 let i=0;
-let score=0;
+let q=0;
+
+let quiz=[
+{
+    question:"Where did we first meet? 💕",
+    options:["College","Instagram","Somewhere special","Destiny 😍"],
+    correct:3
+},
+{
+    question:"Who loves more? 😘",
+    options:["You","Me","Both equally","No idea"],
+    correct:1
+},
+{
+    question:"Who is the most beautiful girl in the world? 👑",
+    options:["Actress","Neighbor","My Princess 💖","Nobody"],
+    correct:2
+}
+];
 
 function start(){
     document.getElementById('music').play();
@@ -172,7 +193,27 @@ function show(id){
 }
 
 function love(){
-    startGame();
+    show('quiz');
+    showQuiz();
+}
+
+function showQuiz(){
+    if(q>=quiz.length){
+        show('final');
+        return;
+    }
+    let data=quiz[q];
+    document.getElementById('quiz').innerHTML=`
+        <h2>${data.question}</h2>
+        ${data.options.map((opt,i)=>
+            `<button onclick="checkAns(${i})">${opt}</button>`
+        ).join("")}
+    `;
+}
+
+function checkAns(i){
+    q++;
+    showQuiz();
 }
 
 function run(){
@@ -183,7 +224,6 @@ function run(){
     btn.style.top=y+'px';
 }
 
-// Floating stickers
 function floatingStickers(){
     setInterval(()=>{
         let s=document.createElement("div");
@@ -198,7 +238,6 @@ function floatingStickers(){
     },800);
 }
 
-// Hearts behind slideshow photo
 function heartsBehindPhoto(){
     for(let k=0;k<6;k++){
         let h=document.createElement("div");
@@ -209,50 +248,6 @@ function heartsBehindPhoto(){
         document.body.appendChild(h);
         setTimeout(()=>h.remove(),4000);
     }
-}
-
-// Mini game
-function startGame(){
-    document.body.innerHTML=`
-    <div style="text-align:center;color:white">
-        <h2>Catch 5 Hearts to Unlock Surprise 💖</h2>
-        <h3>Score: <span id="sc">0</span></h3>
-    </div>`;
-    spawnHeart();
-}
-
-function spawnHeart(){
-    let h=document.createElement("div");
-    h.innerHTML="❤️";
-    h.style.position="absolute";
-    h.style.fontSize="40px";
-    moveHeart(h);
-    h.onclick=function(){
-        score++;
-        document.getElementById('sc').innerText=score;
-        h.remove();
-        if(score>=5){
-            finalMessage();
-        } else {
-            spawnHeart();
-        }
-    };
-    document.body.appendChild(h);
-}
-
-function moveHeart(h){
-    setInterval(()=>{
-        h.style.left=Math.random()*(window.innerWidth-50)+"px";
-        h.style.top=Math.random()*(window.innerHeight-50)+"px";
-    },800);
-}
-
-function finalMessage(){
-    document.body.innerHTML=`
-    <div style="height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(135deg,#ff758c,#ff7eb3);color:white">
-        <h1>You Win My Heart Every Day 😍</h1>
-        <p>I love you forever, My Princess ❤️<br>— Your Life Partner</p>
-    </div>`;
 }
 </script>
 
