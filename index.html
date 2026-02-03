@@ -22,6 +22,7 @@ body{
     justify-content:center;
     align-items:center;
     padding:20px;
+    animation: fade 1s;
 }
 
 .hidden{display:none;}
@@ -36,7 +37,11 @@ button{
 }
 
 #yes{background:white;color:#ff4e50;}
-#no{background:black;color:white;position:absolute;}
+#no{
+    background:black;
+    color:white;
+    position:absolute;
+}
 
 img{
     width:260px;
@@ -86,6 +91,7 @@ img{
 </div>
 
 <script>
+// 👉 PUT YOUR EXACT IMAGE NAMES HERE
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -101,8 +107,12 @@ function start(){
 }
 
 function next(){
-    i=(i+1)%images.length;
-    document.getElementById('slide').src=images[i];
+    i++;
+    if(i < images.length){
+        document.getElementById('slide').src=images[i];
+    } else {
+        show('s3');
+    }
 }
 
 function show(id){
@@ -115,13 +125,13 @@ function love(){
 }
 
 function run(){
-    let x=Math.random()*300;
-    let y=Math.random()*300;
-    document.getElementById('no').style.left=x+'px';
-    document.getElementById('no').style.top=y+'px';
+    let x=Math.random()*(window.innerWidth-100);
+    let y=Math.random()*(window.innerHeight-100);
+    let btn=document.getElementById('no');
+    btn.style.left=x+'px';
+    btn.style.top=y+'px';
 }
 </script>
 
 </body>
 </html>
-
