@@ -15,56 +15,22 @@ body{margin:0;font-family:Arial;color:white;text-align:center;overflow:hidden}
 @keyframes scrollPhotos{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* Layout */
-.screen{
-    min-height:100vh;display:flex;flex-direction:column;
-    justify-content:center;align-items:center;
-    padding:20px;background:rgba(0,0,0,.45);
-    position:relative;box-sizing:border-box
-}
+.screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;background:rgba(0,0,0,.45);position:relative}
 .hidden{display:none}
 
-/* Buttons */
-button{
-    padding:12px 25px;font-size:18px;border:none;
-    border-radius:25px;cursor:pointer;margin:10px;max-width:90%
-}
-.action-btn{
-    position:absolute;bottom:35px;left:50%;
-    transform:translateX(-50%)
-}
+button{padding:12px 25px;font-size:18px;border:none;border-radius:25px;cursor:pointer;margin:10px}
+.action-btn{position:absolute;bottom:35px;left:50%;transform:translateX(-50%)}
 
-/* Slideshow */
-#slide{
-    width:clamp(220px,40vw,320px);
-    height:clamp(220px,40vw,320px);
-    object-fit:cover;border-radius:25px;
-    border:5px solid white;box-shadow:0 0 30px white
-}
+#slide{width:clamp(220px,40vw,320px);height:clamp(220px,40vw,320px);object-fit:cover;border-radius:25px;border:5px solid white;box-shadow:0 0 30px white}
 
-/* Gallery */
-.pgrid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
-    gap:15px;width:100%;max-width:900px
-}
-.pgrid img{
-    width:100%;height:140px;object-fit:cover;
-    border-radius:15px;border:3px solid white;cursor:pointer
-}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:15px;width:100%;max-width:900px}
+.pgrid img{width:100%;height:140px;object-fit:cover;border-radius:15px;border:3px solid white;cursor:pointer}
 #viewImg{max-width:95%;max-height:85vh;border-radius:20px}
 
-/* Video */
 video{width:clamp(260px,80vw,420px);height:auto}
 
-/* Petals */
 .petal{position:fixed;top:-20px;font-size:22px;animation:fall 8s linear infinite}
 @keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
-
-/* Small screens */
-@media(max-width:480px){
-    h2{font-size:20px}
-    button{font-size:15px;padding:10px 18px}
-}
 </style>
 </head>
 
@@ -73,20 +39,17 @@ video{width:clamp(260px,80vw,420px);height:auto}
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<!-- Opening -->
 <div id="s1" class="screen">
     <h2>Tumhare liye ek surprise hai 💌</h2>
     <div onclick="start()" style="font-size:80px;cursor:pointer">💖</div>
 </div>
 
-<!-- Slideshow -->
 <div id="s2" class="screen hidden">
     <h2>Our Memories 📸</h2>
     <img id="slide">
     <button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
-<!-- Gallery -->
 <div id="photogallery" class="screen hidden">
     <h2>hamaare kaarname 📸</h2>
     <div class="pgrid" id="pgrid"></div>
@@ -97,25 +60,21 @@ video{width:clamp(260px,80vw,420px);height:auto}
     <img id="viewImg">
 </div>
 
-<!-- Timeline -->
 <div id="timeline" class="screen hidden">
     <h2>Our Timeline 🕰️</h2>
     <button class="action-btn" onclick="startVideos()">Abhi aur hai meri princess 💖</button>
 </div>
 
-<!-- Videos -->
 <div id="videos" class="screen hidden">
     <h2>Video Memories 🎬</h2>
     <video id="vid" controls playsinline></video>
 </div>
 
-<!-- Letter -->
 <div id="letter" class="screen hidden">
     <h2>My Love Letter 💌</h2>
     <button class="action-btn" onclick="show('flowers')">Abhi nai abhi aur hai princess 💖</button>
 </div>
 
-<!-- Flower -->
 <div id="flowers" class="screen hidden">
     <h2>Pick a flower 🌸</h2>
     <div style="font-size:70px">
@@ -144,8 +103,22 @@ setInterval(()=>{
  setTimeout(()=>p.remove(),8000);
 },500);
 
-// images
-let images=[/* your same image list here */];
+// IMAGES
+let images=[
+"WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
+"WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
+"WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.17 PM (1).jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
+];
 
 // background AFTER images
 let bg=document.getElementById("bgTrack");
@@ -157,17 +130,8 @@ images.concat(images).forEach(src=>{
 
 let i=0;
 
-function start(){
- document.getElementById('music').play();
- show('s2');
- document.getElementById('slide').src=images[i];
-}
-
-function next(){
- i++;
- if(i<images.length) document.getElementById('slide').src=images[i];
- else showPhotoGallery();
-}
+function start(){music.play();show('s2');slide.src=images[i]}
+function next(){i++; i<images.length? slide.src=images[i]:showPhotoGallery()}
 
 function show(id){
  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
@@ -176,28 +140,24 @@ function show(id){
 
 function showPhotoGallery(){
  show('photogallery');
- let grid=document.getElementById("pgrid");
- grid.innerHTML="";
+ pgrid.innerHTML="";
  images.forEach(src=>{
   let img=document.createElement("img");
   img.src=src;
-  img.onclick=()=>openViewer(src);
-  grid.appendChild(img);
+  img.onclick=()=>{show('viewer');viewImg.src=src};
+  pgrid.appendChild(img);
  });
 }
-
-function openViewer(src){show('viewer');viewImg.src=src}
 function closeViewer(){show('photogallery')}
 
-// music sync
+// MUSIC SYNC
 function syncMusic(v){
- let m=document.getElementById("music");
- v.onplay=()=>m.pause();
- v.onpause=()=>m.play();
- v.onended=()=>m.play();
+ v.onplay=()=>music.pause();
+ v.onpause=()=>music.play();
+ v.onended=()=>music.play();
 }
 
-// videos
+// VIDEOS
 let vids=[
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
@@ -207,15 +167,9 @@ let special="WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4";
 let v=0;
 
 function startVideos(){show('videos');loadVideo()}
-
 function loadVideo(){
- let video=document.getElementById("vid");
- video.src=vids[v];
- video.play();
- syncMusic(video);
- video.onended=nextVideo;
+ vid.src=vids[v];vid.play();syncMusic(vid);vid.onended=nextVideo
 }
-
 function nextVideo(){
  v++;
  if(v<vids.length) loadVideo();
