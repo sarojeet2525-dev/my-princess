@@ -67,7 +67,12 @@ transition:.8s;
 </div>
 
 <div id="timeline" class="screen hidden">
-<button class="action-btn" onclick="startVideos()">Videos 🎬</button>
+  <h2 style="max-width:80%">
+    Abhi kahani khatam nahi hui meri princess…  
+    abhi aur yaadein baaki hain 💖
+  </h2>
+
+  <button class="action-btn" onclick="startVideos()">Videos 🎬</button>
 </div>
 
 <div id="videos" class="screen hidden">
@@ -170,17 +175,24 @@ show('heart');
 }
 
 function openHeart(){
-heartBox.style.display="none";
-heartText.innerHTML="Someone is here in my heart ❤️";
-setTimeout(()=>{
-heartPhoto.src=images[2];
-heartPhoto.style.display="block";
-setTimeout(()=>{
-heartText.innerHTML+="<br><br>It’s youuuu ❤️";
-setTimeout(()=>show('final'),2000);
-},1500);
-},1500);
+  heartBox.style.display="none";
+  heartText.innerHTML="Someone is here in my heart ❤️";
+
+  setTimeout(()=>{
+    heartPhoto.src = images[2];   // your photo
+    heartPhoto.style.display="block";
+
+    setTimeout(()=>{
+      heartText.innerHTML += "<br><br>It’s youuuu ❤️";
+
+      // show button instead of auto moving
+      heartNextBtn.style.display = "block";
+
+    },1500);
+
+  },1500);
 }
+
 
 function openLetter(){
 loveText.innerHTML="I made this memory for us ❤️";
@@ -192,3 +204,4 @@ final.appendChild(g);
 </script>
 </body>
 </html>
+
