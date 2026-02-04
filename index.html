@@ -22,7 +22,7 @@ body::after{
 .bg-track img{height:100vh;filter:blur(4px)}
 @keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* Smooth transitions */
+/* Transitions */
 .screen{
  min-height:100vh;display:flex;flex-direction:column;
  justify-content:center;align-items:center;
@@ -56,6 +56,9 @@ body::after{
  animation:pop 1.2s forwards
 }
 @keyframes pop{to{transform:translate(-50%,-50%) scale(1)}}
+
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+@keyframes heartOpen{0%{transform:scale(1)}50%{transform:scale(1.6) rotate(10deg)}100%{transform:scale(1)}}
 </style>
 </head>
 
@@ -96,10 +99,14 @@ body::after{
 <video id="vid" controls playsinline width="300"></video>
 </div>
 
-<!-- Flowers -->
+<!-- Open My Heart -->
 <div id="flowers" class="screen hidden">
-<h2>Pick a flower 🌸</h2>
-<button class="action-btn" onclick="show('final')">Final Surprise 💖</button>
+  <h2>Open My Heart ❤️</h2>
+  <div id="heartBox" onclick="openHeart()" style="font-size:90px;cursor:pointer;animation:pulse 1.5s infinite">❤️</div>
+  <p id="heartMsg" style="margin-top:30px;font-size:20px;display:none;"></p>
+  <button id="heartNext" class="action-btn" onclick="show('final')" style="display:none">
+    Aur dekho aage meri princess 💖
+  </button>
 </div>
 
 <!-- Final -->
@@ -127,7 +134,6 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg"
 ];
 
-// background
 window.onload=()=>{
  let bg=document.getElementById("bgTrack");
  images.concat(images).forEach(s=>{
@@ -161,7 +167,7 @@ function showGallery(){
  });
 }
 
-// ===== VIDEOS (music fix) =====
+// ===== VIDEOS =====
 let vids=[
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
@@ -179,14 +185,22 @@ function playVid(){
   if(v<3) playVid();
   else{
    vid.src=special;
-   vid.onplay=()=>music.play();  // FIX
+   vid.onplay=()=>music.play();
    vid.play();
    vid.onended=()=>show('flowers');
   }
  }
 }
 
-// ===== FINAL LETTER GIF =====
+// ===== HEART PAGE =====
+function openHeart(){
+ heartBox.style.animation="heartOpen 1s ease";
+ heartMsg.innerHTML="Inside this heart, it's only you forever ❤️";
+ heartMsg.style.display="block";
+ heartNext.style.display="block";
+}
+
+// ===== FINAL LETTER =====
 function openLetter(){
  let msg="I made this memory for us ❤️";
  let area=document.getElementById("loveText");
