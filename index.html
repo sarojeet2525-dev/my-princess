@@ -136,45 +136,79 @@ img.src=s;pgrid.appendChild(img);
 }
 
 // ✅ BUFFER-FREE VIDEOS
-let vids=[
+// PRELOAD VIDEOS (very important)
+let videoFiles = [
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
-"WhatsApp%20Video%202026-02-03%20at%202.06.17%20PM.mp4"
+"WhatsApp%20Video%202026-02-03%20at%202.06.17%20PM.mp4",
+"WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4" // special
 ];
-let special="WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4";
-let v=0;
 
-function startVideos(){show('videos');playVid()}
+let videoElements = [];
+videoFiles.forEach(src=>{
+  let v = document.createElement("video");
+  v.src = src;
+  v.preload = "auto";
+  v.playsInline = true;
+  v.style.display = "none";
+  document.body.appendChild(v);
+  videoElements.push(v);
+});
 
-function playVid(){
-music.pause();
-vid.src=vids[v];
-vid.load();
-vid.oncanplaythrough=()=>vid.play();
-vid.onended=()=>{
-v++;
-if(v<3)playVid();
-else{
-vid.src=special;
-vid.load();
-vid.oncanplaythrough=()=>vid.play();
-vid.onended=()=>{music.play();show('heart');}
+let current = 0;
+
+function startVideos(){
+  show('videos');
+  playVideo(0);
 }
-};
+
+function playVideo(index){
+  music.pause();
+
+  let container = document.getElementById("videos");
+  container.innerHTML = "";
+  let v = videoElements[index];
+  v.style.display = "block";
+  container.appendChild(v);
+
+  v.currentTime = 0;
+  v.play();
+
+  v.onended = ()=>{
+    if(index < 2){
+      playVideo(index+1);
+    }else if(index === 2){
+      // special video
+      music.play();
+      playVideo(3);
+    }else{
+      show('heart');
+    }
+  };
 }
+
 
 function openHeart(){
-heartBox.style.display="none";
-heartText.innerHTML="Someone is here in my heart ❤️";
-setTimeout(()=>{
-heartPhoto.src=images[2];
-heartPhoto.style.display="block";
-setTimeout(()=>{
-heartText.innerHTML+="<br><br>It’s youuuu ❤️";
-heartNextBtn.style.display="block";
-},1500);
-},1500);
+  document.getElementById("heartBox").style.display="none";
+
+  let text = document.getElementById("heartText");
+  let photo = document.getElementById("heartPhoto");
+  let btn   = document.getElementById("heartNextBtn");
+
+  text.innerHTML="Someone is here in my heart ❤️";
+
+  setTimeout(()=>{
+    photo.src = images[2];
+    photo.style.display="block";
+
+    setTimeout(()=>{
+      text.innerHTML += "<br><br>It’s youuuu ❤️";
+      btn.style.display = "block";   // ✅ now works
+    },1500);
+
+  },1500);
 }
+
 
 function openLetter(){
 loveText.innerHTML="I made this memory for us ❤️";
@@ -186,3 +220,4 @@ final.appendChild(g);
 </script>
 </body>
 </html>
+
