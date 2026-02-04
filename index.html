@@ -12,7 +12,6 @@ content:"";position:fixed;inset:0;
 background:linear-gradient(45deg,#ff4e5088,#ff8fab88,#ffe06688);
 z-index:-1;
 }
-
 .screen{
 min-height:100vh;display:flex;flex-direction:column;
 justify-content:center;align-items:center;
@@ -22,25 +21,17 @@ transition:.8s;
 }
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
-
 .bg-strip{position:fixed;inset:0;z-index:-2;opacity:.45;overflow:hidden}
 .bg-track{display:flex;width:max-content;animation:move 80s linear infinite}
 .bg-track img{height:100vh;filter:blur(3px)}
 @keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
 #slide{width:280px;height:280px;border-radius:20px;border:5px solid white;object-fit:cover}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;width:90%}
 .pgrid img{height:130px;border-radius:12px;border:3px solid white}
-
 .action-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);padding:12px 25px;border-radius:25px;border:none}
-
 .envelope{font-size:90px;cursor:pointer}
 #loveText{margin-top:20px;color:#ffe066;font-size:20px}
 .popVideo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:220px}
-
-.videoFx{position:fixed;inset:0;pointer-events:none;z-index:5}
-.sparkle::before{content:"✨ ✨ ✨";position:absolute;width:100%;top:40%;text-align:center;font-size:30px}
-.heartRain::before{content:"💖 💗 💕";position:absolute;width:100%;top:0;text-align:center;font-size:28px}
 </style>
 </head>
 
@@ -67,17 +58,12 @@ transition:.8s;
 </div>
 
 <div id="timeline" class="screen hidden">
-<h2 style="max-width:80%">
-Abhi kahani khatam nahi hui meri princess… abhi aur yaadein baaki hain 💖
-</h2>
+<h2>Abhi aur yaadein baaki hain 💖</h2>
 <button class="action-btn" onclick="startVideos()">Videos 🎬</button>
 </div>
 
-<div id="videos" class="screen hidden">
-<video id="vid" controls width="320" playsinline></video>
-</div>
+<div id="videos" class="screen hidden"></div>
 
-<!-- ✅ FIXED HEART -->
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
 <div id="heartBox" onclick="openHeart()" style="font-size:90px">❤️</div>
@@ -94,7 +80,8 @@ Aur dekho aage meri princess 💖
 </div>
 
 <script>
-let images=[ /* same 13 images */ 
+// images
+let images=[ /* same list */ 
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
@@ -125,7 +112,6 @@ setTimeout(()=>el.classList.add('show'),20);
 let i=0;
 function start(){music.play();show('s2');slide.src=images[0]}
 function next(){i++;i<images.length?slide.src=images[i]:showGallery()}
-
 function showGallery(){
 show('photogallery');
 pgrid.innerHTML="";
@@ -135,80 +121,58 @@ img.src=s;pgrid.appendChild(img);
 });
 }
 
-// ✅ BUFFER-FREE VIDEOS
-// PRELOAD VIDEOS (very important)
-let videoFiles = [
+// ✅ FIXED VIDEO SYSTEM
+let videoFiles=[
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.06.17%20PM.mp4",
-"WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4" // special
+"WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4"
 ];
 
-let videoElements = [];
+let videoElements=[];
 videoFiles.forEach(src=>{
-  let v = document.createElement("video");
-  v.src = src;
-  v.preload = "auto";
-  v.playsInline = true;
-  v.style.display = "none";
-  document.body.appendChild(v);
-  videoElements.push(v);
+let v=document.createElement("video");
+v.src=src;v.preload="auto";v.playsInline=true;
+videoElements.push(v);
 });
 
-let current = 0;
-
-function startVideos(){
-  show('videos');
-  playVideo(0);
-}
+function startVideos(){show('videos');playVideo(0);}
 
 function playVideo(index){
-  music.pause();
+music.pause();
+let container=document.getElementById("videos");
+container.innerHTML="";
+let v=videoElements[index];
+container.appendChild(v);
 
-  let container = document.getElementById("videos");
-  container.innerHTML = "";
-  let v = videoElements[index];
-  v.style.display = "block";
-  container.appendChild(v);
+v.onplaying=()=>{
+if(index===3) music.play();
+};
 
-  v.currentTime = 0;
-  v.play();
+v.currentTime=0;
+v.play();
 
-  v.onended = ()=>{
-    if(index < 2){
-      playVideo(index+1);
-    }else if(index === 2){
-      // special video
-      music.play();
-      playVideo(3);
-    }else{
-      show('heart');
-    }
-  };
+v.onended=()=>{
+if(index<3) playVideo(index+1);
+else show('heart');
+};
 }
-
 
 function openHeart(){
-  document.getElementById("heartBox").style.display="none";
-
-  let text = document.getElementById("heartText");
-  let photo = document.getElementById("heartPhoto");
-  let btn   = document.getElementById("heartNextBtn");
-
-  text.innerHTML="Someone is here in my heart ❤️";
-
-  setTimeout(()=>{
-    photo.src = images[2];
-    photo.style.display="block";
-
-    setTimeout(()=>{
-      text.innerHTML += "<br><br>It’s youuuu ❤️";
-      btn.style.display = "block";   // ✅ now works
-    },1500);
-
-  },1500);
+document.getElementById("heartBox").style.display="none";
+let text=document.getElementById("heartText");
+let photo=document.getElementById("heartPhoto");
+let btn=document.getElementById("heartNextBtn");
+text.innerHTML="Someone is here in my heart ❤️";
+setTimeout(()=>{
+photo.src=images[2];
+photo.style.display="block";
+setTimeout(()=>{
+text.innerHTML+="<br><br>It’s youuuu ❤️";
+btn.style.display="block";
+},1500);
+},1500);
 }
-
 
 function openLetter(){
 loveText.innerHTML="I made this memory for us ❤️";
@@ -220,4 +184,3 @@ final.appendChild(g);
 </script>
 </body>
 </html>
-
