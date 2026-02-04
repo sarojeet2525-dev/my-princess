@@ -9,9 +9,11 @@
 body{margin:0;font-family:Arial;color:white;text-align:center;overflow:hidden}
 body::after{
 content:"";position:fixed;inset:0;
-background:linear-gradient(45deg,#ff4e5088,#ff8fab88,#ffe06688);
-z-index:-1;
+background:linear-gradient(45deg,#ff4e50,#ff8fab,#ffe066);
+z-index:-1;opacity:.5;
 }
+
+/* Smooth screens */
 .screen{
 min-height:100vh;display:flex;flex-direction:column;
 justify-content:center;align-items:center;
@@ -21,14 +23,59 @@ transition:.8s;
 }
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
-.bg-strip{position:fixed;inset:0;z-index:-2;opacity:.45;overflow:hidden}
+
+/* Moving photo background */
+.bg-strip{position:fixed;inset:0;z-index:-2;opacity:.35;overflow:hidden}
 .bg-track{display:flex;width:max-content;animation:move 80s linear infinite}
 .bg-track img{height:100vh;filter:blur(3px)}
 @keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Photos */
 #slide{width:280px;height:280px;border-radius:20px;border:5px solid white;object-fit:cover}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;width:90%}
 .pgrid img{height:130px;border-radius:12px;border:3px solid white}
-.action-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);padding:12px 25px;border-radius:25px;border:none}
+
+/* Buttons */
+.action-btn, button{
+  position:fixed;bottom:15px;left:50%;
+  transform:translateX(-50%);
+  padding:12px 25px;border-radius:25px;border:none;
+  transition:transform .25s ease,box-shadow .25s ease,opacity .4s ease;
+  opacity:0;
+  animation:btnFade .8s ease forwards;
+  box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+.screen.show .action-btn,
+.screen.show button{opacity:1}
+
+.action-btn:hover,button:hover{
+  transform:translateX(-50%) scale(1.08);
+  box-shadow:0 15px 35px rgba(255,78,80,.45);
+}
+.action-btn:active,button:active{
+  transform:translateX(-50%) scale(.96);
+}
+@keyframes btnFade{
+  from{opacity:0;transform:translate(-50%,20px)}
+  to{opacity:1;transform:translate(-50%,0)}
+}
+
+/* Cinematic video */
+.videoFrame{
+position:relative;width:100%;max-width:900px;
+aspect-ratio:16/9;margin:auto;overflow:hidden;border-radius:20px;
+}
+.videoFrame video.bg{
+position:absolute;inset:0;width:100%;height:100%;
+object-fit:cover;filter:blur(35px) brightness(.6);
+transform:scale(1.4);
+}
+.videoFrame video.main{
+position:relative;height:100%;width:auto;margin:auto;
+display:block;border-radius:16px;z-index:2;
+}
+
+/* Final */
 .envelope{font-size:90px;cursor:pointer}
 #loveText{margin-top:20px;color:#ffe066;font-size:20px}
 .popVideo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:220px}
@@ -40,30 +87,36 @@ transition:.8s;
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
+<!-- Start -->
 <div id="s1" class="screen show">
 <h2>Tap the heart meri princess 💖</h2>
 <div onclick="start()" style="font-size:90px">💖</div>
 </div>
 
+<!-- Slideshow -->
 <div id="s2" class="screen hidden">
 <h2>Kuch acchii yaadien 📸</h2>
 <img id="slide">
 <button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
+<!-- Gallery -->
 <div id="photogallery" class="screen hidden">
 <h2>hamaare kaarname 📸</h2>
 <div id="pgrid" class="pgrid"></div>
 <button class="action-btn" onclick="show('timeline')">Next 💖</button>
 </div>
 
+<!-- Timeline -->
 <div id="timeline" class="screen hidden">
 <h2>Abhi aur yaadein baaki hain 💖</h2>
 <button class="action-btn" onclick="startVideos()">Videos 🎬</button>
 </div>
 
+<!-- Videos -->
 <div id="videos" class="screen hidden"></div>
 
+<!-- Heart -->
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
 <div id="heartBox" onclick="openHeart()" style="font-size:90px">❤️</div>
@@ -74,14 +127,15 @@ Aur dekho aage meri princess 💖
 </button>
 </div>
 
+<!-- Final -->
 <div id="final" class="screen hidden">
 <div class="envelope" onclick="openLetter()">💌</div>
 <div id="loveText"></div>
 </div>
 
 <script>
-// images
-let images=[ /* same list */ 
+// Images
+let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
@@ -121,19 +175,18 @@ img.src=s;pgrid.appendChild(img);
 });
 }
 
-// ✅ FIXED VIDEO SYSTEM
-let videoFiles=[
+// Videos (cinematic + mobile safe)
+let files=[
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.06.17%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4"
 ];
-
-let videoElements=[];
-videoFiles.forEach(src=>{
+let vids=[];
+files.forEach(src=>{
 let v=document.createElement("video");
-v.src=src;v.preload="auto";v.playsInline=true;
-videoElements.push(v);
+v.src=src;v.preload="auto";v.playsInline=true;v.muted=true;
+vids.push(v);
 });
 
 function startVideos(){show('videos');playVideo(0);}
@@ -142,27 +195,38 @@ function playVideo(index){
 music.pause();
 let container=document.getElementById("videos");
 container.innerHTML="";
-let v=videoElements[index];
-container.appendChild(v);
+let v=vids[index];
 
-v.onplaying=()=>{
-if(index===3) music.play();
-};
+let frame=document.createElement("div");
+frame.className="videoFrame";
+
+let bg=v.cloneNode(true);
+bg.className="bg";bg.muted=true;bg.play();
+
+v.className="main";
+frame.appendChild(bg);
+frame.appendChild(v);
+container.appendChild(frame);
 
 v.currentTime=0;
-v.play();
 
-v.onended=()=>{
-if(index<3) playVideo(index+1);
-else show('heart');
-};
+if(index<3){
+v.muted=true;
+v.play();
+v.onended=()=>playVideo(index+1);
+}else{
+v.muted=false;v.controls=true;
+v.onplay=()=>music.play();
+v.play().catch(()=>{});
+v.onended=()=>show('heart');
+}
 }
 
 function openHeart(){
-document.getElementById("heartBox").style.display="none";
 let text=document.getElementById("heartText");
 let photo=document.getElementById("heartPhoto");
 let btn=document.getElementById("heartNextBtn");
+heartBox.style.display="none";
 text.innerHTML="Someone is here in my heart ❤️";
 setTimeout(()=>{
 photo.src=images[2];
