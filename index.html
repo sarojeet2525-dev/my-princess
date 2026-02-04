@@ -67,23 +67,25 @@ transition:.8s;
 </div>
 
 <div id="timeline" class="screen hidden">
-  <h2 style="max-width:80%">
-    Abhi kahani khatam nahi hui meri princess…  
-    abhi aur yaadein baaki hain 💖
-  </h2>
-
-  <button class="action-btn" onclick="startVideos()">Videos 🎬</button>
+<h2 style="max-width:80%">
+Abhi kahani khatam nahi hui meri princess… abhi aur yaadein baaki hain 💖
+</h2>
+<button class="action-btn" onclick="startVideos()">Videos 🎬</button>
 </div>
 
 <div id="videos" class="screen hidden">
 <video id="vid" controls width="320" playsinline></video>
 </div>
 
+<!-- ✅ FIXED HEART -->
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
 <div id="heartBox" onclick="openHeart()" style="font-size:90px">❤️</div>
-<div id="heartText"></div>
-<img id="heartPhoto" style="width:220px;border-radius:20px;border:4px solid white;display:none;">
+<div id="heartText" style="margin-top:20px;font-size:20px;color:#ffe066"></div>
+<img id="heartPhoto" style="width:220px;border-radius:20px;border:4px solid white;display:none;margin-top:15px;">
+<button id="heartNextBtn" class="action-btn" style="display:none" onclick="show('final')">
+Aur dekho aage meri princess 💖
+</button>
 </div>
 
 <div id="final" class="screen hidden">
@@ -92,7 +94,7 @@ transition:.8s;
 </div>
 
 <script>
-let images=[
+let images=[ /* same 13 images */ 
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
@@ -133,11 +135,7 @@ img.src=s;pgrid.appendChild(img);
 });
 }
 
-let fx=document.createElement("div");
-fx.className="videoFx";
-document.body.appendChild(fx);
-function setFx(t){fx.className="videoFx "+t}
-
+// ✅ BUFFER-FREE VIDEOS
 let vids=[
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
@@ -149,50 +147,34 @@ let v=0;
 function startVideos(){show('videos');playVid()}
 
 function playVid(){
-setFx(v==0?"sparkle":v==1?"heartRain":"");
 music.pause();
-
 vid.src=vids[v];
 vid.load();
-
 vid.oncanplaythrough=()=>vid.play();
-
 vid.onended=()=>{
 v++;
-if(v<3){
-playVid();
-}else{
-setFx("");
+if(v<3)playVid();
+else{
 vid.src=special;
 vid.load();
 vid.oncanplaythrough=()=>vid.play();
-vid.onended=()=>{
-music.play();
-show('heart');
-};
+vid.onended=()=>{music.play();show('heart');}
 }
 };
 }
 
 function openHeart(){
-  heartBox.style.display="none";
-  heartText.innerHTML="Someone is here in my heart ❤️";
-
-  setTimeout(()=>{
-    heartPhoto.src = images[2];   // your photo
-    heartPhoto.style.display="block";
-
-    setTimeout(()=>{
-      heartText.innerHTML += "<br><br>It’s youuuu ❤️";
-
-      // show button instead of auto moving
-      heartNextBtn.style.display = "block";
-
-    },1500);
-
-  },1500);
+heartBox.style.display="none";
+heartText.innerHTML="Someone is here in my heart ❤️";
+setTimeout(()=>{
+heartPhoto.src=images[2];
+heartPhoto.style.display="block";
+setTimeout(()=>{
+heartText.innerHTML+="<br><br>It’s youuuu ❤️";
+heartNextBtn.style.display="block";
+},1500);
+},1500);
 }
-
 
 function openLetter(){
 loveText.innerHTML="I made this memory for us ❤️";
@@ -204,4 +186,3 @@ final.appendChild(g);
 </script>
 </body>
 </html>
-
