@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,24 +7,26 @@
 
 <style>
 body{margin:0;font-family:Arial;color:white;text-align:center;overflow:hidden}
+
+/* brighter background */
 body::after{
- content:"";position:fixed;inset:0;
- background:linear-gradient(45deg,#ff4e5088,#ff8fab88,#ffe06688);
- z-index:-1;
+content:"";position:fixed;inset:0;
+background:linear-gradient(45deg,#ff4e5088,#ff8fab88,#ffe06688);
+z-index:-1;
 }
 
-/* transition */
+/* smooth page */
 .screen{
- min-height:100vh;display:flex;flex-direction:column;
- justify-content:center;align-items:center;
- background:rgba(0,0,0,.35);
- opacity:0;transform:translateY(60px) scale(.96);
- transition:all .9s cubic-bezier(.22,1,.36,1);
+min-height:100vh;display:flex;flex-direction:column;
+justify-content:center;align-items:center;
+background:rgba(0,0,0,.35);
+opacity:0;transform:translateY(60px);
+transition:.8s;
 }
-.screen.show{opacity:1;transform:translateY(0) scale(1)}
+.screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* moving background */
+/* moving photos bg */
 .bg-strip{position:fixed;inset:0;z-index:-2;opacity:.45;overflow:hidden}
 .bg-track{display:flex;width:max-content;animation:move 80s linear infinite}
 .bg-track img{height:100vh;filter:blur(3px)}
@@ -32,17 +34,19 @@ body::after{
 
 #slide{width:280px;height:280px;border-radius:20px;border:5px solid white;object-fit:cover}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;width:90%}
-.pgrid img{height:130px;border-radius:12px;border:3px solid white;cursor:pointer}
+.pgrid img{height:130px;border-radius:12px;border:3px solid white}
 
 .action-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);padding:12px 25px;border-radius:25px;border:none}
 
-.videoFx{position:fixed;inset:0;pointer-events:none;z-index:5}
-.sparkle::before{content:"✨ ✨ ✨ ✨";position:absolute;width:100%;top:40%;text-align:center;font-size:30px;animation:twinkle 1s infinite}
-.heartRain::before{content:"💖 💗 💕";position:absolute;width:100%;top:0;text-align:center;font-size:28px;animation:fall 5s linear infinite}
-.blurGlow{backdrop-filter:blur(6px);background:rgba(255,255,255,0.05)}
-@keyframes fall{to{transform:translateY(110vh);opacity:0}}
+/* envelope */
+.envelope{font-size:90px;cursor:pointer}
+#loveText{margin-top:20px;color:#ffe066;font-size:20px}
+.popVideo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:220px}
 
-.popVideo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:200px}
+/* video fx */
+.videoFx{position:fixed;inset:0;pointer-events:none;z-index:5}
+.sparkle::before{content:"✨ ✨ ✨";position:absolute;width:100%;top:40%;text-align:center;font-size:30px}
+.heartRain::before{content:"💖 💗 💕";position:absolute;width:100%;top:0;text-align:center;font-size:28px}
 </style>
 </head>
 
@@ -73,7 +77,6 @@ body::after{
 
 <!-- Timeline -->
 <div id="timeline" class="screen hidden">
-<h2>Abhi aur hai 💖</h2>
 <button class="action-btn" onclick="startVideos()">Videos 🎬</button>
 </div>
 
@@ -85,18 +88,20 @@ body::after{
 <!-- Heart -->
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
-<div onclick="show('final')" style="font-size:90px">❤️</div>
+<div id="heartBox" onclick="openHeart()" style="font-size:90px">❤️</div>
+<div id="heartText"></div>
+<img id="heartPhoto" style="width:220px;border-radius:20px;border:4px solid white;display:none;">
 </div>
 
-<!-- Final Letter -->
+<!-- Final -->
 <div id="final" class="screen hidden">
-<div onclick="openLetter()" style="font-size:90px">💌</div>
+<div class="envelope" onclick="openLetter()">💌</div>
 <div id="loveText"></div>
 </div>
 
 <script>
-// IMAGES
-let images=[/* same 13 names */ 
+// photos
+let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
@@ -108,41 +113,37 @@ let images=[/* same 13 names */
 "WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg",
 "WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg",
 "WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg"
+"WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg",
+"WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
 ];
 
 images.concat(images).forEach(s=>{
- let i=document.createElement("img");
- i.src=s;bgTrack.appendChild(i);
+ let img=document.createElement("img");
+ img.src=s;bgTrack.appendChild(img);
 });
 
-// TRANSITION
 function show(id){
- document.querySelectorAll('.screen').forEach(s=>{
-  s.classList.remove('show');s.classList.add('hidden');
- });
- let el=document.getElementById(id);
- el.classList.remove('hidden');
- setTimeout(()=>el.classList.add('show'),20);
+document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('show');s.classList.add('hidden')});
+let el=document.getElementById(id);
+el.classList.remove('hidden');
+setTimeout(()=>el.classList.add('show'),20);
 }
 
-// SLIDESHOW
 let i=0;
 function start(){music.play();show('s2');slide.src=images[0]}
 function next(){i++;i<images.length?slide.src=images[i]:showGallery()}
+
 function showGallery(){
- show('photogallery');pgrid.innerHTML="";
- images.forEach(s=>{
-  let img=document.createElement("img");
-  img.src=s;img.onclick=()=>{show('s2');slide.src=s};
-  pgrid.appendChild(img);
- });
+show('photogallery');
+pgrid.innerHTML="";
+images.forEach(s=>{
+ let img=document.createElement("img");
+ img.src=s;pgrid.appendChild(img);
+});
 }
 
-// VIDEO FX
-let fx=document.createElement("div");
-fx.className="videoFx";document.body.appendChild(fx);
+// video effects (no blur now)
+let fx=document.createElement("div");fx.className="videoFx";document.body.appendChild(fx);
 function setFx(t){fx.className="videoFx "+t}
 
 let vids=[
@@ -155,30 +156,45 @@ let v=0;
 
 function startVideos(){show('videos');playVid()}
 function playVid(){
- vid.src=vids[v];vid.play();music.pause();
- if(v==0)setFx("sparkle");
- if(v==1)setFx("heartRain");
- if(v==2)setFx("blurGlow");
- vid.onended=()=>{
-  v++;
-  if(v<3)playVid();
-  else{
-   setFx("");
-   vid.src=special;vid.play();music.play();
-   vid.onended=()=>show('heart');
-  }
+setFx(v==0?"sparkle":v==1?"heartRain":"");
+vid.src=vids[v];
+vid.play();
+music.pause();
+vid.onended=()=>{
+ v++;
+ if(v<3)playVid();
+ else{
+  setFx("");
+  vid.src=special;
+  vid.play();
+  music.play();
+  vid.onended=()=>show('heart');
  }
 }
+}
 
-// FINAL LETTER + GIF
+// heart secret
+function openHeart(){
+heartBox.style.display="none";
+heartText.innerHTML="Someone is here in my heart ❤️";
+setTimeout(()=>{
+ heartPhoto.src=images[2];
+ heartPhoto.style.display="block";
+ setTimeout(()=>{
+  heartText.innerHTML+="<br><br>It’s youuuu ❤️";
+  setTimeout(()=>show('final'),2000);
+ },1500);
+},1500);
+}
+
+// letter + gif
 function openLetter(){
- loveText.innerHTML="I made this memory for us ❤️";
- let g=document.createElement("video");
- g.src="gif.mp4";g.autoplay=true;g.loop=true;g.muted=true;
- g.className="popVideo";
- final.appendChild(g);
+loveText.innerHTML="I made this memory for us ❤️";
+let g=document.createElement("video");
+g.src="gif.mp4";g.autoplay=true;g.loop=true;g.muted=true;
+g.className="popVideo";
+final.appendChild(g);
 }
 </script>
-
 </body>
 </html>
