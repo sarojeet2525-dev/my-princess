@@ -161,8 +161,13 @@ img.src=s;pgrid.appendChild(img);
 
 // ==== VIDEOS ====
 let vids=[
-"video1.mp4","video2.mp4","video3.mp4","special.mp4"
+"WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
+"WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
+"WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4"
 ];
+
+let special="WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4";
+
 
 function startVideos(){show('videos');playVideo(0)}
 
@@ -187,8 +192,9 @@ frame.appendChild(main);
 container.appendChild(frame);
 
 if(index<3){
-main.muted=true;
-main.play();
+main.muted=false;     // 🔥 allow sound
+main.controls=true;   // allow user interaction
+main.play().catch(()=>{}); // browser safe
 main.onended=()=>playVideo(index+1);
 }else{
 let msg=document.createElement("h2");
@@ -228,3 +234,4 @@ final.appendChild(g);
 </script>
 </body>
 </html>
+
