@@ -7,15 +7,12 @@
 
 <style>
 body{margin:0;font-family:Arial;color:white;text-align:center;overflow:hidden}
-
-/* brighter background */
 body::after{
 content:"";position:fixed;inset:0;
 background:linear-gradient(45deg,#ff4e5088,#ff8fab88,#ffe06688);
 z-index:-1;
 }
 
-/* smooth page */
 .screen{
 min-height:100vh;display:flex;flex-direction:column;
 justify-content:center;align-items:center;
@@ -26,7 +23,6 @@ transition:.8s;
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* moving photos bg */
 .bg-strip{position:fixed;inset:0;z-index:-2;opacity:.45;overflow:hidden}
 .bg-track{display:flex;width:max-content;animation:move 80s linear infinite}
 .bg-track img{height:100vh;filter:blur(3px)}
@@ -38,12 +34,10 @@ transition:.8s;
 
 .action-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);padding:12px 25px;border-radius:25px;border:none}
 
-/* envelope */
 .envelope{font-size:90px;cursor:pointer}
 #loveText{margin-top:20px;color:#ffe066;font-size:20px}
 .popVideo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:220px}
 
-/* video fx */
 .videoFx{position:fixed;inset:0;pointer-events:none;z-index:5}
 .sparkle::before{content:"✨ ✨ ✨";position:absolute;width:100%;top:40%;text-align:center;font-size:30px}
 .heartRain::before{content:"💖 💗 💕";position:absolute;width:100%;top:0;text-align:center;font-size:28px}
@@ -55,37 +49,31 @@ transition:.8s;
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<!-- Start -->
 <div id="s1" class="screen show">
 <h2>Tap the heart meri princess 💖</h2>
 <div onclick="start()" style="font-size:90px">💖</div>
 </div>
 
-<!-- Slideshow -->
 <div id="s2" class="screen hidden">
 <h2>Kuch acchii yaadien 📸</h2>
 <img id="slide">
 <button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
-<!-- Gallery -->
 <div id="photogallery" class="screen hidden">
 <h2>hamaare kaarname 📸</h2>
 <div id="pgrid" class="pgrid"></div>
 <button class="action-btn" onclick="show('timeline')">Next 💖</button>
 </div>
 
-<!-- Timeline -->
 <div id="timeline" class="screen hidden">
 <button class="action-btn" onclick="startVideos()">Videos 🎬</button>
 </div>
 
-<!-- Videos -->
 <div id="videos" class="screen hidden">
 <video id="vid" controls width="320" playsinline></video>
 </div>
 
-<!-- Heart -->
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
 <div id="heartBox" onclick="openHeart()" style="font-size:90px">❤️</div>
@@ -93,14 +81,12 @@ transition:.8s;
 <img id="heartPhoto" style="width:220px;border-radius:20px;border:4px solid white;display:none;">
 </div>
 
-<!-- Final -->
 <div id="final" class="screen hidden">
 <div class="envelope" onclick="openLetter()">💌</div>
 <div id="loveText"></div>
 </div>
 
 <script>
-// photos
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -118,8 +104,8 @@ let images=[
 ];
 
 images.concat(images).forEach(s=>{
- let img=document.createElement("img");
- img.src=s;bgTrack.appendChild(img);
+let img=document.createElement("img");
+img.src=s;bgTrack.appendChild(img);
 });
 
 function show(id){
@@ -137,13 +123,14 @@ function showGallery(){
 show('photogallery');
 pgrid.innerHTML="";
 images.forEach(s=>{
- let img=document.createElement("img");
- img.src=s;pgrid.appendChild(img);
+let img=document.createElement("img");
+img.src=s;pgrid.appendChild(img);
 });
 }
 
-// video effects (no blur now)
-let fx=document.createElement("div");fx.className="videoFx";document.body.appendChild(fx);
+let fx=document.createElement("div");
+fx.className="videoFx";
+document.body.appendChild(fx);
 function setFx(t){fx.className="videoFx "+t}
 
 let vids=[
@@ -155,39 +142,46 @@ let special="WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4";
 let v=0;
 
 function startVideos(){show('videos');playVid()}
+
 function playVid(){
 setFx(v==0?"sparkle":v==1?"heartRain":"");
-vid.src=vids[v];
-vid.play();
 music.pause();
+
+vid.src=vids[v];
+vid.load();
+
+vid.oncanplaythrough=()=>vid.play();
+
 vid.onended=()=>{
- v++;
- if(v<3)playVid();
- else{
-  setFx("");
-  vid.src=special;
-  vid.play();
-  music.play();
-  vid.onended=()=>show('heart');
- }
+v++;
+if(v<3){
+playVid();
+}else{
+setFx("");
+vid.src=special;
+vid.load();
+vid.oncanplaythrough=()=>vid.play();
+vid.onended=()=>{
+music.play();
+show('heart');
+};
 }
+};
 }
 
-// heart secret
 function openHeart(){
 heartBox.style.display="none";
 heartText.innerHTML="Someone is here in my heart ❤️";
 setTimeout(()=>{
- heartPhoto.src=images[2];
- heartPhoto.style.display="block";
- setTimeout(()=>{
-  heartText.innerHTML+="<br><br>It’s youuuu ❤️";
-  setTimeout(()=>show('final'),2000);
- },1500);
+heartPhoto.src=images[2];
+heartPhoto.style.display="block";
+setTimeout(()=>{
+heartText.innerHTML+="<br><br>It’s youuuu ❤️";
+setTimeout(()=>show('final'),2000);
+},1500);
 },1500);
 }
 
-// letter + gif
 function openLetter(){
 loveText.innerHTML="I made this memory for us ❤️";
 let g=document.createElement("video");
