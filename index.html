@@ -8,7 +8,7 @@
 <style>
 body{margin:0;font-family:Arial;color:white;text-align:center;overflow:hidden}
 
-/* gradient */
+/* Gradient */
 body::after{
  content:"";position:fixed;inset:0;
  background:linear-gradient(45deg,#ff4e5070,#ff8fab70,#ffe06660);
@@ -16,23 +16,45 @@ body::after{
 }
 @keyframes fade{from{opacity:.6}to{opacity:.9}}
 
-/* moving bg */
+/* Moving background */
 .bg-strip{position:fixed;inset:0;z-index:-2;opacity:.25;overflow:hidden}
 .bg-track{display:flex;width:max-content;animation:move 80s linear infinite}
 .bg-track img{height:100vh;filter:blur(4px)}
 @keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-.screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(0,0,0,.45)}
+/* Transitions */
+.screen{
+ min-height:100vh;display:flex;flex-direction:column;
+ justify-content:center;align-items:center;
+ background:rgba(0,0,0,.45);
+ opacity:0;transform:translateY(40px);
+ transition:.8s ease
+}
+.screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
-.action-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);padding:12px 25px;border-radius:25px;border:none}
 
-#slide{width:280px;height:280px;border-radius:20px;border:5px solid white;object-fit:cover;animation:zoom 6s forwards}
+.action-btn{
+ position:fixed;bottom:15px;left:50%;
+ transform:translateX(-50%);
+ padding:12px 25px;border-radius:25px;border:none
+}
+
+#slide{
+ width:280px;height:280px;border-radius:20px;
+ border:5px solid white;object-fit:cover;
+ animation:zoom 6s forwards
+}
 @keyframes zoom{from{transform:scale(1)}to{transform:scale(1.25)}}
 
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;width:90%}
 .pgrid img{height:130px;object-fit:cover;border-radius:12px;border:3px solid white;cursor:pointer}
 
-.popVideo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);width:180px;border-radius:15px;animation:pop 1.2s forwards}
+.popVideo{
+ position:absolute;top:50%;left:50%;
+ transform:translate(-50%,-50%) scale(0);
+ width:180px;border-radius:15px;
+ animation:pop 1.2s forwards
+}
 @keyframes pop{to{transform:translate(-50%,-50%) scale(1)}}
 </style>
 </head>
@@ -42,38 +64,53 @@ body::after{
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<div id="s1" class="screen">
-  <div onclick="start()" style="font-size:80px">💖</div>
+<!-- Opening -->
+<div id="s1" class="screen show">
+<h2>Tumhare liye ek surprise hai 💌</h2>
+<div onclick="start()" style="font-size:80px">💖</div>
 </div>
 
+<!-- Slideshow -->
 <div id="s2" class="screen hidden">
-  <img id="slide">
-  <button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
+<h2>Kuch acchii yaadien 📸</h2>
+<img id="slide">
+<button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
+<!-- Gallery -->
 <div id="photogallery" class="screen hidden">
-  <div class="pgrid" id="pgrid"></div>
-  <button class="action-btn" onclick="show('timeline')">Aur dekho aage meri princess 💖</button>
+<h2>hamaare kaarname 📸</h2>
+<div class="pgrid" id="pgrid"></div>
+<button class="action-btn" onclick="show('timeline')">Aur dekho aage meri princess 💖</button>
 </div>
 
+<!-- Timeline -->
 <div id="timeline" class="screen hidden">
-  <button class="action-btn" onclick="startVideos()">Abhi aur hai meri princess 💖</button>
+<h2>Tughee to yaad hii hoga ye sab 🕰️</h2>
+<button class="action-btn" onclick="startVideos()">Abhi aur hai meri princess 💖</button>
 </div>
 
+<!-- Videos -->
 <div id="videos" class="screen hidden">
-  <video id="vid" controls playsinline width="300"></video>
+<h2>Veryyy prettyy princesss 🎬</h2>
+<video id="vid" controls playsinline width="300"></video>
 </div>
 
+<!-- Flowers -->
 <div id="flowers" class="screen hidden">
-  <button class="action-btn" onclick="show('final')">Final Surprise 💖</button>
+<h2>Pick a flower 🌸</h2>
+<button class="action-btn" onclick="show('final')">Final Surprise 💖</button>
 </div>
 
+<!-- Final -->
 <div id="final" class="screen hidden">
-  <div onclick="openLetter()" style="font-size:90px">💌</div>
-  <div id="loveText"></div>
+<h2>One last thing for you 💖</h2>
+<div onclick="openLetter()" style="font-size:90px">💌</div>
+<div id="loveText"></div>
 </div>
 
 <script>
+// ===== IMAGES =====
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -90,19 +127,27 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg"
 ];
 
+// background
 window.onload=()=>{
  let bg=document.getElementById("bgTrack");
  images.concat(images).forEach(s=>{
-   let img=document.createElement("img");
-   img.src=s; bg.appendChild(img);
+  let img=document.createElement("img");
+  img.src=s; bg.appendChild(img);
  });
 };
 
-let i=0;
+// transitions
 function show(id){
- document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
- document.getElementById(id).classList.remove('hidden');
+ document.querySelectorAll('.screen').forEach(s=>{
+  s.classList.remove('show');
+  setTimeout(()=>s.classList.add('hidden'),300);
+ });
+ let el=document.getElementById(id);
+ el.classList.remove('hidden');
+ setTimeout(()=>el.classList.add('show'),50);
 }
+
+let i=0;
 function start(){music.play();show('s2');slide.src=images[i]}
 function next(){i++; i<images.length? slide.src=images[i]:showGallery()}
 
@@ -112,12 +157,12 @@ function showGallery(){
  images.forEach(s=>{
   let img=document.createElement("img");
   img.src=s;
-  img.onclick=()=>slide.src=s;
+  img.onclick=()=>{show('s2');slide.src=s};
   pgrid.appendChild(img);
  });
 }
 
-// ===== Videos =====
+// ===== VIDEOS =====
 let vids=[
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
@@ -141,7 +186,7 @@ function playVid(){
  }
 }
 
-// ===== Letter pop video =====
+// ===== FINAL LETTER GIF VIDEO =====
 function openLetter(){
  let msg="I made this memory for us ❤️";
  let area=document.getElementById("loveText");
