@@ -182,11 +182,13 @@ frame.className="videoFrame";
 let main=document.createElement("video");
 main.className="main";
 main.controls=true;
+main.playsInline=true;
 
 let bg=document.createElement("video");
 bg.className="bg";
 bg.muted=true;
 bg.loop=true;
+bg.playsInline=true;
 
 if(index<vids.length){
 main.src=vids[index];
@@ -201,7 +203,18 @@ frame.appendChild(main);
 container.appendChild(frame);
 
 bg.load(); bg.play();
-main.load(); main.play().catch(()=>{});
+
+// 🔥 MOBILE FIX — user starts the video
+let playBtn=document.createElement("button");
+playBtn.innerText="Play Video 💖";
+playBtn.style.position="static";
+playBtn.style.marginTop="20px";
+container.appendChild(playBtn);
+
+playBtn.onclick=()=>{
+playBtn.remove();
+main.load();
+main.play();
 
 if(index<vids.length){
 main.onended=()=>playVideo(index+1);
@@ -214,8 +227,8 @@ container.prepend(msg);
 main.onplay=()=>music.play();
 main.onended=()=>show('heart');
 }
+};
 }
-
 function openHeart(){
 heartText.innerHTML="Someone is here in my heart ❤️";
 setTimeout(()=>{
@@ -241,4 +254,5 @@ document.getElementById("final").appendChild(g);
 </script>
 </body>
 </html>
+
 
