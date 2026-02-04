@@ -8,19 +8,19 @@
 <style>
 body{margin:0;font-family:Arial;color:white;text-align:center;overflow:hidden}
 
-/* gradient */
+/* brighter romantic gradient */
 body::after{
  content:"";position:fixed;inset:0;
- background:linear-gradient(45deg,#ff4e5070,#ff8fab70,#ffe06660);
- z-index:-1
+ background:linear-gradient(45deg,#ff4e5088,#ff8fab88,#ffe06688);
+ z-index:-1;
 }
 
-/* smooth page transition */
+/* smooth transition */
 .screen{
  min-height:100vh;
  display:flex;flex-direction:column;
  justify-content:center;align-items:center;
- background:rgba(0,0,0,.45);
+ background:rgba(0,0,0,.35);
  opacity:0;
  transform:translateY(60px) scale(.96);
  transition:all .9s cubic-bezier(.22,1,.36,1);
@@ -29,128 +29,65 @@ body::after{
 .hidden{display:none}
 
 /* moving photo background */
-.bg-strip{position:fixed;inset:0;z-index:-2;opacity:.25;overflow:hidden}
+.bg-strip{position:fixed;inset:0;z-index:-2;opacity:.45;overflow:hidden}
 .bg-track{display:flex;width:max-content;animation:move 80s linear infinite}
-.bg-track img{height:100vh;filter:blur(4px)}
+.bg-track img{height:100vh;filter:blur(3px)}
 @keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* slideshow image */
-#slide{
- width:280px;height:280px;border-radius:20px;
- border:5px solid white;object-fit:cover;
- animation:kenburns 6s ease-in-out forwards;
-}
+/* slideshow */
+#slide{width:280px;height:280px;border-radius:20px;border:5px solid white;object-fit:cover}
 @keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.25)}}
 
-/* gallery */
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;width:90%}
 .pgrid img{height:130px;object-fit:cover;border-radius:12px;border:3px solid white;cursor:pointer}
 
-/* headings glow */
-h2{text-shadow:0 0 12px #ff8fab,0 0 25px #ff4e50}
+.action-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);padding:12px 25px;border-radius:25px;border:none}
+h2{text-shadow:0 0 15px #ff8fab,0 0 30px #ff4e50}
 
-/* buttons */
-.action-btn{
- position:fixed;bottom:15px;left:50%;
- transform:translateX(-50%);
- padding:12px 25px;border-radius:25px;border:none
-}
-
-/* stars */
-#stars{position:absolute;inset:0;z-index:-1;opacity:0;animation:starsFade 3s ease forwards}
-.star{position:absolute;width:2px;height:2px;background:white;animation:twinkle 2s infinite alternate}
-@keyframes starsFade{from{opacity:0}to{opacity:1}}
-@keyframes twinkle{from{opacity:.2}to{opacity:1}}
-
-/* wave message */
-.waveMsg{
- position:fixed;top:12px;white-space:nowrap;
- font-size:15px;color:#ffe066;
- animation:waveMove 14s linear infinite;
-}
-@keyframes waveMove{0%{left:-100%}100%{left:100%}}
-
-/* petals */
-@keyframes fall{to{transform:translateY(110vh);opacity:0}}
-
-/* heart */
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
-@keyframes heartOpen{0%{transform:scale(1)}50%{transform:scale(1.6) rotate(10deg)}100%{transform:scale(1)}}
-
-/* video effects */
+/* video fx */
 .videoFx{position:fixed;inset:0;pointer-events:none;z-index:5}
 .sparkle::before{content:"✨ ✨ ✨ ✨";position:absolute;width:100%;top:40%;text-align:center;font-size:30px;animation:twinkle 1s infinite}
 .heartRain::before{content:"💖 💗 💕";position:absolute;width:100%;top:0;text-align:center;font-size:28px;animation:fall 5s linear infinite}
 .blurGlow{backdrop-filter:blur(6px);background:rgba(255,255,255,0.05)}
-
-/* gif pop */
-.popVideo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:200px}
+@keyframes fall{to{transform:translateY(110vh);opacity:0}}
 </style>
 </head>
 
 <body>
 
-<div id="cuteMsg" class="waveMsg"></div>
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<!-- intro -->
 <div id="s1" class="screen show">
-<div id="stars"></div>
 <h2>Tap the heart meri princess 💖</h2>
-<div onclick="start()" style="font-size:90px;animation:pulse 1.5s infinite">💖</div>
+<div onclick="start()" style="font-size:90px">💖</div>
 </div>
 
-<!-- slideshow -->
 <div id="s2" class="screen hidden">
 <h2>Kuch acchii yaadien 📸</h2>
 <img id="slide">
 <button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
-<!-- gallery -->
 <div id="photogallery" class="screen hidden">
 <h2>hamaare kaarname 📸</h2>
 <div id="pgrid" class="pgrid"></div>
 <button class="action-btn" onclick="show('timeline')">Next 💖</button>
 </div>
 
-<!-- timeline -->
 <div id="timeline" class="screen hidden">
 <h2>Abhi aur hai 💖</h2>
 <button class="action-btn" onclick="startVideos()">Videos 🎬</button>
 </div>
 
-<!-- videos -->
 <div id="videos" class="screen hidden">
-<video id="vid" controls width="300"></video>
-</div>
-
-<!-- heart -->
-<div id="flowers" class="screen hidden">
-<h2>Open My Heart ❤️</h2>
-<div id="heartBox" onclick="openHeart()" style="font-size:90px;animation:pulse 1.5s infinite">❤️</div>
-<button id="heartNext" class="action-btn hidden" onclick="show('final')">Final 💌</button>
-</div>
-
-<!-- final -->
-<div id="final" class="screen hidden">
-<div onclick="openLetter()" style="font-size:90px">💌</div>
-<div id="loveText"></div>
+<video id="vid" controls width="320" playsinline></video>
 </div>
 
 <script>
-// stars
-for(let i=0;i<80;i++){
- let s=document.createElement("div");
- s.className="star";
- s.style.top=Math.random()*100+"%";
- s.style.left=Math.random()*100+"%";
- document.getElementById("stars").appendChild(s);
-}
-
-// photos
-let images=[ "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
+// PHOTOS
+let images=[
+"WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
 "WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg",
@@ -162,24 +99,47 @@ let images=[ "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg",
 "WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg"];
+"WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg"
+];
 
-images.concat(images).forEach(s=>{
- let i=document.createElement("img");
- i.src=s;bgTrack.appendChild(i);
+images.concat(images).forEach(src=>{
+ let img=document.createElement("img");
+ img.src=src;
+ bgTrack.appendChild(img);
 });
 
-// transitions
+// transition
 function show(id){
- document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
- document.getElementById(id).classList.remove('hidden');
+ document.querySelectorAll('.screen').forEach(s=>{
+  s.classList.remove('show');
+  s.classList.add('hidden');
+ });
+ let el=document.getElementById(id);
+ el.classList.remove('hidden');
+ setTimeout(()=>el.classList.add('show'),20);
 }
 
 // slideshow
 let i=0;
-function start(){music.play();show('s2');slide.src=images[i]}
-function next(){i++;i<images.length?slide.src=images[i]:showGallery()}
+function start(){
+ music.play();
+ show('s2');
+ slide.src=images[0];
+}
 
+function next(){
+ i++;
+ if(i<images.length){
+  slide.style.animation="none";
+  slide.src=images[i];
+  void slide.offsetWidth;
+  slide.style.animation="kenburns 6s ease-in-out forwards";
+ }else{
+  showGallery();
+ }
+}
+
+// gallery
 function showGallery(){
  show('photogallery');
  pgrid.innerHTML="";
@@ -191,38 +151,44 @@ function showGallery(){
  });
 }
 
-// video fx
-let fx=document.createElement("div");fx.className="videoFx";document.body.appendChild(fx);
+// VIDEO EFFECT LAYER
+let fx=document.createElement("div");
+fx.className="videoFx";
+document.body.appendChild(fx);
 function setFx(t){fx.className="videoFx "+t}
 
-// videos
+// VIDEOS
 let vids=[
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
-"WhatsApp%20Video%202026-02-03%20at%202.06.17%20PM.mp4"];
+"WhatsApp%20Video%202026-02-03%20at%202.06.17%20PM.mp4"
+];
 let special="WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4";
 let v=0;
 
 function startVideos(){show('videos');playVid()}
+
 function playVid(){
- vid.src=vids[v];vid.play();music.pause();
+ vid.src=vids[v];
+ vid.play();
+ music.pause();
+
  if(v==0)setFx("sparkle");
  if(v==1)setFx("heartRain");
  if(v==2)setFx("blurGlow");
+
  vid.onended=()=>{
   v++;
   if(v<3)playVid();
-  else{setFx("");vid.src=special;vid.play();music.play();vid.onended=()=>show('flowers');}
+  else{
+   setFx("");
+   vid.src=special;
+   vid.play();
+   music.play();
+  }
  }
 }
-
-function openHeart(){heartNext.classList.remove('hidden')}
-function openLetter(){
- loveText.innerHTML="I made this memory for us ❤️";
- let g=document.createElement("video");
- g.src="gif.mp4";g.autoplay=true;g.loop=true;g.muted=true;
- g.className="popVideo";final.appendChild(g);
-}
 </script>
+
 </body>
 </html>
