@@ -16,7 +16,7 @@ body::after{
 }
 @keyframes fade{from{opacity:.6}to{opacity:.9}}
 
-/* Moving blurred photo background */
+/* Moving blurred background */
 .bg-strip{position:fixed;inset:0;z-index:-2;opacity:.25;overflow:hidden}
 .bg-track{display:flex;width:max-content;animation:move 80s linear infinite}
 .bg-track img{height:100vh;filter:blur(4px)}
@@ -127,7 +127,7 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg"
 ];
 
-// background load
+// background
 window.onload=()=>{
  let bg=document.getElementById("bgTrack");
  images.concat(images).forEach(s=>{
@@ -161,7 +161,7 @@ function showGallery(){
  });
 }
 
-// ===== VIDEOS =====
+// ===== VIDEOS (music fix) =====
 let vids=[
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
@@ -178,8 +178,9 @@ function playVid(){
   v++;
   if(v<3) playVid();
   else{
-   vid.src=special; vid.play();
-   music.play();
+   vid.src=special;
+   vid.onplay=()=>music.play();  // FIX
+   vid.play();
    vid.onended=()=>show('flowers');
   }
  }
