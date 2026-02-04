@@ -115,6 +115,7 @@ Aur dekho aage meri princess 💖
 </div>
 
 <script>
+<script>
 // ==== ALL 13 PHOTOS ====
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
@@ -133,14 +134,19 @@ let images=[
 ];
 
 // background photos
+let bgTrack=document.getElementById("bgTrack");
 images.concat(images).forEach(s=>{
 let img=document.createElement("img");
-img.src=s;bgTrack.appendChild(img);
+img.src=s;
+bgTrack.appendChild(img);
 });
 
-// screen show
+// screen switch
 function show(id){
-document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('show');s.classList.add('hidden')});
+document.querySelectorAll('.screen').forEach(s=>{
+s.classList.remove('show');
+s.classList.add('hidden')
+});
 let el=document.getElementById(id);
 el.classList.remove('hidden');
 setTimeout(()=>el.classList.add('show'),20);
@@ -150,16 +156,18 @@ setTimeout(()=>el.classList.add('show'),20);
 let i=0;
 function start(){music.play();show('s2');slide.src=images[0]}
 function next(){i++; i<images.length?slide.src=images[i]:showGallery()}
+
 function showGallery(){
 show('gallery');
 pgrid.innerHTML="";
 images.forEach(s=>{
 let img=document.createElement("img");
-img.src=s;pgrid.appendChild(img);
+img.src=s;
+pgrid.appendChild(img);
 });
 }
 
-// ==== VIDEOS ====
+// ==== VIDEOS (FIXED) ====
 let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
@@ -168,44 +176,63 @@ let vids=[
 
 let special="WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4";
 
-
-function startVideos(){show('videos');playVideo(0)}
+function startVideos(){
+show('videos');
+playVideo(0);
+}
 
 function playVideo(index){
 let container=document.getElementById("videos");
 container.innerHTML="";
 music.pause();
 
+// create frame
 let frame=document.createElement("div");
 frame.className="videoFrame";
 
+// main video
 let main=document.createElement("video");
-main.src=vids[index];
 main.className="main";
 main.playsInline=true;
+main.controls=true;
 
-let bg=main.cloneNode(true);
-bg.className="bg";bg.muted=true;bg.play();
+// background blur
+let bg=document.createElement("video");
+bg.className="bg";
+bg.muted=true;
+bg.loop=true;
 
+// set correct source
+if(index < vids.length){
+main.src = vids[index];
+bg.src   = vids[index];
+}else{
+main.src = special;
+bg.src   = special;
+}
+
+// append
 frame.appendChild(bg);
 frame.appendChild(main);
 container.appendChild(frame);
 
-if(index<3){
-main.muted=false;     // 🔥 allow sound
-main.controls=true;   // allow user interaction
-main.play().catch(()=>{}); // browser safe
+// play bg
+bg.play();
+
+// normal videos
+if(index < vids.length){
+main.play().catch(()=>{});
 main.onended=()=>playVideo(index+1);
-}else{
+}
+// special video
+else{
 let msg=document.createElement("h2");
 msg.innerHTML="Yeh video sabse khaas hai… sirf meri princess ke liye 💖";
 msg.style.color="#ffe066";
 container.prepend(msg);
 
-main.muted=false;
-main.controls=true;
 main.onplay=()=>music.play();
-main.play();
+main.play().catch(()=>{});
 main.onended=()=>show('heart');
 }
 }
@@ -223,15 +250,19 @@ heartBtn.style.display="block";
 },1500);
 }
 
-// ==== FINAL LETTER GIF ====
+// ==== FINAL GIF ====
 function openLetter(){
 loveText.innerHTML="I made this memory for us ❤️";
 let g=document.createElement("video");
-g.src="gif.mp4";g.autoplay=true;g.loop=true;g.muted=true;
+g.src="gif.mp4";
+g.autoplay=true;
+g.loop=true;
+g.muted=true;
 g.className="popVideo";
 final.appendChild(g);
 }
 </script>
 </body>
 </html>
+
 
