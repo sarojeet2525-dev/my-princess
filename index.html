@@ -12,8 +12,6 @@ content:"";position:fixed;inset:0;
 background:linear-gradient(45deg,#ff4e5088,#ff8fab88,#ffe06688);
 z-index:-1;
 }
-
-/* smooth screens */
 .screen{
 min-height:100vh;display:flex;flex-direction:column;
 justify-content:center;align-items:center;
@@ -24,28 +22,22 @@ transition:.8s;
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* moving background photos */
 .bg-strip{position:fixed;inset:0;z-index:-2;opacity:.4;overflow:hidden}
 .bg-track{display:flex;width:max-content;animation:move 80s linear infinite}
 .bg-track img{height:100vh;filter:blur(4px)}
 @keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* slideshow */
 #slide{width:280px;height:280px;border-radius:20px;border:5px solid white;object-fit:cover}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;width:90%}
 .pgrid img{height:130px;border-radius:12px;border:3px solid white}
 
-/* buttons */
 button{
 position:fixed;bottom:15px;left:50%;
 transform:translateX(-50%);
 padding:12px 25px;border-radius:25px;border:none;
 transition:.3s;box-shadow:0 10px 25px rgba(0,0,0,.25)
 }
-button:hover{transform:translateX(-50%) scale(1.08)}
-button:active{transform:translateX(-50%) scale(.96)}
 
-/* cinematic video */
 .videoFrame{
 position:relative;width:95%;max-width:900px;
 aspect-ratio:16/9;margin:auto;overflow:hidden;border-radius:20px
@@ -68,36 +60,30 @@ position:relative;height:100%;width:auto;margin:auto;display:block;border-radius
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<!-- Start -->
 <div id="s1" class="screen show">
 <h2>Tap the heart meri princess 💖</h2>
 <div onclick="start()" style="font-size:90px">💖</div>
 </div>
 
-<!-- Slideshow -->
 <div id="s2" class="screen hidden">
 <h2>Kuch acchii yaadien 📸</h2>
 <img id="slide">
 <button onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
-<!-- Gallery -->
 <div id="gallery" class="screen hidden">
 <h2>hamaare kaarname 📸</h2>
 <div id="pgrid" class="pgrid"></div>
 <button onclick="show('message')">Next 💖</button>
 </div>
 
-<!-- Message before videos -->
 <div id="message" class="screen hidden">
 <h2>Abhi kahani khatam nahi hui meri princess… 💖</h2>
 <button onclick="startVideos()">Videos 🎬</button>
 </div>
 
-<!-- Videos -->
 <div id="videos" class="screen hidden"></div>
 
-<!-- Heart -->
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
 <div onclick="openHeart()" style="font-size:90px">❤️</div>
@@ -108,58 +94,37 @@ Aur dekho aage meri princess 💖
 </button>
 </div>
 
-<!-- Final -->
 <div id="final" class="screen hidden">
 <div class="envelope" onclick="openLetter()">💌</div>
 <div id="loveText"></div>
 </div>
 
 <script>
-// ===== GET ELEMENTS SAFELY =====
-const music = document.getElementById("music");
-const slide = document.getElementById("slide");
-const pgrid = document.getElementById("pgrid");
-const heartText = document.getElementById("heartText");
-const heartPhoto = document.getElementById("heartPhoto");
-const heartBtn = document.getElementById("heartBtn");
-const bgTrack = document.getElementById("bgTrack");
+const music=document.getElementById("music");
+const slide=document.getElementById("slide");
+const pgrid=document.getElementById("pgrid");
+const bgTrack=document.getElementById("bgTrack");
+const heartText=document.getElementById("heartText");
+const heartPhoto=document.getElementById("heartPhoto");
+const heartBtn=document.getElementById("heartBtn");
 
-// ==== ALL 13 PHOTOS ====
-let images=[
-"WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
-"WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
-];
+let images=[ /* your 13 images here */ ];
 
-// background photos
 images.concat(images).forEach(src=>{
 let img=document.createElement("img");
 img.src=src;
 bgTrack.appendChild(img);
 });
 
-// screen switch
 function show(id){
 document.querySelectorAll('.screen').forEach(s=>{
-s.classList.remove('show');
-s.classList.add('hidden')
+s.classList.remove('show');s.classList.add('hidden')
 });
 let el=document.getElementById(id);
 el.classList.remove('hidden');
 setTimeout(()=>el.classList.add('show'),20);
 }
 
-// slideshow
 let i=0;
 function start(){
 music.play();
@@ -169,11 +134,8 @@ slide.src=images[0];
 
 function next(){
 i++;
-if(i<images.length){
-slide.src=images[i];
-}else{
-showGallery();
-}
+if(i<images.length){ slide.src=images[i]; }
+else{ showGallery(); }
 }
 
 function showGallery(){
@@ -186,7 +148,7 @@ pgrid.appendChild(img);
 });
 }
 
-// ==== VIDEOS (fixed) ====
+// VIDEOS
 let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
@@ -194,10 +156,7 @@ let vids=[
 ];
 let special="WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4";
 
-function startVideos(){
-show('videos');
-playVideo(0);
-}
+function startVideos(){ show('videos'); playVideo(0); }
 
 function playVideo(index){
 let container=document.getElementById("videos");
@@ -209,7 +168,6 @@ frame.className="videoFrame";
 
 let main=document.createElement("video");
 main.className="main";
-main.playsInline=true;
 main.controls=true;
 
 let bg=document.createElement("video");
@@ -229,8 +187,8 @@ frame.appendChild(bg);
 frame.appendChild(main);
 container.appendChild(frame);
 
-bg.play();
-main.play().catch(()=>{});
+bg.load(); bg.play();
+main.load(); main.play().catch(()=>{});
 
 if(index<vids.length){
 main.onended=()=>playVideo(index+1);
@@ -245,7 +203,6 @@ main.onended=()=>show('heart');
 }
 }
 
-// heart
 function openHeart(){
 heartText.innerHTML="Someone is here in my heart ❤️";
 setTimeout(()=>{
@@ -258,7 +215,6 @@ heartBtn.style.display="block";
 },1500);
 }
 
-// final gif
 function openLetter(){
 document.getElementById("loveText").innerHTML="I made this memory for us ❤️";
 let g=document.createElement("video");
@@ -269,9 +225,6 @@ g.muted=true;
 g.className="popVideo";
 document.getElementById("final").appendChild(g);
 }
-</script>  
+</script>
 </body>
 </html>
-
-
-
