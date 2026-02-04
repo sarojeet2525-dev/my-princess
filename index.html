@@ -16,21 +16,21 @@ body::after{
 }
 @keyframes fade{from{opacity:.6}to{opacity:.9}}
 
-/* Moving background */
+/* Moving blurred photo background */
 .bg-strip{position:fixed;inset:0;z-index:-2;opacity:.25;overflow:hidden}
 .bg-track{display:flex;width:max-content;animation:move 80s linear infinite}
 .bg-track img{height:100vh;filter:blur(4px)}
 @keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* Transitions */
+/* Smooth transitions */
 .screen{
  min-height:100vh;display:flex;flex-direction:column;
  justify-content:center;align-items:center;
  background:rgba(0,0,0,.45);
- opacity:0;transform:translateY(40px);
- transition:.8s ease
+ opacity:0;transform:translateY(60px) scale(.96);
+ transition:all .9s cubic-bezier(.22,1,.36,1);
 }
-.screen.show{opacity:1;transform:translateY(0)}
+.screen.show{opacity:1;transform:translateY(0) scale(1)}
 .hidden{display:none}
 
 .action-btn{
@@ -127,7 +127,7 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg"
 ];
 
-// background
+// background load
 window.onload=()=>{
  let bg=document.getElementById("bgTrack");
  images.concat(images).forEach(s=>{
@@ -136,15 +136,14 @@ window.onload=()=>{
  });
 };
 
-// transitions
 function show(id){
  document.querySelectorAll('.screen').forEach(s=>{
   s.classList.remove('show');
-  setTimeout(()=>s.classList.add('hidden'),300);
+  s.classList.add('hidden');
  });
  let el=document.getElementById(id);
  el.classList.remove('hidden');
- setTimeout(()=>el.classList.add('show'),50);
+ setTimeout(()=>el.classList.add('show'),20);
 }
 
 let i=0;
@@ -186,7 +185,7 @@ function playVid(){
  }
 }
 
-// ===== FINAL LETTER GIF VIDEO =====
+// ===== FINAL LETTER GIF =====
 function openLetter(){
  let msg="I made this memory for us ❤️";
  let area=document.getElementById("loveText");
