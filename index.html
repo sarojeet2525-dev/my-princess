@@ -7,49 +7,42 @@
 
 <style>
 body{margin:0;font-family:Arial;color:white;text-align:center;overflow:hidden}
-
-/* brighter romantic gradient */
 body::after{
  content:"";position:fixed;inset:0;
  background:linear-gradient(45deg,#ff4e5088,#ff8fab88,#ffe06688);
  z-index:-1;
 }
 
-/* smooth transition */
+/* transition */
 .screen{
- min-height:100vh;
- display:flex;flex-direction:column;
+ min-height:100vh;display:flex;flex-direction:column;
  justify-content:center;align-items:center;
  background:rgba(0,0,0,.35);
- opacity:0;
- transform:translateY(60px) scale(.96);
+ opacity:0;transform:translateY(60px) scale(.96);
  transition:all .9s cubic-bezier(.22,1,.36,1);
 }
 .screen.show{opacity:1;transform:translateY(0) scale(1)}
 .hidden{display:none}
 
-/* moving photo background */
+/* moving background */
 .bg-strip{position:fixed;inset:0;z-index:-2;opacity:.45;overflow:hidden}
 .bg-track{display:flex;width:max-content;animation:move 80s linear infinite}
 .bg-track img{height:100vh;filter:blur(3px)}
 @keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* slideshow */
 #slide{width:280px;height:280px;border-radius:20px;border:5px solid white;object-fit:cover}
-@keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.25)}}
-
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;width:90%}
-.pgrid img{height:130px;object-fit:cover;border-radius:12px;border:3px solid white;cursor:pointer}
+.pgrid img{height:130px;border-radius:12px;border:3px solid white;cursor:pointer}
 
 .action-btn{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);padding:12px 25px;border-radius:25px;border:none}
-h2{text-shadow:0 0 15px #ff8fab,0 0 30px #ff4e50}
 
-/* video fx */
 .videoFx{position:fixed;inset:0;pointer-events:none;z-index:5}
 .sparkle::before{content:"✨ ✨ ✨ ✨";position:absolute;width:100%;top:40%;text-align:center;font-size:30px;animation:twinkle 1s infinite}
 .heartRain::before{content:"💖 💗 💕";position:absolute;width:100%;top:0;text-align:center;font-size:28px;animation:fall 5s linear infinite}
 .blurGlow{backdrop-filter:blur(6px);background:rgba(255,255,255,0.05)}
 @keyframes fall{to{transform:translateY(110vh);opacity:0}}
+
+.popVideo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:200px}
 </style>
 </head>
 
@@ -58,35 +51,52 @@ h2{text-shadow:0 0 15px #ff8fab,0 0 30px #ff4e50}
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
+<!-- Start -->
 <div id="s1" class="screen show">
 <h2>Tap the heart meri princess 💖</h2>
 <div onclick="start()" style="font-size:90px">💖</div>
 </div>
 
+<!-- Slideshow -->
 <div id="s2" class="screen hidden">
 <h2>Kuch acchii yaadien 📸</h2>
 <img id="slide">
 <button class="action-btn" onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
+<!-- Gallery -->
 <div id="photogallery" class="screen hidden">
 <h2>hamaare kaarname 📸</h2>
 <div id="pgrid" class="pgrid"></div>
 <button class="action-btn" onclick="show('timeline')">Next 💖</button>
 </div>
 
+<!-- Timeline -->
 <div id="timeline" class="screen hidden">
 <h2>Abhi aur hai 💖</h2>
 <button class="action-btn" onclick="startVideos()">Videos 🎬</button>
 </div>
 
+<!-- Videos -->
 <div id="videos" class="screen hidden">
 <video id="vid" controls width="320" playsinline></video>
 </div>
 
+<!-- Heart -->
+<div id="heart" class="screen hidden">
+<h2>Open My Heart ❤️</h2>
+<div onclick="show('final')" style="font-size:90px">❤️</div>
+</div>
+
+<!-- Final Letter -->
+<div id="final" class="screen hidden">
+<div onclick="openLetter()" style="font-size:90px">💌</div>
+<div id="loveText"></div>
+</div>
+
 <script>
-// PHOTOS
-let images=[
+// IMAGES
+let images=[/* same 13 names */ 
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
@@ -102,62 +112,39 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg"
 ];
 
-images.concat(images).forEach(src=>{
- let img=document.createElement("img");
- img.src=src;
- bgTrack.appendChild(img);
+images.concat(images).forEach(s=>{
+ let i=document.createElement("img");
+ i.src=s;bgTrack.appendChild(i);
 });
 
-// transition
+// TRANSITION
 function show(id){
  document.querySelectorAll('.screen').forEach(s=>{
-  s.classList.remove('show');
-  s.classList.add('hidden');
+  s.classList.remove('show');s.classList.add('hidden');
  });
  let el=document.getElementById(id);
  el.classList.remove('hidden');
  setTimeout(()=>el.classList.add('show'),20);
 }
 
-// slideshow
+// SLIDESHOW
 let i=0;
-function start(){
- music.play();
- show('s2');
- slide.src=images[0];
-}
-
-function next(){
- i++;
- if(i<images.length){
-  slide.style.animation="none";
-  slide.src=images[i];
-  void slide.offsetWidth;
-  slide.style.animation="kenburns 6s ease-in-out forwards";
- }else{
-  showGallery();
- }
-}
-
-// gallery
+function start(){music.play();show('s2');slide.src=images[0]}
+function next(){i++;i<images.length?slide.src=images[i]:showGallery()}
 function showGallery(){
- show('photogallery');
- pgrid.innerHTML="";
+ show('photogallery');pgrid.innerHTML="";
  images.forEach(s=>{
   let img=document.createElement("img");
-  img.src=s;
-  img.onclick=()=>{show('s2');slide.src=s};
+  img.src=s;img.onclick=()=>{show('s2');slide.src=s};
   pgrid.appendChild(img);
  });
 }
 
-// VIDEO EFFECT LAYER
+// VIDEO FX
 let fx=document.createElement("div");
-fx.className="videoFx";
-document.body.appendChild(fx);
+fx.className="videoFx";document.body.appendChild(fx);
 function setFx(t){fx.className="videoFx "+t}
 
-// VIDEOS
 let vids=[
 "WhatsApp%20Video%202026-02-03%20at%202.06.15%20PM.mp4",
 "WhatsApp%20Video%202026-02-03%20at%202.07.12%20PM.mp4",
@@ -167,26 +154,29 @@ let special="WhatsApp%20Video%202026-02-03%20at%202.23.03%20PM.mp4";
 let v=0;
 
 function startVideos(){show('videos');playVid()}
-
 function playVid(){
- vid.src=vids[v];
- vid.play();
- music.pause();
-
+ vid.src=vids[v];vid.play();music.pause();
  if(v==0)setFx("sparkle");
  if(v==1)setFx("heartRain");
  if(v==2)setFx("blurGlow");
-
  vid.onended=()=>{
   v++;
   if(v<3)playVid();
   else{
    setFx("");
-   vid.src=special;
-   vid.play();
-   music.play();
+   vid.src=special;vid.play();music.play();
+   vid.onended=()=>show('heart');
   }
  }
+}
+
+// FINAL LETTER + GIF
+function openLetter(){
+ loveText.innerHTML="I made this memory for us ❤️";
+ let g=document.createElement("video");
+ g.src="gif.mp4";g.autoplay=true;g.loop=true;g.muted=true;
+ g.className="popVideo";
+ final.appendChild(g);
 }
 </script>
 
