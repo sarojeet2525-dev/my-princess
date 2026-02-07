@@ -37,7 +37,7 @@ transition:.8s ease;
 position:fixed;
 inset:0;
 z-index:-2;
-opacity:.3;
+opacity:.25;
 overflow:hidden;
 }
 .bg-track{
@@ -133,7 +133,7 @@ animation:pulse 2s infinite;
 /* GIF */
 .magicGif{
 position:absolute;
-top:35%;
+top:40%;
 left:50%;
 transform:translate(-50%,-50%);
 width:min(70vw,240px);
@@ -145,7 +145,7 @@ z-index:1;
 
 /* Proposal */
 #proposalArea{
-margin-top:150px;
+margin-top:170px;
 z-index:2;
 position:relative;
 }
@@ -224,7 +224,7 @@ Aur dekho aage meri princess 💖
 <div class="envelope" onclick="openLetter()">💌</div>
 <div id="loveText"></div>
 
-<video id="magicGif" class="magicGif" src="gif.mp4" loop muted></video>
+<video id="magicGif" class="magicGif" src="gif.mp4" loop muted playsinline></video>
 
 <div id="proposalArea" style="display:none;">
 <h2 style="color:#ffe066;">Will you stay with me forever? 💍</h2>
@@ -276,11 +276,8 @@ setTimeout(()=>el.classList.add('show'),20);
 /* SLIDESHOW */
 let i=0;
 function start(){music.play();show('s2');slide.src=images[0];}
-function next(){
-i++;
-if(i<images.length){slide.src=images[i];}
-else{showGallery();}
-}
+function next(){i++; if(i<images.length){slide.src=images[i];} else{showGallery();}}
+
 function showGallery(){
 show('gallery');
 pgrid.innerHTML="";
@@ -298,6 +295,7 @@ let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"
 ];
+
 let currentVideo=0;
 
 function startVideos(){
@@ -305,11 +303,14 @@ currentVideo=0;
 show('videos');
 loadVideo();
 }
+
 function loadVideo(){
 let video=document.getElementById("mainVideo");
 video.src=vids[currentVideo];
 video.load();
+video.play().catch(()=>{});
 }
+
 function nextVideo(){
 currentVideo++;
 if(currentVideo<vids.length){loadVideo();}
@@ -333,8 +334,10 @@ heartBtn.style.display="block";
 function openLetter(){
 document.getElementById("loveText").innerHTML="I made this memory for us ❤️";
 let gif=document.getElementById("magicGif");
-gif.classList.add("show");
+gif.classList.remove("show");
+gif.currentTime=0;
 gif.play();
+setTimeout(()=>{gif.classList.add("show");},100);
 setTimeout(()=>{
 document.getElementById("proposalArea").style.display="block";
 },2000);
