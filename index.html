@@ -172,6 +172,7 @@ let special="WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4";
 function startVideos(){ show('videos'); playVideo(0); }
 
 function playVideo(index){
+
 let container=document.getElementById("videos");
 container.innerHTML="";
 music.pause();
@@ -184,41 +185,38 @@ main.className="main";
 main.controls=true;
 main.playsInline=true;
 
+// detect mobile
+let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+if(index < vids.length){
+main.src = vids[index];
+}else{
+main.src = special;
+}
+
+frame.appendChild(main);
+container.appendChild(frame);
+
+// 🔥 only add blurred background on desktop
+if(!isMobile){
 let bg=document.createElement("video");
 bg.className="bg";
 bg.muted=true;
 bg.loop=true;
-bg.playsInline=true;
-
-if(index<vids.length){
-main.src=vids[index];
-bg.src=vids[index];
-}else{
-main.src=special;
-bg.src=special;
+bg.src=main.src;
+frame.insertBefore(bg, main);
+bg.play();
 }
 
-frame.appendChild(bg);
-frame.appendChild(main);
-container.appendChild(frame);
-
-bg.load(); bg.play();
-
-// 🔥 MOBILE FIX — user starts the video
-let playBtn=document.createElement("button");
-playBtn.innerText="Play Video 💖";
-playBtn.style.position="static";
-playBtn.style.marginTop="20px";
-container.appendChild(playBtn);
-
-playBtn.onclick=()=>{
-playBtn.remove();
 main.load();
-main.play();
+main.play().catch(()=>{});
 
-if(index<vids.length){
-main.onended=()=>playVideo(index+1);
-}else{
+// normal 3 videos
+if(index < vids.length){
+main.onended = ()=>playVideo(index+1);
+}
+// special video
+else{
 let msg=document.createElement("h2");
 msg.innerHTML="Yeh video sabse khaas hai… sirf meri princess ke liye 💖";
 msg.style.color="#ffe066";
@@ -254,5 +252,6 @@ document.getElementById("final").appendChild(g);
 </script>
 </body>
 </html>
+
 
 
