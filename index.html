@@ -190,13 +190,18 @@ let title=document.getElementById("videoTitle");
 
 music.pause();
 
+// VERY IMPORTANT RESET
+video.pause();
+video.currentTime = 0;
+video.onended = null;
+
 if(currentVideo < vids.length){
   title.innerHTML="Memory " + (currentVideo+1) + " 💖";
-  video.src=vids[currentVideo];
+  video.src = vids[currentVideo];
 }
 else if(currentVideo === vids.length){
   title.innerHTML="Yeh video sabse khaas hai… sirf meri princess ke liye 💖";
-  video.src=special;
+  video.src = special;
   music.play();
 }
 else{
@@ -205,9 +210,13 @@ else{
 }
 
 video.load();
-video.play().catch(()=>{});
 
-video.onended=()=>{
+// 👇 IMPORTANT: let user control play
+video.controls = true;
+video.autoplay = false;
+
+// After video ends
+video.onended = ()=>{
   currentVideo++;
   playNextVideo();
 };
@@ -238,6 +247,7 @@ document.getElementById("final").appendChild(g);
 </script>
 </body>
 </html>
+
 
 
 
