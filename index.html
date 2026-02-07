@@ -15,7 +15,7 @@ overflow-x:hidden;
 background:linear-gradient(45deg,#ff4e5088,#ff8fab88,#ffe06688);
 }
 
-/* Smooth screen transition */
+/* Screen */
 .screen{
 min-height:100vh;
 display:flex;
@@ -24,14 +24,15 @@ justify-content:center;
 align-items:center;
 background:rgba(0,0,0,.35);
 opacity:0;
-transform:translateY(60px);
+transform:translateY(50px);
 transition:.8s ease;
-padding:20px;
+padding:30px 20px;
+box-sizing:border-box;
 }
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* Background moving photos */
+/* Background */
 .bg-strip{
 position:fixed;
 inset:0;
@@ -42,11 +43,11 @@ overflow:hidden;
 .bg-track{
 display:flex;
 width:max-content;
-animation:move 80s linear infinite;
+animation:move 90s linear infinite;
 }
 .bg-track img{
 height:100vh;
-filter:blur(5px);
+filter:blur(6px);
 }
 @keyframes move{
 from{transform:translateX(0)}
@@ -55,66 +56,70 @@ to{transform:translateX(-50%)}
 
 /* Slideshow */
 #slide{
-width:280px;
-height:280px;
+width:min(85vw,300px);
+height:min(85vw,300px);
 border-radius:20px;
 border:5px solid white;
 object-fit:cover;
+margin-bottom:20px;
 }
 
 /* Gallery */
 .pgrid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
 gap:12px;
-width:95%;
+width:100%;
+max-width:800px;
 }
 .pgrid img{
-height:130px;
+width:100%;
+height:120px;
 border-radius:12px;
 border:3px solid white;
 object-fit:cover;
 }
 
-/* Buttons */
+/* Buttons (FIXED POSITION ISSUE REMOVED) */
 button{
-position:fixed;
-bottom:15px;
-left:50%;
-transform:translateX(-50%);
+margin-top:25px;
 padding:12px 25px;
 border-radius:25px;
 border:none;
-transition:.3s;
-box-shadow:0 10px 25px rgba(0,0,0,.25);
 cursor:pointer;
+font-size:16px;
+background:white;
+color:#ff4e50;
+transition:.3s ease;
+box-shadow:0 8px 20px rgba(0,0,0,.25);
 }
 button:hover{
-transform:translateX(-50%) scale(1.08);
-}
-button:active{
-transform:translateX(-50%) scale(.95);
+transform:scale(1.08);
 }
 
-/* Video */
+/* Video Responsive FIX */
 .videoFrame{
-width:95%;
-max-width:700px;
-aspect-ratio:16/9;
-margin:auto;
-}
-video{
 width:100%;
+max-width:800px;
+aspect-ratio:16/9;
+margin-top:20px;
+}
+.videoFrame video{
+width:100%;
+height:100%;
+object-fit:contain;
 border-radius:16px;
 }
 
-/* FINAL CINEMATIC PART */
-#final{
-box-shadow:0 0 60px gold inset;
-position:relative;
-overflow:hidden;
+/* Heart */
+#heartPhoto{
+width:min(80vw,220px);
+border-radius:20px;
+border:4px solid white;
+margin-top:15px;
 }
 
+/* Final */
 .envelope{
 font-size:90px;
 cursor:pointer;
@@ -131,14 +136,14 @@ position:absolute;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
-width:240px;
+width:min(70vw,240px);
 opacity:0;
 transition:2s ease;
 }
 .magicGif.show{opacity:1;}
 
 #proposalRing{
-font-size:110px;
+font-size:100px;
 display:none;
 cursor:pointer;
 animation:ringGlow 2s infinite;
@@ -151,7 +156,7 @@ animation:ringGlow 2s infinite;
 
 #yesText{
 display:none;
-font-size:40px;
+font-size:32px;
 color:#ff4e50;
 margin-top:20px;
 animation:pop 1s ease forwards;
@@ -161,7 +166,7 @@ animation:pop 1s ease forwards;
 100%{transform:scale(1)}
 }
 
-/* Falling roses */
+/* Roses */
 @keyframes fall{
 to{transform:translateY(110vh);opacity:0}
 }
@@ -173,58 +178,59 @@ to{transform:translateY(110vh);opacity:0}
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<!-- START -->
+<!-- Start -->
 <div id="s1" class="screen show">
 <h2>Tap the heart meri princess 💖</h2>
-<div onclick="start()" style="font-size:90px">💖</div>
+<div onclick="start()" style="font-size:90px;cursor:pointer">💖</div>
 </div>
 
-<!-- SLIDESHOW -->
+<!-- Slideshow -->
 <div id="s2" class="screen hidden">
 <h2>Kuch acchii yaadien 📸</h2>
 <img id="slide">
 <button onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
-<!-- GALLERY -->
+<!-- Gallery -->
 <div id="gallery" class="screen hidden">
 <h2>Hamaare kaarname 📸</h2>
 <div id="pgrid" class="pgrid"></div>
 <button onclick="show('message')">Next 💖</button>
 </div>
 
-<!-- MESSAGE -->
+<!-- Message -->
 <div id="message" class="screen hidden">
 <h2>Abhi kahani khatam nahi hui meri princess… 💖</h2>
 <button onclick="startVideos()">Videos 🎬</button>
 </div>
 
-<!-- VIDEOS -->
+<!-- Videos -->
 <div id="videos" class="screen hidden">
 <h2 id="videoTitle"></h2>
 <div class="videoFrame">
 <video id="mainVideo" controls playsinline></video>
 </div>
+<button onclick="nextVideo()">Next Video 💖</button>
 </div>
 
-<!-- HEART PART -->
+<!-- Heart -->
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
-<div onclick="openHeart()" style="font-size:90px">❤️</div>
+<div onclick="openHeart()" style="font-size:90px;cursor:pointer">❤️</div>
 <div id="heartText" style="margin-top:20px;color:#ffe066"></div>
-<img id="heartPhoto" style="width:220px;border-radius:20px;border:4px solid white;display:none;margin-top:15px;">
+<img id="heartPhoto" style="display:none;">
 <button id="heartBtn" style="display:none" onclick="show('final')">
 Aur dekho aage meri princess 💖
 </button>
 </div>
 
-<!-- FINAL -->
-<div id="final" class="screen hidden">
+<!-- Final -->
+<div id="final" class="screen hidden" style="position:relative;">
 <div class="envelope" onclick="openLetter()">💌</div>
 <div id="loveText"></div>
 <video id="magicGif" class="magicGif" src="gif.mp4" loop muted></video>
 
-<div id="proposalArea" style="display:none;flex-direction:column;align-items:center;margin-top:20px;">
+<div id="proposalArea" style="display:none;margin-top:20px;">
 <h2 style="color:#ffe066;">Will you stay with me forever? 💍</h2>
 <div id="proposalRing" onclick="acceptProposal()">💍</div>
 <h1 id="yesText">She said YES 💞✨</h1>
@@ -237,7 +243,7 @@ const slide=document.getElementById("slide");
 const pgrid=document.getElementById("pgrid");
 const bgTrack=document.getElementById("bgTrack");
 
-let images=[ /* YOUR 13 IMAGES */ 
+let images=[ /* 13 photos */ 
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
@@ -261,7 +267,8 @@ bgTrack.appendChild(img);
 
 function show(id){
 document.querySelectorAll('.screen').forEach(s=>{
-s.classList.remove('show');s.classList.add('hidden')
+s.classList.remove('show');
+s.classList.add('hidden');
 });
 let el=document.getElementById(id);
 el.classList.remove('hidden');
@@ -282,44 +289,36 @@ pgrid.appendChild(img);
 });
 }
 
-/* VIDEOS */
+/* VIDEO FIX */
 let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
-"WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4"
+"WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4",
+"WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"
 ];
-let special="WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4";
+
 let currentVideo=0;
 
 function startVideos(){
+currentVideo=0;
 show('videos');
-playNextVideo();
+loadVideo();
 }
 
-function playNextVideo(){
+function loadVideo(){
 let video=document.getElementById("mainVideo");
-let title=document.getElementById("videoTitle");
-
-video.pause();
-video.currentTime=0;
-music.pause();
-
-if(currentVideo<vids.length){
-title.innerHTML="Memory "+(currentVideo+1)+" 💖";
 video.src=vids[currentVideo];
-}
-else if(currentVideo===vids.length){
-title.innerHTML="Yeh video sabse khaas hai… 💖";
-video.src=special;
-music.play();
-}
-else{
-show('heart');
-return;
+video.load();
+video.play().catch(()=>{});
 }
 
-video.load();
-video.onended=()=>{currentVideo++;playNextVideo();}
+function nextVideo(){
+currentVideo++;
+if(currentVideo<vids.length){
+loadVideo();
+}else{
+show('heart');
+}
 }
 
 /* HEART */
@@ -335,37 +334,20 @@ heartBtn.style.display="block";
 },1500);
 }
 
-/* FINAL MAGIC */
+/* FINAL */
 function openLetter(){
 document.getElementById("loveText").innerHTML="I made this memory for us ❤️";
 let gif=document.getElementById("magicGif");
 gif.classList.add("show");
 gif.play();
-
 setTimeout(()=>{
-document.getElementById("proposalArea").style.display="flex";
+document.getElementById("proposalArea").style.display="block";
 document.getElementById("proposalRing").style.display="block";
-startRoses();
 },2000);
 }
 
 function acceptProposal(){
 document.getElementById("yesText").style.display="block";
-startRoses();
-}
-
-function startRoses(){
-for(let i=0;i<15;i++){
-let r=document.createElement("div");
-r.innerHTML="🌹";
-r.style.position="fixed";
-r.style.left=Math.random()*100+"vw";
-r.style.top="-20px";
-r.style.fontSize="24px";
-r.style.animation="fall 5s linear";
-document.body.appendChild(r);
-setTimeout(()=>r.remove(),5000);
-}
 }
 </script>
 </body>
