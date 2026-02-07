@@ -12,17 +12,10 @@ font-family:Arial;
 color:white;
 text-align:center;
 overflow-x:hidden;
+background:linear-gradient(45deg,#ff4e5088,#ff8fab88,#ffe06688);
 }
 
-body::after{
-content:"";
-position:fixed;
-inset:0;
-background:linear-gradient(45deg,#ff4e50aa,#ff8faaaa,#ffe066aa);
-z-index:-1;
-}
-
-/* Screens */
+/* smooth screen */
 .screen{
 min-height:100vh;
 display:flex;
@@ -32,19 +25,18 @@ align-items:center;
 background:rgba(0,0,0,.35);
 opacity:0;
 transform:translateY(40px);
-transition:.6s;
+transition:0.7s ease;
 padding:20px;
-box-sizing:border-box;
 }
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* Background moving images */
+/* background moving photos */
 .bg-strip{
 position:fixed;
 inset:0;
 z-index:-2;
-opacity:.3;
+opacity:.25;
 overflow:hidden;
 }
 .bg-track{
@@ -61,21 +53,21 @@ from{transform:translateX(0)}
 to{transform:translateX(-50%)}
 }
 
-/* Slideshow */
+/* slideshow */
 #slide{
-width:clamp(220px,60vw,320px);
-height:clamp(220px,60vw,320px);
+width:clamp(220px,70vw,320px);
+height:clamp(220px,70vw,320px);
 border-radius:20px;
 border:5px solid white;
 object-fit:cover;
 }
 
-/* Gallery */
+/* gallery */
 .pgrid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
 gap:12px;
-width:100%;
+width:90%;
 max-width:900px;
 }
 .pgrid img{
@@ -85,119 +77,141 @@ border:3px solid white;
 object-fit:cover;
 }
 
-/* Buttons (NOT fixed now) */
+/* buttons */
 button{
-margin-top:25px;
 padding:12px 25px;
 border-radius:25px;
 border:none;
-background:white;
-color:#ff4e50;
+background:#ffe066;
+color:black;
 font-weight:bold;
 cursor:pointer;
-transition:.3s;
-box-shadow:0 10px 25px rgba(0,0,0,.25);
+margin-top:20px;
+transition:.3s ease;
 }
 button:hover{transform:scale(1.08)}
 button:active{transform:scale(.95)}
 
-/* Video */
-.videoBox{
+/* video */
+.videoFrame{
 width:100%;
-max-width:800px;
-max-height:75vh;
-display:flex;
-justify-content:center;
-align-items:center;
-margin-top:20px;
+max-width:850px;
+aspect-ratio:16/9;
+margin:auto;
 }
 video{
 width:100%;
-max-height:75vh;
+height:100%;
 border-radius:20px;
 object-fit:contain;
+background:black;
 }
 
-/* Heart */
+/* heart part */
+#heartPhoto{
+width:220px;
+border-radius:20px;
+border:4px solid white;
+margin-top:15px;
+display:none;
+}
+
+/* proposal */
 .envelope{
 font-size:90px;
 cursor:pointer;
+animation:pulse 1.5s infinite;
+}
+@keyframes pulse{
+0%,100%{transform:scale(1)}
+50%{transform:scale(1.1)}
 }
 
-.popVideo{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-width:220px;
+#proposalArea{
+display:none;
+flex-direction:column;
+align-items:center;
+gap:15px;
 }
 
-/* Mobile */
+.magicGif{
+width:200px;
+opacity:0;
+transform:translateY(20px) scale(.8);
+filter:blur(10px);
+animation:magicAppear 2s ease forwards;
+}
+
+@keyframes magicAppear{
+to{
+opacity:1;
+transform:translateY(0) scale(1);
+filter:blur(0);
+}
+}
+
 @media(max-width:600px){
-video{
-max-height:65vh;
-}
+video{max-height:60vh;}
 }
 </style>
 </head>
 
 <body>
 
-<div class="bg-strip">
-<div class="bg-track" id="bgTrack"></div>
-</div>
-
+<div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<!-- Start -->
+<!-- START -->
 <div id="s1" class="screen show">
 <h2>Tap the heart meri princess 💖</h2>
-<div onclick="start()" style="font-size:90px;cursor:pointer">💖</div>
+<div onclick="start()" style="font-size:90px;cursor:pointer;">💖</div>
 </div>
 
-<!-- Slideshow -->
+<!-- SLIDESHOW -->
 <div id="s2" class="screen hidden">
 <h2>Kuch acchii yaadien 📸</h2>
 <img id="slide">
 <button onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
-<!-- Gallery -->
+<!-- GALLERY -->
 <div id="gallery" class="screen hidden">
 <h2>Hamaare kaarname 📸</h2>
 <div id="pgrid" class="pgrid"></div>
 <button onclick="show('message')">Next 💖</button>
 </div>
 
-<!-- Message -->
+<!-- MESSAGE -->
 <div id="message" class="screen hidden">
 <h2>Abhi kahani khatam nahi hui meri princess… 💖</h2>
 <button onclick="startVideos()">Videos 🎬</button>
 </div>
 
-<!-- Videos -->
+<!-- VIDEOS -->
 <div id="videos" class="screen hidden">
 <h2 id="videoTitle"></h2>
-<div class="videoBox">
+<div class="videoFrame">
 <video id="mainVideo" controls playsinline></video>
 </div>
 </div>
 
-<!-- Heart -->
+<!-- HEART -->
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
-<div onclick="openHeart()" style="font-size:90px;cursor:pointer">❤️</div>
+<div onclick="openHeart()" style="font-size:90px;cursor:pointer;">❤️</div>
 <div id="heartText" style="margin-top:20px;color:#ffe066"></div>
-<img id="heartPhoto" style="width:220px;border-radius:20px;border:4px solid white;display:none;margin-top:15px;">
-<button id="heartBtn" style="display:none" onclick="show('final')">
+<img id="heartPhoto">
+<button id="heartBtn" style="display:none;" onclick="show('final')">
 Aur dekho aage meri princess 💖
 </button>
 </div>
 
-<!-- Final -->
+<!-- FINAL -->
 <div id="final" class="screen hidden">
 <div class="envelope" onclick="openLetter()">💌</div>
-<div id="loveText"></div>
+<div id="proposalArea">
+<h2 id="proposalText"></h2>
+</div>
 </div>
 
 <script>
@@ -211,7 +225,7 @@ const heartBtn=document.getElementById("heartBtn");
 const video=document.getElementById("mainVideo");
 const videoTitle=document.getElementById("videoTitle");
 
-/* 13 Images */
+/* 13 IMAGES */
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -234,6 +248,7 @@ img.src=src;
 bgTrack.appendChild(img);
 });
 
+/* screen switch */
 function show(id){
 document.querySelectorAll('.screen').forEach(s=>{
 s.classList.remove('show');
@@ -241,20 +256,20 @@ s.classList.add('hidden');
 });
 let el=document.getElementById(id);
 el.classList.remove('hidden');
-setTimeout(()=>el.classList.add('show'),20);
+setTimeout(()=>el.classList.add('show'),10);
 }
 
-/* Slideshow */
+/* slideshow */
 let i=0;
 function start(){
-music.play().catch(()=>{});
+music.play();
 show('s2');
 slide.src=images[0];
 }
 function next(){
 i++;
-if(i<images.length){ slide.src=images[i]; }
-else{ showGallery(); }
+if(i<images.length){slide.src=images[i]}
+else{showGallery()}
 }
 function showGallery(){
 show('gallery');
@@ -266,35 +281,34 @@ pgrid.appendChild(img);
 });
 }
 
-/* Videos */
+/* videos */
 let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4"
 ];
 let special="WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4";
-
-let currentVideo=0;
+let current=0;
 
 function startVideos(){
+current=0;
 show('videos');
-currentVideo=0;
-playNextVideo();
+playNext();
 }
 
-function playNextVideo(){
+function playNext(){
 music.pause();
 video.pause();
 video.currentTime=0;
 
-if(currentVideo < vids.length){
-videoTitle.innerHTML="Memory " + (currentVideo+1) + " 💖";
-video.src=vids[currentVideo];
+if(current<vids.length){
+videoTitle.innerHTML="Memory "+(current+1)+" 💖";
+video.src=vids[current];
 }
-else if(currentVideo === vids.length){
+else if(current===vids.length){
 videoTitle.innerHTML="Yeh video sabse khaas hai… sirf meri princess ke liye 💖";
 video.src=special;
-music.play().catch(()=>{});
+music.play();
 }
 else{
 show('heart');
@@ -303,18 +317,17 @@ return;
 
 video.load();
 video.play().catch(()=>{});
-
 video.onended=()=>{
-currentVideo++;
-playNextVideo();
+current++;
+playNext();
 };
 }
 
-/* Heart */
+/* heart */
 function openHeart(){
 heartText.innerHTML="Someone is here in my heart ❤️";
 setTimeout(()=>{
-heartPhoto.src=images[2];
+heartPhoto.src=images[1];
 heartPhoto.style.display="block";
 setTimeout(()=>{
 heartText.innerHTML+="<br><br>It’s youuuu ❤️";
@@ -323,16 +336,20 @@ heartBtn.style.display="block";
 },1500);
 }
 
-/* Final */
+/* final */
 function openLetter(){
-document.getElementById("loveText").innerHTML="I made this memory for us ❤️";
-let g=document.createElement("video");
-g.src="gif.mp4";
-g.autoplay=true;
-g.loop=true;
-g.muted=true;
-g.className="popVideo";
-document.getElementById("final").appendChild(g);
+document.querySelector(".envelope").style.display="none";
+document.getElementById("proposalArea").style.display="flex";
+document.getElementById("proposalText").innerHTML=
+"From the first day… till forever… I choose you ❤️";
+
+let gif=document.createElement("video");
+gif.src="gif.mp4";
+gif.autoplay=true;
+gif.loop=true;
+gif.muted=true;
+gif.className="magicGif";
+document.getElementById("proposalArea").appendChild(gif);
 }
 </script>
 
