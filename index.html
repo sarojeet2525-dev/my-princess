@@ -15,7 +15,7 @@ overflow-x:hidden;
 background:linear-gradient(45deg,#ff4e5088,#ff8fab88,#ffe06688);
 }
 
-/* Screen */
+/* Screens */
 .screen{
 min-height:100vh;
 display:flex;
@@ -24,7 +24,7 @@ justify-content:center;
 align-items:center;
 background:rgba(0,0,0,.35);
 opacity:0;
-transform:translateY(50px);
+transform:translateY(40px);
 transition:.8s ease;
 padding:30px 20px;
 box-sizing:border-box;
@@ -32,7 +32,7 @@ box-sizing:border-box;
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* Background */
+/* Moving Background */
 .bg-strip{
 position:fixed;
 inset:0;
@@ -82,7 +82,7 @@ object-fit:cover;
 
 /* Buttons */
 button{
-margin-top:25px;
+margin-top:20px;
 padding:12px 25px;
 border-radius:25px;
 border:none;
@@ -93,11 +93,9 @@ color:#ff4e50;
 transition:.3s ease;
 box-shadow:0 8px 20px rgba(0,0,0,.25);
 }
-button:hover{
-transform:scale(1.08);
-}
+button:hover{transform:scale(1.08)}
 
-/* Video Responsive */
+/* Video */
 .videoFrame{
 width:100%;
 max-width:800px;
@@ -119,12 +117,7 @@ border:4px solid white;
 margin-top:15px;
 }
 
-/* Final */
-#final{
-position:relative;
-overflow:hidden;
-}
-
+/* Envelope */
 .envelope{
 font-size:90px;
 cursor:pointer;
@@ -136,77 +129,118 @@ animation:pulse 2s infinite;
 100%{transform:scale(1)}
 }
 
-/* MAGIC GIF FIXED */
+/* GIF Fade */
 .magicGif{
 position:absolute;
 top:50%;
 left:50%;
-transform:translate(-50%,-50%) scale(0.6);
-width:min(70vw,260px);
+transform:translate(-50%,-50%);
+width:min(70vw,240px);
 opacity:0;
+transition:2s ease;
 z-index:5;
-animation:magicFade 1.5s ease forwards;
-display:none;
 }
+.magicGif.show{opacity:1}
 
-@keyframes magicFade{
-0%{opacity:0;transform:translate(-50%,-50%) scale(0.6);}
-60%{opacity:1;transform:translate(-50%,-50%) scale(1.1);}
-100%{opacity:1;transform:translate(-50%,-50%) scale(1);}
-}
-
-#proposalRing{
-font-size:100px;
-display:none;
-cursor:pointer;
-animation:ringGlow 2s infinite;
-}
-@keyframes ringGlow{
-0%{text-shadow:0 0 10px gold}
-50%{text-shadow:0 0 40px gold}
-100%{text-shadow:0 0 10px gold}
-}
-
+/* Proposal */
+#proposalArea{margin-top:30px}
 #yesText{
 display:none;
-font-size:32px;
-color:#ff4e50;
+font-size:36px;
+color:gold;
 margin-top:20px;
-animation:pop 1s ease forwards;
+text-shadow:0 0 20px gold;
 }
-@keyframes pop{
-0%{transform:scale(0)}
-100%{transform:scale(1)}
+
+/* Confetti */
+.confetti{
+position:fixed;
+width:8px;
+height:14px;
+top:-20px;
+animation:fall 4s linear forwards;
+}
+@keyframes fall{
+to{transform:translateY(110vh) rotate(360deg);opacity:0}
+}
+
+/* Roses */
+.rose{
+position:fixed;
+top:-30px;
+font-size:22px;
+animation:fallRose 5s linear forwards;
+}
+@keyframes fallRose{
+to{transform:translateY(110vh);opacity:0}
+}
+
+/* Firework */
+.firework{
+position:fixed;
+font-size:28px;
+animation:boom 1.5s ease-out forwards;
+}
+@keyframes boom{
+0%{transform:scale(0);opacity:1}
+100%{transform:scale(3);opacity:0}
+}
+
+/* Floating hearts */
+.floatingHeart{
+position:fixed;
+font-size:20px;
+animation:floatUp 6s linear forwards;
+}
+@keyframes floatUp{
+0%{transform:translateY(100vh)}
+100%{transform:translateY(-10vh);opacity:0}
+}
+
+/* Gold glow */
+.goldGlow{
+animation:goldFlash 2s ease forwards;
+}
+@keyframes goldFlash{
+0%{box-shadow:0 0 0px gold}
+50%{box-shadow:0 0 150px gold inset}
+100%{box-shadow:0 0 60px gold inset}
 }
 </style>
 </head>
+
 <body>
 
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
+<!-- Start -->
 <div id="s1" class="screen show">
 <h2>Tap the heart meri princess 💖</h2>
 <div onclick="start()" style="font-size:90px;cursor:pointer">💖</div>
 </div>
 
+<!-- Slideshow -->
 <div id="s2" class="screen hidden">
 <h2>Kuch acchii yaadien 📸</h2>
 <img id="slide">
 <button onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
+<!-- Gallery -->
 <div id="gallery" class="screen hidden">
 <h2>Hamaare kaarname 📸</h2>
 <div id="pgrid" class="pgrid"></div>
 <button onclick="show('message')">Next 💖</button>
 </div>
 
+<!-- Message -->
 <div id="message" class="screen hidden">
 <h2>Abhi kahani khatam nahi hui meri princess… 💖</h2>
 <button onclick="startVideos()">Videos 🎬</button>
 </div>
 
+<!-- Videos -->
 <div id="videos" class="screen hidden">
 <h2 id="videoTitle"></h2>
 <div class="videoFrame">
@@ -215,6 +249,7 @@ animation:pop 1s ease forwards;
 <button onclick="nextVideo()">Next Video 💖</button>
 </div>
 
+<!-- Heart -->
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
 <div onclick="openHeart()" style="font-size:90px;cursor:pointer">❤️</div>
@@ -225,14 +260,16 @@ Aur dekho aage meri princess 💖
 </button>
 </div>
 
-<div id="final" class="screen hidden">
+<!-- Final -->
+<div id="final" class="screen hidden" style="position:relative;">
 <div class="envelope" onclick="openLetter()">💌</div>
 <div id="loveText"></div>
-<video id="magicGif" class="magicGif" src="gif.mp4" loop muted playsinline></video>
+<video id="magicGif" class="magicGif" src="gif.mp4" loop muted></video>
 
-<div id="proposalArea" style="display:none;margin-top:20px;">
-<h2 style="color:#ffe066;">Will you stay with me forever? 💍</h2>
-<div id="proposalRing" onclick="acceptProposal()">💍</div>
+<div id="proposalArea" style="display:none;">
+<h2>Will you stay with me forever? 💍</h2>
+<button onclick="acceptProposal()">Yes 💖</button>
+<button onclick="acceptProposal()">Of course YES 💞</button>
 <h1 id="yesText">She said YES 💞✨</h1>
 </div>
 </div>
@@ -289,13 +326,13 @@ pgrid.appendChild(img);
 });
 }
 
+/* VIDEOS */
 let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"
 ];
-
 let currentVideo=0;
 
 function startVideos(){
@@ -303,13 +340,12 @@ currentVideo=0;
 show('videos');
 loadVideo();
 }
-
 function loadVideo(){
 let video=document.getElementById("mainVideo");
 video.src=vids[currentVideo];
 video.load();
+video.play().catch(()=>{});
 }
-
 function nextVideo(){
 currentVideo++;
 if(currentVideo<vids.length){
@@ -319,35 +355,70 @@ show('heart');
 }
 }
 
+/* HEART */
 function openHeart(){
-heartText.innerHTML="Someone is here in my heart ❤️";
+document.getElementById("heartText").innerHTML="Someone is there in my heart ❤️";
 setTimeout(()=>{
-heartPhoto.src=images[1];
-heartPhoto.style.display="block";
+document.getElementById("heartPhoto").src=images[1];
+document.getElementById("heartPhoto").style.display="block";
 setTimeout(()=>{
-heartText.innerHTML+="<br><br>It’s youuuu ❤️";
-heartBtn.style.display="block";
+document.getElementById("heartText").innerHTML+="<br><br>It’s youuuu ❤️";
+document.getElementById("heartBtn").style.display="block";
 },1500);
 },1500);
 }
 
-/* FIXED GIF PART */
+/* FINAL */
 function openLetter(){
 document.getElementById("loveText").innerHTML="I made this memory for us ❤️";
-
 let gif=document.getElementById("magicGif");
-gif.style.display="block";
-gif.currentTime=0;
-gif.play().catch(()=>{});
-
+gif.classList.add("show");
+gif.play();
 setTimeout(()=>{
 document.getElementById("proposalArea").style.display="block";
-document.getElementById("proposalRing").style.display="block";
 },2000);
 }
 
 function acceptProposal(){
 document.getElementById("yesText").style.display="block";
+document.getElementById("final").classList.add("goldGlow");
+
+for(let i=0;i<120;i++){
+let c=document.createElement("div");
+c.className="confetti";
+c.style.left=Math.random()*100+"vw";
+c.style.background=`hsl(${Math.random()*360},100%,60%)`;
+document.body.appendChild(c);
+setTimeout(()=>c.remove(),4000);
+}
+
+for(let i=0;i<40;i++){
+let r=document.createElement("div");
+r.className="rose";
+r.innerHTML="🌹";
+r.style.left=Math.random()*100+"vw";
+document.body.appendChild(r);
+setTimeout(()=>r.remove(),5000);
+}
+
+for(let i=0;i<20;i++){
+let f=document.createElement("div");
+f.className="firework";
+f.innerHTML="✨";
+f.style.left=Math.random()*100+"vw";
+f.style.top=Math.random()*60+"vh";
+document.body.appendChild(f);
+setTimeout(()=>f.remove(),1500);
+}
+
+setInterval(()=>{
+let h=document.createElement("div");
+h.className="floatingHeart";
+h.innerHTML="💖";
+h.style.left=Math.random()*100+"vw";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),6000);
+},800);
 }
 </script>
 </body>
