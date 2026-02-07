@@ -80,7 +80,7 @@ border:3px solid white;
 object-fit:cover;
 }
 
-/* Buttons (FIXED POSITION ISSUE REMOVED) */
+/* Buttons */
 button{
 margin-top:25px;
 padding:12px 25px;
@@ -97,7 +97,7 @@ button:hover{
 transform:scale(1.08);
 }
 
-/* Video Responsive FIX */
+/* Video Responsive */
 .videoFrame{
 width:100%;
 max-width:800px;
@@ -120,6 +120,11 @@ margin-top:15px;
 }
 
 /* Final */
+#final{
+position:relative;
+overflow:hidden;
+}
+
 .envelope{
 font-size:90px;
 cursor:pointer;
@@ -131,16 +136,24 @@ animation:pulse 2s infinite;
 100%{transform:scale(1)}
 }
 
+/* MAGIC GIF FIXED */
 .magicGif{
 position:absolute;
 top:50%;
 left:50%;
-transform:translate(-50%,-50%);
-width:min(70vw,240px);
+transform:translate(-50%,-50%) scale(0.6);
+width:min(70vw,260px);
 opacity:0;
-transition:2s ease;
+z-index:5;
+animation:magicFade 1.5s ease forwards;
+display:none;
 }
-.magicGif.show{opacity:1;}
+
+@keyframes magicFade{
+0%{opacity:0;transform:translate(-50%,-50%) scale(0.6);}
+60%{opacity:1;transform:translate(-50%,-50%) scale(1.1);}
+100%{opacity:1;transform:translate(-50%,-50%) scale(1);}
+}
 
 #proposalRing{
 font-size:100px;
@@ -165,12 +178,6 @@ animation:pop 1s ease forwards;
 0%{transform:scale(0)}
 100%{transform:scale(1)}
 }
-
-/* Roses */
-@keyframes fall{
-to{transform:translateY(110vh);opacity:0}
-}
-
 </style>
 </head>
 <body>
@@ -178,33 +185,28 @@ to{transform:translateY(110vh);opacity:0}
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<!-- Start -->
 <div id="s1" class="screen show">
 <h2>Tap the heart meri princess 💖</h2>
 <div onclick="start()" style="font-size:90px;cursor:pointer">💖</div>
 </div>
 
-<!-- Slideshow -->
 <div id="s2" class="screen hidden">
 <h2>Kuch acchii yaadien 📸</h2>
 <img id="slide">
 <button onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
-<!-- Gallery -->
 <div id="gallery" class="screen hidden">
 <h2>Hamaare kaarname 📸</h2>
 <div id="pgrid" class="pgrid"></div>
 <button onclick="show('message')">Next 💖</button>
 </div>
 
-<!-- Message -->
 <div id="message" class="screen hidden">
 <h2>Abhi kahani khatam nahi hui meri princess… 💖</h2>
 <button onclick="startVideos()">Videos 🎬</button>
 </div>
 
-<!-- Videos -->
 <div id="videos" class="screen hidden">
 <h2 id="videoTitle"></h2>
 <div class="videoFrame">
@@ -213,7 +215,6 @@ to{transform:translateY(110vh);opacity:0}
 <button onclick="nextVideo()">Next Video 💖</button>
 </div>
 
-<!-- Heart -->
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
 <div onclick="openHeart()" style="font-size:90px;cursor:pointer">❤️</div>
@@ -224,11 +225,10 @@ Aur dekho aage meri princess 💖
 </button>
 </div>
 
-<!-- Final -->
-<div id="final" class="screen hidden" style="position:relative;">
+<div id="final" class="screen hidden">
 <div class="envelope" onclick="openLetter()">💌</div>
 <div id="loveText"></div>
-<video id="magicGif" class="magicGif" src="gif.mp4" loop muted></video>
+<video id="magicGif" class="magicGif" src="gif.mp4" loop muted playsinline></video>
 
 <div id="proposalArea" style="display:none;margin-top:20px;">
 <h2 style="color:#ffe066;">Will you stay with me forever? 💍</h2>
@@ -243,7 +243,7 @@ const slide=document.getElementById("slide");
 const pgrid=document.getElementById("pgrid");
 const bgTrack=document.getElementById("bgTrack");
 
-let images=[ /* 13 photos */ 
+let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
@@ -289,7 +289,6 @@ pgrid.appendChild(img);
 });
 }
 
-/* VIDEO FIX */
 let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
@@ -309,7 +308,6 @@ function loadVideo(){
 let video=document.getElementById("mainVideo");
 video.src=vids[currentVideo];
 video.load();
-video.play().catch(()=>{});
 }
 
 function nextVideo(){
@@ -321,9 +319,8 @@ show('heart');
 }
 }
 
-/* HEART */
 function openHeart(){
-heartText.innerHTML="Someone is there in my heart ❤️";
+heartText.innerHTML="Someone is here in my heart ❤️";
 setTimeout(()=>{
 heartPhoto.src=images[1];
 heartPhoto.style.display="block";
@@ -334,12 +331,15 @@ heartBtn.style.display="block";
 },1500);
 }
 
-/* FINAL */
+/* FIXED GIF PART */
 function openLetter(){
 document.getElementById("loveText").innerHTML="I made this memory for us ❤️";
+
 let gif=document.getElementById("magicGif");
-gif.classList.add("show");
-gif.play();
+gif.style.display="block";
+gif.currentTime=0;
+gif.play().catch(()=>{});
+
 setTimeout(()=>{
 document.getElementById("proposalArea").style.display="block";
 document.getElementById("proposalRing").style.display="block";
