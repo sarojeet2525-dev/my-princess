@@ -82,7 +82,13 @@ position:relative;height:100%;width:auto;margin:auto;display:block;border-radius
 <button onclick="startVideos()">Videos 🎬</button>
 </div>
 
-<div id="videos" class="screen hidden"></div>
+<div id="videos" class="screen hidden">
+  <h2 id="videoTitle" style="margin-bottom:20px;"></h2>
+
+  <div class="videoFrame">
+    <video id="mainVideo" class="main" controls playsinline></video>
+  </div>
+</div>
 
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
@@ -232,6 +238,7 @@ document.getElementById("final").appendChild(g);
 </script>
 </body>
 </html>
+
 
 
 
