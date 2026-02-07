@@ -11,7 +11,7 @@ margin:0;
 font-family:Arial;
 color:white;
 text-align:center;
-overflow:hidden;
+overflow-x:hidden;
 }
 
 body::after{
@@ -31,28 +31,30 @@ justify-content:center;
 align-items:center;
 background:rgba(0,0,0,.35);
 opacity:0;
-transform:translateY(60px);
-transition:.8s;
+transform:translateY(40px);
+transition:.6s;
+padding:20px;
+box-sizing:border-box;
 }
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* Moving background photos */
+/* Background moving images */
 .bg-strip{
 position:fixed;
 inset:0;
 z-index:-2;
-opacity:.35;
-overflow:hidden
+opacity:.3;
+overflow:hidden;
 }
 .bg-track{
 display:flex;
 width:max-content;
-animation:move 90s linear infinite
+animation:move 90s linear infinite;
 }
 .bg-track img{
 height:100vh;
-filter:blur(5px)
+filter:blur(5px);
 }
 @keyframes move{
 from{transform:translateX(0)}
@@ -61,11 +63,11 @@ to{transform:translateX(-50%)}
 
 /* Slideshow */
 #slide{
-width:280px;
-height:280px;
+width:clamp(220px,60vw,320px);
+height:clamp(220px,60vw,320px);
 border-radius:20px;
 border:5px solid white;
-object-fit:cover
+object-fit:cover;
 }
 
 /* Gallery */
@@ -73,45 +75,53 @@ object-fit:cover
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
 gap:12px;
-width:90%
+width:100%;
+max-width:900px;
 }
 .pgrid img{
 height:130px;
 border-radius:12px;
-border:3px solid white
+border:3px solid white;
+object-fit:cover;
 }
 
-/* Buttons */
+/* Buttons (NOT fixed now) */
 button{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
+margin-top:25px;
 padding:12px 25px;
 border-radius:25px;
 border:none;
 background:white;
 color:#ff4e50;
 font-weight:bold;
+cursor:pointer;
 transition:.3s;
-box-shadow:0 10px 25px rgba(0,0,0,.25)
+box-shadow:0 10px 25px rgba(0,0,0,.25);
 }
-button:hover{transform:translateX(-50%) scale(1.08)}
-button:active{transform:translateX(-50%) scale(.95)}
+button:hover{transform:scale(1.08)}
+button:active{transform:scale(.95)}
 
 /* Video */
 .videoBox{
-width:95%;
-max-width:700px
+width:100%;
+max-width:800px;
+max-height:75vh;
+display:flex;
+justify-content:center;
+align-items:center;
+margin-top:20px;
 }
 video{
 width:100%;
-border-radius:20px
+max-height:75vh;
+border-radius:20px;
+object-fit:contain;
 }
 
+/* Heart */
 .envelope{
 font-size:90px;
-cursor:pointer
+cursor:pointer;
 }
 
 .popVideo{
@@ -119,7 +129,14 @@ position:absolute;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
-width:220px
+width:220px;
+}
+
+/* Mobile */
+@media(max-width:600px){
+video{
+max-height:65vh;
+}
 }
 </style>
 </head>
@@ -184,7 +201,6 @@ Aur dekho aage meri princess 💖
 </div>
 
 <script>
-
 const music=document.getElementById("music");
 const slide=document.getElementById("slide");
 const pgrid=document.getElementById("pgrid");
@@ -195,7 +211,7 @@ const heartBtn=document.getElementById("heartBtn");
 const video=document.getElementById("mainVideo");
 const videoTitle=document.getElementById("videoTitle");
 
-/* ===== 13 IMAGES ===== */
+/* 13 Images */
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -212,14 +228,12 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
 ];
 
-/* Background images */
 images.concat(images).forEach(src=>{
 let img=document.createElement("img");
 img.src=src;
 bgTrack.appendChild(img);
 });
 
-/* Show screen */
 function show(id){
 document.querySelectorAll('.screen').forEach(s=>{
 s.classList.remove('show');
@@ -252,13 +266,12 @@ pgrid.appendChild(img);
 });
 }
 
-/* ===== VIDEOS ===== */
+/* Videos */
 let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4"
 ];
-
 let special="WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4";
 
 let currentVideo=0;
@@ -270,9 +283,7 @@ playNextVideo();
 }
 
 function playNextVideo(){
-
 music.pause();
-
 video.pause();
 video.currentTime=0;
 
@@ -323,7 +334,7 @@ g.muted=true;
 g.className="popVideo";
 document.getElementById("final").appendChild(g);
 }
-
 </script>
+
 </body>
 </html>
