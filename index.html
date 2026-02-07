@@ -167,66 +167,46 @@ let vids=[
 "WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4"
 ];
+
 let special="WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4";
 
-function startVideos(){ show('videos'); playVideo(0); }
+let currentVideo=0;
 
-function playVideo(index){
+function startVideos(){
+show('videos');
+playNextVideo();
+}
 
-let container=document.getElementById("videos");
-container.innerHTML="";
+function playNextVideo(){
+
+let video=document.getElementById("mainVideo");
+let title=document.getElementById("videoTitle");
+
 music.pause();
 
-let frame=document.createElement("div");
-frame.className="videoFrame";
-
-let main=document.createElement("video");
-main.className="main";
-main.controls=true;
-main.playsInline=true;
-
-// detect mobile
-let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-if(index < vids.length){
-main.src = vids[index];
-}else{
-main.src = special;
+if(currentVideo < vids.length){
+  title.innerHTML="Memory " + (currentVideo+1) + " 💖";
+  video.src=vids[currentVideo];
 }
-
-frame.appendChild(main);
-container.appendChild(frame);
-
-// 🔥 only add blurred background on desktop
-if(!isMobile){
-let bg=document.createElement("video");
-bg.className="bg";
-bg.muted=true;
-bg.loop=true;
-bg.src=main.src;
-frame.insertBefore(bg, main);
-bg.play();
+else if(currentVideo === vids.length){
+  title.innerHTML="Yeh video sabse khaas hai… sirf meri princess ke liye 💖";
+  video.src=special;
+  music.play();
 }
-
-main.load();
-main.play().catch(()=>{});
-
-// normal 3 videos
-if(index < vids.length){
-main.onended = ()=>playVideo(index+1);
-}
-// special video
 else{
-let msg=document.createElement("h2");
-msg.innerHTML="Yeh video sabse khaas hai… sirf meri princess ke liye 💖";
-msg.style.color="#ffe066";
-container.prepend(msg);
-
-main.onplay=()=>music.play();
-main.onended=()=>show('heart');
+  show('heart');
+  return;
 }
+
+video.load();
+video.play().catch(()=>{});
+
+video.onended=()=>{
+  currentVideo++;
+  playNextVideo();
 };
 }
+
 function openHeart(){
 heartText.innerHTML="Someone is here in my heart ❤️";
 setTimeout(()=>{
@@ -252,6 +232,7 @@ document.getElementById("final").appendChild(g);
 </script>
 </body>
 </html>
+
 
 
 
