@@ -37,7 +37,7 @@ transition:.8s ease;
 position:fixed;
 inset:0;
 z-index:-2;
-opacity:.25;
+opacity:.3;
 overflow:hidden;
 }
 .bg-track{
@@ -109,7 +109,7 @@ object-fit:contain;
 border-radius:16px;
 }
 
-/* Heart Photo */
+/* Heart */
 #heartPhoto{
 width:min(80vw,220px);
 border-radius:20px;
@@ -137,17 +137,16 @@ top:40%;
 left:50%;
 transform:translate(-50%,-50%);
 width:min(70vw,240px);
-opacity:0;
-transition:2s ease;
+display:none;
 z-index:1;
 }
-.magicGif.show{opacity:1}
 
 /* Proposal */
 #proposalArea{
-margin-top:170px;
-z-index:2;
+margin-top:200px;
 position:relative;
+z-index:2;
+display:none;
 }
 #yesText{
 display:none;
@@ -226,7 +225,7 @@ Aur dekho aage meri princess 💖
 
 <video id="magicGif" class="magicGif" src="gif.mp4" loop muted playsinline></video>
 
-<div id="proposalArea" style="display:none;">
+<div id="proposalArea">
 <h2 style="color:#ffe066;">Will you stay with me forever? 💍</h2>
 <button onclick="celebrate()">Yes 💖</button>
 <button onclick="celebrate()">Of Course Yesss 💞</button>
@@ -239,6 +238,7 @@ const music=document.getElementById("music");
 const slide=document.getElementById("slide");
 const pgrid=document.getElementById("pgrid");
 const bgTrack=document.getElementById("bgTrack");
+const heartPhoto=document.getElementById("heartPhoto");
 
 /* 13 IMAGES */
 let images=[
@@ -273,11 +273,14 @@ el.classList.remove('hidden');
 setTimeout(()=>el.classList.add('show'),20);
 }
 
-/* SLIDESHOW */
+/* Slideshow */
 let i=0;
 function start(){music.play();show('s2');slide.src=images[0];}
-function next(){i++; if(i<images.length){slide.src=images[i];} else{showGallery();}}
-
+function next(){
+i++;
+if(i<images.length){slide.src=images[i];}
+else{showGallery();}
+}
 function showGallery(){
 show('gallery');
 pgrid.innerHTML="";
@@ -288,14 +291,13 @@ pgrid.appendChild(img);
 });
 }
 
-/* VIDEOS */
+/* Videos */
 let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"
 ];
-
 let currentVideo=0;
 
 function startVideos(){
@@ -303,21 +305,18 @@ currentVideo=0;
 show('videos');
 loadVideo();
 }
-
 function loadVideo(){
 let video=document.getElementById("mainVideo");
 video.src=vids[currentVideo];
 video.load();
-video.play().catch(()=>{});
 }
-
 function nextVideo(){
 currentVideo++;
 if(currentVideo<vids.length){loadVideo();}
 else{show('heart');}
 }
 
-/* HEART */
+/* Heart */
 function openHeart(){
 heartText.innerHTML="Someone is there in my heart ❤️";
 setTimeout(()=>{
@@ -330,14 +329,14 @@ heartBtn.style.display="block";
 },1500);
 }
 
-/* FINAL */
+/* Final */
 function openLetter(){
 document.getElementById("loveText").innerHTML="I made this memory for us ❤️";
 let gif=document.getElementById("magicGif");
-gif.classList.remove("show");
+gif.style.display="block";
 gif.currentTime=0;
 gif.play();
-setTimeout(()=>{gif.classList.add("show");},100);
+
 setTimeout(()=>{
 document.getElementById("proposalArea").style.display="block";
 },2000);
