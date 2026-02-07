@@ -6,93 +6,170 @@
 <title>For My Princess ❤️</title>
 
 <style>
-body{margin:0;font-family:Arial;color:white;text-align:center;overflow:hidden}
+body{
+margin:0;
+font-family:Arial;
+color:white;
+text-align:center;
+overflow:hidden;
+}
+
 body::after{
-content:"";position:fixed;inset:0;
-background:linear-gradient(45deg,#ff4e5088,#ff8fab88,#ffe06688);
+content:"";
+position:fixed;
+inset:0;
+background:linear-gradient(45deg,#ff4e50aa,#ff8faaaa,#ffe066aa);
 z-index:-1;
 }
+
+/* Screens */
 .screen{
-min-height:100vh;display:flex;flex-direction:column;
-justify-content:center;align-items:center;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 background:rgba(0,0,0,.35);
-opacity:0;transform:translateY(60px);
+opacity:0;
+transform:translateY(60px);
 transition:.8s;
 }
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-.bg-strip{position:fixed;inset:0;z-index:-2;opacity:.4;overflow:hidden}
-.bg-track{display:flex;width:max-content;animation:move 80s linear infinite}
-.bg-track img{height:100vh;filter:blur(4px)}
-@keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* Moving background photos */
+.bg-strip{
+position:fixed;
+inset:0;
+z-index:-2;
+opacity:.35;
+overflow:hidden
+}
+.bg-track{
+display:flex;
+width:max-content;
+animation:move 90s linear infinite
+}
+.bg-track img{
+height:100vh;
+filter:blur(5px)
+}
+@keyframes move{
+from{transform:translateX(0)}
+to{transform:translateX(-50%)}
+}
 
-#slide{width:280px;height:280px;border-radius:20px;border:5px solid white;object-fit:cover}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;width:90%}
-.pgrid img{height:130px;border-radius:12px;border:3px solid white}
+/* Slideshow */
+#slide{
+width:280px;
+height:280px;
+border-radius:20px;
+border:5px solid white;
+object-fit:cover
+}
 
+/* Gallery */
+.pgrid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+gap:12px;
+width:90%
+}
+.pgrid img{
+height:130px;
+border-radius:12px;
+border:3px solid white
+}
+
+/* Buttons */
 button{
-position:fixed;bottom:15px;left:50%;
+position:fixed;
+bottom:20px;
+left:50%;
 transform:translateX(-50%);
-padding:12px 25px;border-radius:25px;border:none;
-transition:.3s;box-shadow:0 10px 25px rgba(0,0,0,.25)
+padding:12px 25px;
+border-radius:25px;
+border:none;
+background:white;
+color:#ff4e50;
+font-weight:bold;
+transition:.3s;
+box-shadow:0 10px 25px rgba(0,0,0,.25)
+}
+button:hover{transform:translateX(-50%) scale(1.08)}
+button:active{transform:translateX(-50%) scale(.95)}
+
+/* Video */
+.videoBox{
+width:95%;
+max-width:700px
+}
+video{
+width:100%;
+border-radius:20px
 }
 
-.videoFrame{
-position:relative;width:95%;max-width:900px;
-aspect-ratio:16/9;margin:auto;overflow:hidden;border-radius:20px
-}
-.videoFrame video.bg{
-position:absolute;inset:0;width:100%;height:100%;
-object-fit:cover;filter:blur(35px) brightness(.6);transform:scale(1.4)
-}
-.videoFrame video.main{
-position:relative;height:100%;width:auto;margin:auto;display:block;border-radius:16px
+.envelope{
+font-size:90px;
+cursor:pointer
 }
 
-.envelope{font-size:90px;cursor:pointer}
-.popVideo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:220px}
+.popVideo{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:220px
+}
 </style>
 </head>
 
 <body>
 
-<div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
-<audio id="music" src="Perfect.mp3" loop></audio>
-
-<div id="s1" class="screen show">
-<h2>Tap the heart meri princess 💖</h2>
-<div onclick="start()" style="font-size:90px">💖</div>
+<div class="bg-strip">
+<div class="bg-track" id="bgTrack"></div>
 </div>
 
+<audio id="music" src="Perfect.mp3" loop></audio>
+
+<!-- Start -->
+<div id="s1" class="screen show">
+<h2>Tap the heart meri princess 💖</h2>
+<div onclick="start()" style="font-size:90px;cursor:pointer">💖</div>
+</div>
+
+<!-- Slideshow -->
 <div id="s2" class="screen hidden">
 <h2>Kuch acchii yaadien 📸</h2>
 <img id="slide">
 <button onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
+<!-- Gallery -->
 <div id="gallery" class="screen hidden">
-<h2>hamaare kaarname 📸</h2>
+<h2>Hamaare kaarname 📸</h2>
 <div id="pgrid" class="pgrid"></div>
 <button onclick="show('message')">Next 💖</button>
 </div>
 
+<!-- Message -->
 <div id="message" class="screen hidden">
 <h2>Abhi kahani khatam nahi hui meri princess… 💖</h2>
 <button onclick="startVideos()">Videos 🎬</button>
 </div>
 
+<!-- Videos -->
 <div id="videos" class="screen hidden">
-  <h2 id="videoTitle" style="margin-bottom:20px;"></h2>
-
-  <div class="videoFrame">
-    <video id="mainVideo" class="main" controls playsinline></video>
-  </div>
+<h2 id="videoTitle"></h2>
+<div class="videoBox">
+<video id="mainVideo" controls playsinline></video>
+</div>
 </div>
 
+<!-- Heart -->
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
-<div onclick="openHeart()" style="font-size:90px">❤️</div>
+<div onclick="openHeart()" style="font-size:90px;cursor:pointer">❤️</div>
 <div id="heartText" style="margin-top:20px;color:#ffe066"></div>
 <img id="heartPhoto" style="width:220px;border-radius:20px;border:4px solid white;display:none;margin-top:15px;">
 <button id="heartBtn" style="display:none" onclick="show('final')">
@@ -100,12 +177,14 @@ Aur dekho aage meri princess 💖
 </button>
 </div>
 
+<!-- Final -->
 <div id="final" class="screen hidden">
 <div class="envelope" onclick="openLetter()">💌</div>
 <div id="loveText"></div>
 </div>
 
 <script>
+
 const music=document.getElementById("music");
 const slide=document.getElementById("slide");
 const pgrid=document.getElementById("pgrid");
@@ -113,7 +192,10 @@ const bgTrack=document.getElementById("bgTrack");
 const heartText=document.getElementById("heartText");
 const heartPhoto=document.getElementById("heartPhoto");
 const heartBtn=document.getElementById("heartBtn");
+const video=document.getElementById("mainVideo");
+const videoTitle=document.getElementById("videoTitle");
 
+/* ===== 13 IMAGES ===== */
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -129,34 +211,37 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg",
 "WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
 ];
+
+/* Background images */
 images.concat(images).forEach(src=>{
 let img=document.createElement("img");
 img.src=src;
 bgTrack.appendChild(img);
 });
 
+/* Show screen */
 function show(id){
 document.querySelectorAll('.screen').forEach(s=>{
-s.classList.remove('show');s.classList.add('hidden')
+s.classList.remove('show');
+s.classList.add('hidden');
 });
 let el=document.getElementById(id);
 el.classList.remove('hidden');
 setTimeout(()=>el.classList.add('show'),20);
 }
 
+/* Slideshow */
 let i=0;
 function start(){
-music.play();
+music.play().catch(()=>{});
 show('s2');
 slide.src=images[0];
 }
-
 function next(){
 i++;
 if(i<images.length){ slide.src=images[i]; }
 else{ showGallery(); }
 }
-
 function showGallery(){
 show('gallery');
 pgrid.innerHTML="";
@@ -167,65 +252,58 @@ pgrid.appendChild(img);
 });
 }
 
-// VIDEOS
+/* ===== VIDEOS ===== */
 let vids=[
-encodeURI"WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
-encodeURI"WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
-encodeURI"WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4"
+"WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
+"WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
+"WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4"
 ];
 
-let special=encodeURI"WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4";
+let special="WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4";
 
 let currentVideo=0;
 
 function startVideos(){
 show('videos');
+currentVideo=0;
 playNextVideo();
 }
 
 function playNextVideo(){
 
-let video=document.getElementById("mainVideo");
-let title=document.getElementById("videoTitle");
-
 music.pause();
 
-// VERY IMPORTANT RESET
 video.pause();
-video.currentTime = 0;
-video.onended = null;
+video.currentTime=0;
 
 if(currentVideo < vids.length){
-  title.innerHTML="Memory " + (currentVideo+1) + " 💖";
-  video.src = vids[currentVideo];
+videoTitle.innerHTML="Memory " + (currentVideo+1) + " 💖";
+video.src=vids[currentVideo];
 }
 else if(currentVideo === vids.length){
-  title.innerHTML="Yeh video sabse khaas hai… sirf meri princess ke liye 💖";
-  video.src = special;
-  music.play();
+videoTitle.innerHTML="Yeh video sabse khaas hai… sirf meri princess ke liye 💖";
+video.src=special;
+music.play().catch(()=>{});
 }
 else{
-  show('heart');
-  return;
+show('heart');
+return;
 }
 
 video.load();
+video.play().catch(()=>{});
 
-// 👇 IMPORTANT: let user control play
-video.controls = true;
-video.autoplay = false;
-
-// After video ends
-video.onended = ()=>{
-  currentVideo++;
-  playNextVideo();
+video.onended=()=>{
+currentVideo++;
+playNextVideo();
 };
 }
 
+/* Heart */
 function openHeart(){
 heartText.innerHTML="Someone is here in my heart ❤️";
 setTimeout(()=>{
-heartPhoto.src=images[1];
+heartPhoto.src=images[2];
 heartPhoto.style.display="block";
 setTimeout(()=>{
 heartText.innerHTML+="<br><br>It’s youuuu ❤️";
@@ -234,6 +312,7 @@ heartBtn.style.display="block";
 },1500);
 }
 
+/* Final */
 function openLetter(){
 document.getElementById("loveText").innerHTML="I made this memory for us ❤️";
 let g=document.createElement("video");
@@ -244,13 +323,7 @@ g.muted=true;
 g.className="popVideo";
 document.getElementById("final").appendChild(g);
 }
+
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
