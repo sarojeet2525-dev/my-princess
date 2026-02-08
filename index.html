@@ -13,9 +13,19 @@ color:white;
 text-align:center;
 overflow-x:hidden;
 background:linear-gradient(45deg,#ff4e50,#ff8fab,#ffe066);
+cursor:none;
 }
 
-/* Screen Animation */
+/* Sparkle cursor */
+.sparkle{
+position:fixed;
+pointer-events:none;
+font-size:14px;
+animation:fade 1s linear forwards;
+}
+@keyframes fade{to{opacity:0;transform:translateY(-20px)}}
+
+/* Screens */
 .screen{
 min-height:100vh;
 display:flex;
@@ -26,13 +36,13 @@ padding:25px;
 box-sizing:border-box;
 background:rgba(0,0,0,.35);
 opacity:0;
-transform:translateY(40px);
-transition:.8s ease;
+transform:translateY(30px);
+transition:.7s ease;
 }
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* Moving background photos */
+/* Moving blurred background */
 .bg-strip{
 position:fixed;
 inset:0;
@@ -109,6 +119,15 @@ object-fit:contain;
 border-radius:16px;
 }
 
+/* Heart */
+#heartPhoto{
+width:min(80vw,220px);
+border-radius:20px;
+border:4px solid white;
+margin-top:15px;
+display:none;
+}
+
 /* Envelope */
 .envelope{
 font-size:90px;
@@ -117,7 +136,7 @@ animation:pulse 2s infinite;
 }
 @keyframes pulse{
 0%{transform:scale(1)}
-50%{transform:scale(1.15)}
+50%{transform:scale(1.1)}
 100%{transform:scale(1)}
 }
 
@@ -134,19 +153,18 @@ z-index:1;
 }
 .magicGif.show{opacity:1}
 
-/* Letter */
-#loveText{
-margin-top:20px;
-color:#ffe066;
-font-size:18px;
-min-height:60px;
+/* Proposal */
+#proposalArea{
+margin-top:200px;
+display:none;
+position:relative;
+z-index:2;
 }
 
-/* Ring */
 #ring{
-font-size:80px;
+font-size:90px;
 display:none;
-animation:float 2s infinite ease-in-out;
+animation:float 2s ease-in-out infinite;
 }
 @keyframes float{
 0%{transform:translateY(0)}
@@ -154,27 +172,20 @@ animation:float 2s infinite ease-in-out;
 100%{transform:translateY(0)}
 }
 
-/* Proposal */
-#proposalArea{
-display:none;
-margin-top:120px;
-position:relative;
-z-index:2;
-}
-
-#finalText{
-display:none;
-font-size:28px;
+#names{
+font-size:32px;
 margin-top:20px;
-color:white;
+display:none;
+color:#fff;
+text-shadow:0 0 20px gold;
 }
 
 /* Roses */
 .rose{
 position:fixed;
 top:-20px;
-font-size:22px;
-animation:fall 5s linear forwards;
+font-size:20px;
+animation:fall 4s linear forwards;
 }
 @keyframes fall{
 to{transform:translateY(110vh);opacity:0}
@@ -187,6 +198,17 @@ top:-10px;
 font-size:20px;
 animation:fall 3s linear forwards;
 }
+
+/* Fireworks */
+.firework{
+position:fixed;
+font-size:30px;
+animation:boom 1s ease-out forwards;
+}
+@keyframes boom{
+0%{transform:scale(0)}
+100%{transform:scale(2);opacity:0}
+}
 </style>
 </head>
 <body>
@@ -194,33 +216,33 @@ animation:fall 3s linear forwards;
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<!-- START -->
+<!-- Start -->
 <div id="s1" class="screen show">
 <h2>Tap the heart meri princess 💖</h2>
 <div onclick="start()" style="font-size:90px;cursor:pointer">💖</div>
 </div>
 
-<!-- SLIDESHOW -->
+<!-- Slideshow -->
 <div id="s2" class="screen hidden">
 <h2>Kuch acchii yaadien 📸</h2>
 <img id="slide">
 <button onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
-<!-- GALLERY -->
+<!-- Gallery -->
 <div id="gallery" class="screen hidden">
 <h2>Hamaare kaarname 📸</h2>
 <div id="pgrid" class="pgrid"></div>
 <button onclick="show('message')">Next 💖</button>
 </div>
 
-<!-- MESSAGE -->
+<!-- Message -->
 <div id="message" class="screen hidden">
 <h2>Abhi kahani khatam nahi hui meri princess… 💖</h2>
 <button onclick="startVideos()">Videos 🎬</button>
 </div>
 
-<!-- VIDEOS -->
+<!-- Videos -->
 <div id="videos" class="screen hidden">
 <div class="videoFrame">
 <video id="mainVideo" controls playsinline></video>
@@ -228,37 +250,51 @@ animation:fall 3s linear forwards;
 <button onclick="nextVideo()">Next Video 💖</button>
 </div>
 
-<!-- HEART -->
+<!-- Heart -->
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
 <div onclick="openHeart()" style="font-size:90px;cursor:pointer">❤️</div>
 <div id="heartText" style="margin-top:20px;color:#ffe066"></div>
-<img id="heartPhoto" style="width:220px;border-radius:20px;border:4px solid white;display:none;margin-top:15px;">
+<img id="heartPhoto">
 <button id="heartBtn" style="display:none" onclick="show('final')">
 Aur dekho aage meri princess 💖
 </button>
 </div>
 
-<!-- FINAL -->
+<!-- Final -->
 <div id="final" class="screen hidden" style="position:relative;">
 <div class="envelope" onclick="openLetter()">💌</div>
 <div id="loveText"></div>
-
 <video id="magicGif" class="magicGif" src="gif.mp4" loop muted playsinline></video>
 
 <div id="proposalArea">
-<h2>Will you stay with me forever? 💍</h2>
+<h2 style="color:#ffe066;">Will you stay with me forever? 💍</h2>
 <div id="ring">💍</div>
 <button onclick="celebrate()">Yes 💖</button>
 <button onclick="celebrate()">Of Course Yesss 💞</button>
-<h1 id="finalText">Anushree said YES to Sarojeet 💞✨</h1>
+<div id="names">Anushree ❤️ Sarojeet</div>
 </div>
 </div>
 
 <script>
+/* Sparkle Cursor */
+document.addEventListener("mousemove",e=>{
+let s=document.createElement("div");
+s.className="sparkle";
+s.innerHTML="✨";
+s.style.left=e.clientX+"px";
+s.style.top=e.clientY+"px";
+document.body.appendChild(s);
+setTimeout(()=>s.remove(),1000);
+});
 
-/* Background Images */
-let images=[
+const music=document.getElementById("music");
+const slide=document.getElementById("slide");
+const pgrid=document.getElementById("pgrid");
+const bgTrack=document.getElementById("bgTrack");
+const heartPhoto=document.getElementById("heartPhoto");
+
+let images=[ /* 13 photos */
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
@@ -273,13 +309,13 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg",
 "WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
 ];
+
 images.concat(images).forEach(src=>{
 let img=document.createElement("img");
 img.src=src;
 bgTrack.appendChild(img);
 });
 
-/* Screen Show */
 function show(id){
 document.querySelectorAll('.screen').forEach(s=>{
 s.classList.remove('show');
@@ -293,7 +329,11 @@ setTimeout(()=>el.classList.add('show'),20);
 /* Slideshow */
 let i=0;
 function start(){music.play();show('s2');slide.src=images[0];}
-function next(){i++; if(i<images.length){slide.src=images[i];} else{showGallery();}}
+function next(){
+i++;
+if(i<images.length){slide.src=images[i];}
+else{showGallery();}
+}
 function showGallery(){
 show('gallery');
 pgrid.innerHTML="";
@@ -312,9 +352,26 @@ let vids=[
 "WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"
 ];
 let currentVideo=0;
-function startVideos(){currentVideo=0;show('videos');loadVideo();}
-function loadVideo(){mainVideo.src=vids[currentVideo];mainVideo.load();}
-function nextVideo(){currentVideo++; if(currentVideo<vids.length){loadVideo();} else{show('heart');}}
+
+function startVideos(){
+currentVideo=0;
+show('videos');
+loadVideo();
+}
+
+function loadVideo(){
+let video=document.getElementById("mainVideo");
+video.src=vids[currentVideo];
+video.load();
+if(currentVideo<3){music.pause();}
+else{music.play();}
+}
+
+function nextVideo(){
+currentVideo++;
+if(currentVideo<vids.length){loadVideo();}
+else{show('heart');}
+}
 
 /* Heart */
 function openHeart(){
@@ -329,50 +386,53 @@ heartBtn.style.display="block";
 },1500);
 }
 
-/* Final Magic */
+/* Final */
 function openLetter(){
-let msg="I made this memory for us ❤️";
+let text="My princess… this little website is just a small piece of my heart. 💖";
+let area=document.getElementById("loveText");
+area.innerHTML="";
 let i=0;
 function type(){
-if(i<msg.length){
-loveText.innerHTML+=msg.charAt(i);
-i++;
+if(i<text.length){
+area.innerHTML+=text[i++];
 setTimeout(type,40);
+}else{
+document.getElementById("magicGif").classList.add("show");
+setTimeout(()=>{
+document.getElementById("proposalArea").style.display="block";
+document.getElementById("ring").style.display="block";
+},2000);
 }
 }
 type();
-
-magicGif.classList.add("show");
-magicGif.play();
-
-setTimeout(()=>{
-proposalArea.style.display="block";
-ring.style.display="block";
-},2500);
 }
 
-/* Celebration */
 function celebrate(){
-finalText.style.display="block";
-
-/* Roses */
+document.getElementById("names").style.display="block";
 for(let i=0;i<30;i++){
+let c=document.createElement("div");
+c.className="confetti";
+c.innerHTML="🎉";
+c.style.left=Math.random()*100+"vw";
+document.body.appendChild(c);
+setTimeout(()=>c.remove(),3000);
+}
+for(let i=0;i<20;i++){
 let r=document.createElement("div");
 r.className="rose";
 r.innerHTML="🌹";
 r.style.left=Math.random()*100+"vw";
 document.body.appendChild(r);
-setTimeout(()=>r.remove(),5000);
+setTimeout(()=>r.remove(),4000);
 }
-
-/* Confetti */
-for(let i=0;i<40;i++){
-let c=document.createElement("div");
-c.className="confetti";
-c.innerHTML="💖";
-c.style.left=Math.random()*100+"vw";
-document.body.appendChild(c);
-setTimeout(()=>c.remove(),3000);
+for(let i=0;i<10;i++){
+let f=document.createElement("div");
+f.className="firework";
+f.innerHTML="🎆";
+f.style.left=Math.random()*100+"vw";
+f.style.top=Math.random()*60+"vh";
+document.body.appendChild(f);
+setTimeout(()=>f.remove(),1000);
 }
 }
 </script>
