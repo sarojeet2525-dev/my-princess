@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ANU ❤️ SARU</title>
+<title>For My Princess ❤️</title>
 
 <style>
 body{
@@ -13,21 +13,9 @@ color:white;
 text-align:center;
 overflow-x:hidden;
 background:linear-gradient(45deg,#ff4e50,#ff8fab,#ffe066);
-cursor:none;
 }
 
-/* sparkle cursor */
-.sparkle{
-position:fixed;
-pointer-events:none;
-font-size:14px;
-animation:fade 1s linear forwards;
-}
-@keyframes fade{
-to{opacity:0;transform:translateY(20px)}
-}
-
-/* screen */
+/* Screens */
 .screen{
 min-height:100vh;
 display:flex;
@@ -35,6 +23,7 @@ flex-direction:column;
 justify-content:center;
 align-items:center;
 padding:25px;
+box-sizing:border-box;
 background:rgba(0,0,0,.35);
 opacity:0;
 transform:translateY(40px);
@@ -43,7 +32,7 @@ transition:.8s ease;
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* moving background photos */
+/* Background moving images */
 .bg-strip{
 position:fixed;
 inset:0;
@@ -54,7 +43,7 @@ overflow:hidden;
 .bg-track{
 display:flex;
 width:max-content;
-animation:move 100s linear infinite;
+animation:move 80s linear infinite;
 }
 .bg-track img{
 height:100vh;
@@ -65,7 +54,7 @@ from{transform:translateX(0)}
 to{transform:translateX(-50%)}
 }
 
-/* slideshow */
+/* Slideshow */
 #slide{
 width:min(85vw,300px);
 height:min(85vw,300px);
@@ -75,7 +64,7 @@ object-fit:cover;
 margin-bottom:20px;
 }
 
-/* gallery */
+/* Gallery */
 .pgrid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
@@ -91,7 +80,7 @@ border:3px solid white;
 object-fit:cover;
 }
 
-/* buttons */
+/* Buttons */
 button{
 margin-top:20px;
 padding:12px 25px;
@@ -106,7 +95,7 @@ box-shadow:0 8px 20px rgba(0,0,0,.25);
 }
 button:hover{transform:scale(1.08)}
 
-/* video */
+/* Video */
 .videoFrame{
 width:100%;
 max-width:800px;
@@ -120,7 +109,16 @@ object-fit:contain;
 border-radius:16px;
 }
 
-/* envelope */
+/* Heart */
+#heartPhoto{
+width:min(80vw,220px);
+border-radius:20px;
+border:4px solid white;
+margin-top:15px;
+display:none;
+}
+
+/* Envelope */
 .envelope{
 font-size:90px;
 cursor:pointer;
@@ -132,73 +130,42 @@ animation:pulse 2s infinite;
 100%{transform:scale(1)}
 }
 
-/* gif */
-#magicGif{
+/* GIF */
+.magicGif{
 position:absolute;
-top:35%;
+top:38%;
 left:50%;
 transform:translate(-50%,-50%);
 width:min(70vw,240px);
-opacity:0;
-transition:2s ease;
+display:none;
 z-index:1;
+pointer-events:none;
 }
 
-/* proposal */
+/* Proposal */
 #proposalArea{
-margin-top:180px;
-display:none;
+margin-top:200px;
+position:relative;
 z-index:2;
-}
-#ring{
-font-size:80px;
 display:none;
-animation:ringFloat 2s infinite ease-in-out;
-}
-@keyframes ringFloat{
-0%{transform:translateY(0)}
-50%{transform:translateY(-15px)}
-100%{transform:translateY(0)}
-}
-#finalNames{
-display:none;
-font-size:36px;
-margin-top:25px;
-animation:glow 2s infinite alternate;
-}
-@keyframes glow{
-from{text-shadow:0 0 10px white}
-to{text-shadow:0 0 30px #ff4e50}
 }
 
-/* confetti */
+#yesText{
+display:none;
+font-size:28px;
+color:#ff4e50;
+margin-top:20px;
+}
+
+/* Confetti */
 .confetti{
 position:fixed;
 top:-10px;
-font-size:18px;
+font-size:20px;
 animation:fall 3s linear forwards;
 }
 @keyframes fall{
 to{transform:translateY(110vh);opacity:0}
-}
-
-/* rose */
-.rose{
-position:fixed;
-top:-10px;
-font-size:20px;
-animation:fall 4s linear forwards;
-}
-
-/* fireworks */
-.firework{
-position:fixed;
-font-size:30px;
-animation:boom 1.2s ease forwards;
-}
-@keyframes boom{
-0%{transform:scale(0);opacity:1}
-100%{transform:scale(3);opacity:0}
 }
 </style>
 </head>
@@ -209,27 +176,33 @@ animation:boom 1.2s ease forwards;
 
 <!-- Start -->
 <div id="s1" class="screen show">
-<h2>Tap the heart ANU 💖</h2>
+<h2>Tap the heart meri princess 💖</h2>
 <div onclick="start()" style="font-size:90px;cursor:pointer">💖</div>
 </div>
 
 <!-- Slideshow -->
 <div id="s2" class="screen hidden">
-<h2>Our Beautiful Memories 📸</h2>
+<h2>Kuch acchii yaadien 📸</h2>
 <img id="slide">
-<button onclick="next()">Next 💖</button>
+<button onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
 <!-- Gallery -->
 <div id="gallery" class="screen hidden">
-<h2>Hamaare Kaarname 📸</h2>
+<h2>Hamaare kaarname 📸</h2>
 <div id="pgrid" class="pgrid"></div>
-<button onclick="show('videosPage')">Videos 🎬</button>
+<button onclick="show('message')">Next 💖</button>
+</div>
+
+<!-- Message -->
+<div id="message" class="screen hidden">
+<h2>Abhi kahani khatam nahi hui meri princess… 💖</h2>
+<button onclick="startVideos()">Videos 🎬</button>
 </div>
 
 <!-- Videos -->
-<div id="videosPage" class="screen hidden">
-<h2>Our Special Moments 🎥</h2>
+<div id="videos" class="screen hidden">
+<h2 id="videoTitle"></h2>
 <div class="videoFrame">
 <video id="mainVideo" controls playsinline></video>
 </div>
@@ -240,8 +213,8 @@ animation:boom 1.2s ease forwards;
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
 <div onclick="openHeart()" style="font-size:90px;cursor:pointer">❤️</div>
-<div id="heartText"></div>
-<img id="heartPhoto" style="display:none;width:200px;border-radius:20px;margin-top:15px;">
+<div id="heartText" style="margin-top:20px;color:#ffe066"></div>
+<img id="heartPhoto">
 <button id="heartBtn" style="display:none" onclick="show('final')">
 Aur dekho aage meri princess 💖
 </button>
@@ -251,32 +224,27 @@ Aur dekho aage meri princess 💖
 <div id="final" class="screen hidden" style="position:relative;">
 <div class="envelope" onclick="openLetter()">💌</div>
 <div id="loveText"></div>
-<video id="magicGif" src="gif.mp4" loop muted playsinline></video>
+
+<video id="magicGif" class="magicGif" src="gif.mp4" loop muted playsinline></video>
 
 <div id="proposalArea">
-<h2>Will you stay with me forever ANU? 💍</h2>
-<div id="ring">💍</div>
-<button onclick="celebrate()">YES 💖</button>
-<button onclick="celebrate()">OF COURSE YES 💞</button>
+<h2 style="color:#ffe066;">ANU 💖 Will you stay with SARU forever? 💍</h2>
+<button onclick="celebrate()">Yes 💖</button>
+<button onclick="celebrate()">Of Course Yesss 💞</button>
+<h1 id="yesText">ANU ❤️ SARU Forever 💞✨</h1>
 </div>
-
-<div id="finalNames">ANU ❤️ SARU</div>
 </div>
 
 <script>
+const music=document.getElementById("music");
+const slide=document.getElementById("slide");
+const pgrid=document.getElementById("pgrid");
+const bgTrack=document.getElementById("bgTrack");
+const heartPhoto=document.getElementById("heartPhoto");
+const heartText=document.getElementById("heartText");
+const heartBtn=document.getElementById("heartBtn");
 
-/* sparkle cursor */
-document.addEventListener("mousemove",e=>{
-let s=document.createElement("div");
-s.className="sparkle";
-s.innerHTML="✨";
-s.style.left=e.clientX+"px";
-s.style.top=e.clientY+"px";
-document.body.appendChild(s);
-setTimeout(()=>s.remove(),1000);
-});
-
-/* ALL 13 PHOTOS */
+/* 13 IMAGES */
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -293,14 +261,12 @@ let images=[
 "WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
 ];
 
-let bgTrack=document.getElementById("bgTrack");
 images.concat(images).forEach(src=>{
 let img=document.createElement("img");
 img.src=src;
 bgTrack.appendChild(img);
 });
 
-/* screen switch */
 function show(id){
 document.querySelectorAll('.screen').forEach(s=>{
 s.classList.remove('show');
@@ -311,124 +277,110 @@ el.classList.remove('hidden');
 setTimeout(()=>el.classList.add('show'),20);
 }
 
-/* slideshow */
+/* SLIDESHOW */
 let i=0;
-function start(){
-document.getElementById("music").play();
-show("s2");
-document.getElementById("slide").src=images[0];
-}
+function start(){music.play();show('s2');slide.src=images[0];}
 function next(){
 i++;
-if(i<images.length){
-document.getElementById("slide").src=images[i];
-}else{
-show("gallery");
-let grid=document.getElementById("pgrid");
-grid.innerHTML="";
+if(i<images.length){slide.src=images[i];}
+else{showGallery();}
+}
+function showGallery(){
+show('gallery');
+pgrid.innerHTML="";
 images.forEach(src=>{
 let img=document.createElement("img");
 img.src=src;
-grid.appendChild(img);
+pgrid.appendChild(img);
 });
 }
-}
 
-/* videos */
+/* VIDEOS */
 let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"
 ];
-let v=0;
-function nextVideo(){
+
+let currentVideo=0;
+
+function startVideos(){
+currentVideo=0;
+show('videos');
+loadVideo();
+}
+
+function loadVideo(){
 let video=document.getElementById("mainVideo");
-if(v<3){
-document.getElementById("music").pause();
-}else{
-document.getElementById("music").play();
+let title=document.getElementById("videoTitle");
+
+video.pause();
+video.currentTime=0;
+
+if(currentVideo<3){
+music.pause();
+title.innerHTML="Memory " + (currentVideo+1) + " 💖";
+video.src=vids[currentVideo];
 }
-video.src=vids[v];
+else{
+music.play();
+title.innerHTML="Special Video 💞";
+video.src=vids[currentVideo];
+}
+
 video.load();
-v++;
-if(v>vids.length){
-show("heart");
-}
 }
 
-/* heart */
+function nextVideo(){
+currentVideo++;
+if(currentVideo<vids.length){loadVideo();}
+else{show('heart');}
+}
+
+/* HEART */
 function openHeart(){
-let text=document.getElementById("heartText");
-text.innerHTML="Someone is there in my heart ❤️";
+heartText.innerHTML="Someone is there in my heart ❤️";
+
 setTimeout(()=>{
-let photo=document.getElementById("heartPhoto");
-photo.src=images[2];
-photo.style.display="block";
+heartPhoto.src=images[2];
+heartPhoto.style.display="block";
+
 setTimeout(()=>{
-text.innerHTML+="<br><br>It’s youuuu ❤️";
-document.getElementById("heartBtn").style.display="block";
+heartText.innerHTML+="<br><br>It’s youuuu ❤️";
+heartBtn.style.display="block";
 },1500);
+
 },1500);
 }
 
-/* letter */
+/* FINAL */
 function openLetter(){
-let message="ANU... you are my forever, my peace, my happiness 💖";
-let i=0;
-let area=document.getElementById("loveText");
-area.innerHTML="";
-let typing=setInterval(()=>{
-area.innerHTML+=message[i];
-i++;
-if(i>=message.length){
-clearInterval(typing);
-magicPhase();
-}
-},60);
-}
+document.getElementById("loveText").innerHTML="I made this memory for us ❤️";
 
-function magicPhase(){
 let gif=document.getElementById("magicGif");
-gif.style.opacity=1;
-gif.play();
-document.getElementById("ring").style.display="block";
-
-for(let i=0;i<25;i++){
-let r=document.createElement("div");
-r.className="rose";
-r.innerHTML="🌹";
-r.style.left=Math.random()*100+"vw";
-document.body.appendChild(r);
-setTimeout(()=>r.remove(),4000);
-}
+gif.pause();
+gif.currentTime=0;
+gif.style.display="block";
+gif.play().catch(()=>{});
 
 setTimeout(()=>{
 document.getElementById("proposalArea").style.display="block";
-},2000);
+},2500);
 }
 
 function celebrate(){
-document.getElementById("finalNames").style.display="block";
-for(let i=0;i<60;i++){
+document.getElementById("yesText").style.display="block";
+
+for(let i=0;i<50;i++){
 let c=document.createElement("div");
 c.className="confetti";
-c.innerHTML="🎉";
+c.innerHTML="💖";
 c.style.left=Math.random()*100+"vw";
 document.body.appendChild(c);
 setTimeout(()=>c.remove(),3000);
 }
-for(let i=0;i<8;i++){
-let f=document.createElement("div");
-f.className="firework";
-f.innerHTML="✨";
-f.style.left=Math.random()*100+"vw";
-f.style.top=Math.random()*60+"vh";
-document.body.appendChild(f);
-setTimeout(()=>f.remove(),1200);
 }
-}
-
 </script>
 </body>
 </html>
