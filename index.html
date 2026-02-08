@@ -15,7 +15,7 @@ overflow-x:hidden;
 background:linear-gradient(45deg,#ff4e50,#ff8fab,#ffe066);
 }
 
-/* Screens */
+/* Screen animation */
 .screen{
 min-height:100vh;
 display:flex;
@@ -32,7 +32,7 @@ transition:.8s ease;
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* Background moving images */
+/* Background moving photos */
 .bg-strip{
 position:fixed;
 inset:0;
@@ -109,7 +109,7 @@ object-fit:contain;
 border-radius:16px;
 }
 
-/* Heart */
+/* Heart photo */
 #heartPhoto{
 width:min(80vw,220px);
 border-radius:20px;
@@ -130,16 +130,20 @@ animation:pulse 2s infinite;
 100%{transform:scale(1)}
 }
 
-/* GIF */
+/* Magic GIF */
 .magicGif{
 position:absolute;
-top:38%;
+top:40%;
 left:50%;
-transform:translate(-50%,-50%);
+transform:translate(-50%,-50%) scale(.8);
 width:min(70vw,240px);
-display:none;
+opacity:0;
+transition:1.5s ease;
 z-index:1;
-pointer-events:none;
+}
+.magicGif.show{
+opacity:1;
+transform:translate(-50%,-50%) scale(1);
 }
 
 /* Proposal */
@@ -149,10 +153,21 @@ position:relative;
 z-index:2;
 display:none;
 }
+#ring{
+font-size:80px;
+display:none;
+animation:float 2s infinite ease-in-out;
+cursor:pointer;
+}
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(-15px)}
+100%{transform:translateY(0)}
+}
 
 #yesText{
 display:none;
-font-size:28px;
+font-size:30px;
 color:#ff4e50;
 margin-top:20px;
 }
@@ -166,6 +181,17 @@ animation:fall 3s linear forwards;
 }
 @keyframes fall{
 to{transform:translateY(110vh);opacity:0}
+}
+
+/* Sparkle cursor */
+.sparkle{
+position:fixed;
+pointer-events:none;
+font-size:14px;
+animation:spark 1s linear forwards;
+}
+@keyframes spark{
+to{transform:translateY(20px);opacity:0}
 }
 </style>
 </head>
@@ -224,14 +250,12 @@ Aur dekho aage meri princess 💖
 <div id="final" class="screen hidden" style="position:relative;">
 <div class="envelope" onclick="openLetter()">💌</div>
 <div id="loveText"></div>
-
-<video id="magicGif" class="magicGif" src="gif.mp4" loop muted playsinline></video>
-
 <div id="proposalArea">
-<h2 style="color:#ffe066;">ANU 💖 Will you stay with SARU forever? 💍</h2>
+<h2 style="color:#ffe066;">Will you stay with me forever? 💍</h2>
+<div id="ring" onclick="celebrate()">💍</div>
 <button onclick="celebrate()">Yes 💖</button>
 <button onclick="celebrate()">Of Course Yesss 💞</button>
-<h1 id="yesText">ANU ❤️ SARU Forever 💞✨</h1>
+<h1 id="yesText">Anushree said YES to Sarojeet 💞✨</h1>
 </div>
 </div>
 
@@ -240,11 +264,7 @@ const music=document.getElementById("music");
 const slide=document.getElementById("slide");
 const pgrid=document.getElementById("pgrid");
 const bgTrack=document.getElementById("bgTrack");
-const heartPhoto=document.getElementById("heartPhoto");
-const heartText=document.getElementById("heartText");
-const heartBtn=document.getElementById("heartBtn");
 
-/* 13 IMAGES */
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -277,14 +297,10 @@ el.classList.remove('hidden');
 setTimeout(()=>el.classList.add('show'),20);
 }
 
-/* SLIDESHOW */
 let i=0;
 function start(){music.play();show('s2');slide.src=images[0];}
-function next(){
-i++;
-if(i<images.length){slide.src=images[i];}
-else{showGallery();}
-}
+function next(){i++; if(i<images.length){slide.src=images[i];} else{showGallery();}}
+
 function showGallery(){
 show('gallery');
 pgrid.innerHTML="";
@@ -295,14 +311,13 @@ pgrid.appendChild(img);
 });
 }
 
-/* VIDEOS */
+/* Videos */
 let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"
 ];
-
 let currentVideo=0;
 
 function startVideos(){
@@ -313,23 +328,10 @@ loadVideo();
 
 function loadVideo(){
 let video=document.getElementById("mainVideo");
-let title=document.getElementById("videoTitle");
-
-video.pause();
-video.currentTime=0;
-
-if(currentVideo<3){
-music.pause();
-title.innerHTML="Memory " + (currentVideo+1) + " 💖";
+if(currentVideo<3){music.pause();} else{music.play();}
 video.src=vids[currentVideo];
-}
-else{
-music.play();
-title.innerHTML="Special Video 💞";
-video.src=vids[currentVideo];
-}
-
 video.load();
+video.play().catch(()=>{});
 }
 
 function nextVideo(){
@@ -338,40 +340,49 @@ if(currentVideo<vids.length){loadVideo();}
 else{show('heart');}
 }
 
-/* HEART */
+/* Heart */
 function openHeart(){
 heartText.innerHTML="Someone is there in my heart ❤️";
-
 setTimeout(()=>{
-heartPhoto.src=images[2];
+heartPhoto.src=images[1];
 heartPhoto.style.display="block";
-
 setTimeout(()=>{
 heartText.innerHTML+="<br><br>It’s youuuu ❤️";
 heartBtn.style.display="block";
 },1500);
-
 },1500);
 }
 
-/* FINAL */
+/* Final */
 function openLetter(){
 document.getElementById("loveText").innerHTML="I made this memory for us ❤️";
 
-let gif=document.getElementById("magicGif");
-gif.pause();
-gif.currentTime=0;
-gif.style.display="block";
-gif.play().catch(()=>{});
+let final=document.getElementById("final");
+
+/* create gif dynamically */
+let gif=document.createElement("video");
+gif.src="gif.mp4";
+gif.loop=true;
+gif.muted=true;
+gif.playsInline=true;
+gif.className="magicGif";
+final.appendChild(gif);
+
+setTimeout(()=>{
+gif.play();
+gif.classList.add("show");
+},100);
 
 setTimeout(()=>{
 document.getElementById("proposalArea").style.display="block";
-},2500);
+document.getElementById("ring").style.display="block";
+},2000);
 }
 
 function celebrate(){
 document.getElementById("yesText").style.display="block";
 
+/* confetti */
 for(let i=0;i<50;i++){
 let c=document.createElement("div");
 c.className="confetti";
@@ -380,7 +391,28 @@ c.style.left=Math.random()*100+"vw";
 document.body.appendChild(c);
 setTimeout(()=>c.remove(),3000);
 }
+
+/* roses */
+for(let i=0;i<20;i++){
+let r=document.createElement("div");
+r.className="confetti";
+r.innerHTML="🌹";
+r.style.left=Math.random()*100+"vw";
+document.body.appendChild(r);
+setTimeout(()=>r.remove(),3000);
 }
+}
+
+/* Sparkle cursor */
+document.addEventListener("mousemove",e=>{
+let s=document.createElement("div");
+s.className="sparkle";
+s.innerHTML="✨";
+s.style.left=e.clientX+"px";
+s.style.top=e.clientY+"px";
+document.body.appendChild(s);
+setTimeout(()=>s.remove(),1000);
+});
 </script>
 </body>
 </html>
