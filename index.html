@@ -14,38 +14,40 @@ body{
     cursor: crosshair; 
 }
 
-h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
 
-/* Moving Background Photo Track */
-.bg-strip{position:fixed;inset:0;z-index:-2;opacity:.3;}
+/* --- UPDATED: Brighter Background Track --- */
+.bg-strip{position:fixed;inset:0;z-index:-2;opacity:.6; background: #ff758c;}
 .bg-track{display:flex;width:max-content;animation:move 90s linear infinite;}
-.bg-track img{height:100vh;filter:blur(4px);object-fit:cover;}
+.bg-track img{height:100vh;filter:blur(2px); object-fit:cover;}
 @keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* Glowing Pink Heart Rain */
 .heart-rain {
     position: fixed; top: -10%; user-select: none; pointer-events: none; z-index: 1000;
-    color: #ffb6c1; text-shadow: 0 0 10px #ff69b4; animation: fall linear forwards;
+    color: #fff1f5; text-shadow: 0 0 10px #ff69b4; animation: fall linear forwards;
 }
 @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
-/* Screens */
+/* --- UPDATED: Brighter Screen Overlays --- */
 .screen{
     min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
-    padding:20px; box-sizing:border-box; background: rgba(0, 0, 0, 0.25); 
-    backdrop-filter: blur(8px); opacity:0; transform:translateY(30px); transition:.8s ease;
+    padding:20px; box-sizing:border-box; 
+    background: rgba(255, 255, 255, 0.15); /* Light translucent white instead of dark */
+    backdrop-filter: blur(4px); 
+    opacity:0; transform:translateY(30px); transition:.8s ease;
 }
 .screen.show{opacity:1; transform:translateY(0)}
 .hidden{display:none}
 
-/* GALLERY SIZE FIX */
+/* GALLERY */
 .pgrid{
     display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; 
     width:100%; max-width:320px; margin: 0 auto;
 }
-.pgrid img{ width:100%; height:100px; object-fit:cover; border-radius:8px; border:2px solid white; }
+.pgrid img{ width:100%; height:100px; object-fit:cover; border-radius:8px; border:2px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
 
-/* VIDEO SIZE FIX */
+/* VIDEO */
 .video-wrapper {
     width: 280px; aspect-ratio: 9/16; background: #000; border-radius: 15px; 
     overflow: hidden; border: 3px solid white; margin: 10px auto;
@@ -53,12 +55,13 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 #mainVideo { width:100%; height:100%; object-fit:cover; }
 
 /* LETTERS & SIGNATURE */
-.letter-card { background: rgba(255, 255, 255, 0.15); padding: 15px; border-radius: 15px; text-align: left; border: 1px solid rgba(255,255,255,0.2); }
-#signatureArea { font-family: 'Great Vibes', cursive; font-size: 3rem; color: #ffe066; height: 60px; opacity: 0; transition: 1.5s; }
-
-/* CELEBRATION ELEMENTS */
-.confetti { position: fixed; top: -20px; z-index: 2000; animation: fallConfetti linear forwards; }
-@keyframes fallConfetti { to { transform: translateY(110vh) rotate(720deg); } }
+.letter-card { 
+    background: rgba(255, 255, 255, 0.25); 
+    padding: 15px; border-radius: 15px; text-align: left; 
+    border: 1px solid rgba(255,255,255,0.4);
+    box-shadow: 0 8px 32px rgba(255, 105, 180, 0.2);
+}
+#signatureArea { font-family: 'Great Vibes', cursive; font-size: 3rem; color: #ffe066; height: 60px; opacity: 0; transition: 1.5s; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
 
 /* FINAL YES TEXT STYLING */
 #yesText {
@@ -77,13 +80,17 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
     100% { transform: scale(1); }
 }
 
-/* Cursor Sparkle Style */
+/* Cursor Sparkle */
 .sparkle {
     position: fixed; pointer-events: none; z-index: 9999;
     font-size: 20px; transition: opacity 0.8s, transform 0.8s;
 }
 
-button{ margin-top:15px; padding:10px 20px; border-radius:20px; border:none; cursor:pointer; font-weight:600; background:white; color:#ff4e50; }
+button{ 
+    margin-top:15px; padding:10px 20px; border-radius:20px; border:none; cursor:pointer; 
+    font-weight:600; background:white; color:#ff4e50; 
+    box-shadow: 0 4px 15px rgba(255,255,255,0.4);
+}
 </style>
 </head>
 <body>
@@ -92,13 +99,13 @@ button{ margin-top:15px; padding:10px 20px; border-radius:20px; border:none; cur
 <audio id="music" src="Perfect.mp3" loop></audio>
 
 <div id="s1" class="screen show">
-    <h2>Tap the heart meri princess 💖</h2>
-    <div onclick="start()" style="cursor:pointer; font-size:80px;">💖</div>
+    <h2 style="color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5);">Tap the heart meri princess 💖</h2>
+    <div onclick="start()" style="cursor:pointer; font-size:80px; filter: drop-shadow(0 0 10px #fff);">💖</div>
 </div>
 
 <div id="s2" class="screen hidden">
     <h2>Kuch acchii yaadien 📸</h2>
-    <img id="slide" style="width:260px; border-radius:15px; border:4px solid white;">
+    <img id="slide" style="width:260px; border-radius:15px; border:4px solid white; box-shadow: 0 0 20px rgba(255,255,255,0.3);">
     <button onclick="next()">MERI CUTIEE💖</button>
 </div>
 
@@ -110,7 +117,7 @@ button{ margin-top:15px; padding:10px 20px; border-radius:20px; border:none; cur
 
 <div id="message" class="screen hidden">
     <h2 id="typedMsg"></h2>
-    <div id="togetherTimer" style="background:rgba(255,255,255,0.2); padding:15px; border-radius:15px; font-size:0.9rem;"></div>
+    <div id="togetherTimer" style="background:rgba(255,255,255,0.3); padding:15px; border-radius:15px; font-size:0.9rem; font-weight:600;"></div>
     <button onclick="startVideos()">Videos 🎬</button>
 </div>
 
@@ -122,7 +129,7 @@ button{ margin-top:15px; padding:10px 20px; border-radius:20px; border:none; cur
 <div id="letter1" class="screen hidden">
     <h2>Pehle Kuch Baatien... 🤨</h2>
     <div class="letter-card" style="max-width:320px;">
-        <p>
+        <p style="color: #fff; font-weight: 500;">
             Kaise batau mai tumhe..🤨<br>
             Aanko mai tum... 👀<br>
             Yaadon Mai tum..🤔<br>
@@ -144,7 +151,7 @@ button{ margin-top:15px; padding:10px 20px; border-radius:20px; border:none; cur
 <div id="letter2" class="screen hidden">
     <h2>Sirf Tumhari Chahat... 💦</h2>
     <div class="letter-card" style="max-width:320px;">
-        <p>
+        <p style="color: #fff; font-weight: 500;">
             Log bachte hai samandar se lekin..<br>
             hum tumhari aakho mai dubne ko taiyaar hai..💦<br><br>
             Kisko dekhne ki chahat kare..🫣..<br>
@@ -161,7 +168,7 @@ button{ margin-top:15px; padding:10px 20px; border-radius:20px; border:none; cur
 <div id="letter3" class="screen hidden">
     <h2>Mera Har Wakt Tum... 🌎</h2>
     <div class="letter-card" style="max-width:320px;">
-        <p>
+        <p style="color: #fff; font-weight: 500;">
             Duniya ko khushi chaiye 🌎...<br>
             aur mughe har Khushi mai tum..🫵<br><br>
             Mere dosto ko wakt chaiye 🧑‍🤝‍🧑...<br>
@@ -179,21 +186,21 @@ button{ margin-top:15px; padding:10px 20px; border-radius:20px; border:none; cur
 
 <div id="heart" class="screen hidden">
     <h2>Open My Heart ❤️</h2>
-    <div onclick="openHeart()" style="font-size:80px; cursor:pointer">❤️</div>
-    <div id="heartText" style="margin-top:10px;"></div>
+    <div onclick="openHeart()" style="font-size:80px; cursor:pointer; filter: drop-shadow(0 0 10px #fff);">❤️</div>
+    <div id="heartText" style="margin-top:10px; font-weight: 600;"></div>
     <img id="heartPhoto" style="width:180px; border-radius:15px; border:3px solid white; display:none;">
     <button id="heartBtn" class="hidden" onclick="show('final')">Aage Dekho 💖</button>
 </div>
 
 <div id="final" class="screen hidden">
-    <div id="env" onclick="openLetter()" style="font-size:80px; cursor:pointer;">💌</div>
-    <video id="magicGif" style="display:none; width:200px;" loop muted playsinline><source src="gif.mp4" type="video/mp4"></video>
+    <div id="env" onclick="openLetter()" style="font-size:80px; cursor:pointer; filter: drop-shadow(0 0 15px gold);">💌</div>
+    <video id="magicGif" style="display:none; width:200px; border-radius: 15px; border: 2px solid white;" loop muted playsinline><source src="gif.mp4" type="video/mp4"></video>
     <div id="proposalArea" style="display:none;">
         <h2 id="proposalHeading"></h2>
         <button onclick="celebrate()">Yes 💖</button>
         <button onclick="celebrate()">Of Course Yesss 💞</button>
         <h1 id="yesText">I LOVE YOU IN EVERY SECOND OF MY LIFE! 💞</h1>
-        <button id="restartBtn" style="display:none; background:#ff4e50; color:white;" onclick="restart()">Pura Phir Se Dekho 🔄</button>
+        <button id="restartBtn" style="display:none; background:#ff4e50; color:white; border: 2px solid white;" onclick="restart()">Pura Phir Se Dekho 🔄</button>
     </div>
 </div>
 
@@ -274,7 +281,8 @@ function openLetter(){
 function celebrate(){
     document.getElementById("yesText").style.display="block";
     document.getElementById("restartBtn").style.display="inline-block";
-    document.body.style.background = "linear-gradient(to bottom, #ff758c, #ff9a9e, #fecfef)";
+    // BRIGHTER GRADIENT
+    document.body.style.background = "linear-gradient(to bottom, #ff9a9e, #fad0c4, #ffd1ff)";
     for(let i=0; i<100; i++){
         let c = document.createElement("div"); c.className="confetti";
         c.innerHTML = ["💖","✨","🌸","🎉","💕"][Math.floor(Math.random()*5)];
@@ -287,7 +295,7 @@ function celebrate(){
 }
 
 function restart() {
-    location.reload(); // Simplest way to reset all states and start over
+    location.reload();
 }
 
 setInterval(()=>{
@@ -299,4 +307,3 @@ setInterval(()=>{
 </script>
 </body>
 </html>
-
