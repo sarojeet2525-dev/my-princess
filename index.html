@@ -255,7 +255,7 @@ Aur dekho aage meri princess 💖
 <div id="ring" onclick="celebrate()">💍</div>
 <button onclick="celebrate()">Yes 💖</button>
 <button onclick="celebrate()">Of Course Yesss 💞</button>
-<h1 id="yesText">Anushree said YES to Sarojeet 💞✨</h1>
+<h1 id="yesText">Anu said YES to Saru now they are ANUSARU 💞✨</h1>
 </div>
 </div>
 
@@ -316,6 +316,7 @@ let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4",
+"WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4",
 "WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"
 ];
 let currentVideo=0;
@@ -328,7 +329,7 @@ loadVideo();
 
 function loadVideo(){
 let video=document.getElementById("mainVideo");
-if(currentVideo<3){music.pause();} else{music.play();}
+if(currentVideo<4){music.pause();} else{music.play();}
 video.src=vids[currentVideo];
 video.load();
 video.play().catch(()=>{});
@@ -416,3 +417,4 @@ setTimeout(()=>s.remove(),1000);
 </script>
 </body>
 </html>
+
