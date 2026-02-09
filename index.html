@@ -32,7 +32,7 @@ transition:.8s ease;
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* Moving background photos */
+/* Moving background */
 .bg-strip{
 position:fixed;
 inset:0;
@@ -52,12 +52,6 @@ filter:blur(6px);
 @keyframes move{
 from{transform:translateX(0)}
 to{transform:translateX(-50%)}
-}
-
-/* Typing */
-#typingText{
-font-size:22px;
-min-height:60px;
 }
 
 /* Slideshow */
@@ -136,18 +130,22 @@ animation:pulse 2s infinite;
 100%{transform:scale(1)}
 }
 
-/* GIF (BEHIND proposal) */
+/* GIF FIXED */
 .magicGif{
 position:absolute;
 top:35%;
 left:50%;
-transform:translate(-50%,-50%);
+transform:translate(-50%,-50%) scale(.8);
 width:min(70vw,240px);
 opacity:0;
-transition:1.5s ease;
+pointer-events:none;
 z-index:1;
+transition:1.5s ease;
 }
-.magicGif.show{opacity:1}
+.magicGif.show{
+opacity:1;
+transform:translate(-50%,-50%) scale(1);
+}
 
 /* Proposal */
 #proposalArea{
@@ -156,69 +154,45 @@ position:relative;
 z-index:2;
 display:none;
 }
-
-#ring{
-font-size:80px;
-display:none;
-animation:float 2s infinite ease-in-out;
-cursor:pointer;
-}
-@keyframes float{
-0%{transform:translateY(0)}
-50%{transform:translateY(-15px)}
-100%{transform:translateY(0)}
-}
-
 #yesText{
 display:none;
 font-size:28px;
+color:#ff4e50;
 margin-top:20px;
 }
 
-/* Confetti slow */
+/* Confetti burst */
 .confetti{
 position:fixed;
 top:-20px;
 animation:fall linear forwards;
 }
 @keyframes fall{
-0%{transform:translateY(0) rotate(0deg)}
-100%{transform:translateY(110vh) rotate(720deg);opacity:0}
+0%{transform:translateY(0) rotate(0deg);opacity:1;}
+100%{transform:translateY(110vh) rotate(720deg);opacity:0;}
 }
 
-/* Fireworks burst */
+/* Fireworks */
 .firework{
 position:fixed;
 font-size:26px;
 animation:explode 1s ease-out forwards;
 }
 @keyframes explode{
-0%{transform:scale(0)}
-100%{transform:scale(3);opacity:0}
-}
-
-/* Sparkle cursor */
-.sparkle{
-position:fixed;
-pointer-events:none;
-font-size:14px;
-animation:spark 1s linear forwards;
-}
-@keyframes spark{
-to{transform:translateY(20px);opacity:0}
+0%{transform:scale(0);}
+100%{transform:scale(3);opacity:0;}
 }
 </style>
 </head>
 <body>
 
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
+<audio id="music" src="Perfect.mp3" loop></audio>
 
-<audio id="music" src="Perfect.mp3" preload="auto" loop></audio>
-
-<!-- FIRST PAGE -->
+<!-- START -->
 <div id="s1" class="screen show">
-<h2 id="typingText"></h2>
-<button onclick="start()">Enter My Heart 💖</button>
+<h2>Tap the heart meri princess 💖</h2>
+<div onclick="start()" style="font-size:90px;cursor:pointer">💖</div>
 </div>
 
 <!-- SLIDESHOW -->
@@ -264,11 +238,12 @@ Aur dekho aage meri princess 💖
 <div id="final" class="screen hidden" style="position:relative;">
 <div class="envelope" onclick="openLetter()">💌</div>
 
-<video id="magicGif" class="magicGif" src="gif.mp4" loop muted playsinline></video>
+<video id="magicGif" class="magicGif" loop muted playsinline>
+<source src="gif.mp4" type="video/mp4">
+</video>
 
 <div id="proposalArea">
 <h2>Will you stay with me forever? 💍</h2>
-<div id="ring" onclick="celebrate()">💍</div>
 <button onclick="celebrate()">Yes 💖</button>
 <button onclick="celebrate()">Of Course Yesss 💞</button>
 <h1 id="yesText">ANU said YES to SARU 💞✨</h1>
@@ -281,7 +256,7 @@ const slide=document.getElementById("slide");
 const pgrid=document.getElementById("pgrid");
 const bgTrack=document.getElementById("bgTrack");
 
-/* 13 Photos */
+/* IMAGES */
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -304,18 +279,7 @@ img.src=src;
 bgTrack.appendChild(img);
 });
 
-/* Typing */
-let text="Tughe dekhna hai mere dil mai kyy haii 💖";
-let ti=0;
-function type(){
-if(ti<text.length){
-document.getElementById("typingText").innerHTML+=text[ti];
-ti++;
-setTimeout(type,50);
-}}
-type();
-
-/* Screen switch */
+/* SHOW SCREEN */
 function show(id){
 document.querySelectorAll('.screen').forEach(s=>{
 s.classList.remove('show');
@@ -326,13 +290,15 @@ el.classList.remove('hidden');
 setTimeout(()=>el.classList.add('show'),20);
 }
 
-/* Slideshow */
-let index=0;
+/* START */
 function start(){
 music.play().catch(()=>{});
 show('s2');
 slide.src=images[0];
 }
+
+/* SLIDESHOW */
+let index=0;
 function next(){
 index++;
 if(index<images.length){slide.src=images[index];}
@@ -348,7 +314,7 @@ pgrid.appendChild(img);
 });
 }
 
-/* Videos */
+/* VIDEOS */
 let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
@@ -365,11 +331,10 @@ loadVideo();
 }
 function loadVideo(){
 let video=document.getElementById("mainVideo");
-if(currentVideo<vids.length-1){music.pause();}
+if(currentVideo<4){music.pause();}
 else{music.play();}
 video.src=vids[currentVideo];
 video.load();
-video.play().catch(()=>{});
 }
 function nextVideo(){
 currentVideo++;
@@ -377,7 +342,7 @@ if(currentVideo<vids.length){loadVideo();}
 else{show('heart');}
 }
 
-/* Heart */
+/* HEART */
 function openHeart(){
 heartText.innerHTML="Someone is there in my heart ❤️";
 setTimeout(()=>{
@@ -390,22 +355,25 @@ heartBtn.style.display="block";
 },1500);
 }
 
-/* Envelope */
+/* LETTER FIXED */
 function openLetter(){
 let gif=document.getElementById("magicGif");
+let proposal=document.getElementById("proposalArea");
+
+gif.currentTime=0;
 gif.classList.add("show");
-gif.play();
+gif.play().catch(()=>{});
+
 setTimeout(()=>{
-document.getElementById("proposalArea").style.display="block";
-document.getElementById("ring").style.display="block";
-},1500);
+proposal.style.display="block";
+},2000);
 }
 
-/* Celebration */
+/* CELEBRATION */
 function celebrate(){
 document.getElementById("yesText").style.display="block";
 
-for(let i=0;i<80;i++){
+for(let i=0;i<60;i++){
 let c=document.createElement("div");
 c.className="confetti";
 let emojis=["💖","💞","✨","🌸","🎉"];
@@ -417,7 +385,7 @@ document.body.appendChild(c);
 setTimeout(()=>c.remove(),5000);
 }
 
-for(let i=0;i<15;i++){
+for(let i=0;i<12;i++){
 setTimeout(()=>{
 let f=document.createElement("div");
 f.className="firework";
@@ -426,20 +394,9 @@ f.style.left=Math.random()*100+"vw";
 f.style.top=Math.random()*80+"vh";
 document.body.appendChild(f);
 setTimeout(()=>f.remove(),1000);
-},i*150);
+},i*200);
 }
 }
-
-/* Sparkle Cursor */
-document.addEventListener("mousemove",e=>{
-let s=document.createElement("div");
-s.className="sparkle";
-s.innerHTML="✨";
-s.style.left=e.clientX+"px";
-s.style.top=e.clientY+"px";
-document.body.appendChild(s);
-setTimeout(()=>s.remove(),1000);
-});
 </script>
 </body>
 </html>
