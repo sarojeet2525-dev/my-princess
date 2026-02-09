@@ -11,6 +11,7 @@
 body{
     margin:0; font-family: 'Poppins', sans-serif; color:white; text-align:center; overflow-x:hidden;
     background: #ff758c; transition: background 2s ease;
+    cursor: crosshair; /* Custom cursor feel */
 }
 
 h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
@@ -37,7 +38,7 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 .screen.show{opacity:1; transform:translateY(0)}
 .hidden{display:none}
 
-/* GALLERY SIZE FIX (Small & Clean) */
+/* GALLERY SIZE FIX */
 .pgrid{
     display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; 
     width:100%; max-width:320px; margin: 0 auto;
@@ -59,6 +60,28 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 /* CELEBRATION ELEMENTS */
 .confetti { position: fixed; top: -20px; z-index: 2000; animation: fallConfetti linear forwards; }
 @keyframes fallConfetti { to { transform: translateY(110vh) rotate(720deg); } }
+
+/* FINAL YES TEXT STYLING */
+#yesText {
+    display: none;
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.5rem;
+    color: #fff;
+    text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493, 0 0 30px #ff1493;
+    animation: pulse 2s infinite;
+    margin-top: 20px;
+}
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Cursor Sparkle Style */
+.sparkle {
+    position: fixed; pointer-events: none; z-index: 9999;
+    font-size: 20px; transition: opacity 0.8s, transform 0.8s;
+}
 
 button{ margin-top:15px; padding:10px 20px; border-radius:20px; border:none; cursor:pointer; font-weight:600; background:white; color:#ff4e50; }
 </style>
@@ -169,7 +192,7 @@ button{ margin-top:15px; padding:10px 20px; border-radius:20px; border:none; cur
         <h2 id="proposalHeading"></h2>
         <button onclick="celebrate()">Yes 💖</button>
         <button onclick="celebrate()">Of Course Yesss 💞</button>
-        <h1 id="yesText" style="display:none; font-family:'Great Vibes'; color:#fff;">ANU said YES! 💞</h1>
+        <h1 id="yesText">ANU said YES! 💞</h1>
     </div>
 </div>
 
@@ -182,6 +205,22 @@ const bgTrack=document.getElementById("bgTrack");
 let images=["WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg","WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg","WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg","WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"];
 
 images.concat(images).forEach(src=>{let img=document.createElement("img"); img.src=src; bgTrack.appendChild(img);});
+
+// Sparkle Cursor Logic
+document.addEventListener('mousemove', (e) => {
+    const sparkle = document.createElement("div");
+    sparkle.className = "sparkle";
+    sparkle.innerHTML = ["✨", "⭐", "💖"][Math.floor(Math.random() * 3)];
+    sparkle.style.left = e.clientX + "px";
+    sparkle.style.top = e.clientY + "px";
+    document.body.appendChild(sparkle);
+    
+    setTimeout(() => {
+        sparkle.style.opacity = "0";
+        sparkle.style.transform = "translateY(20px) scale(0.5)";
+    }, 50);
+    setTimeout(() => sparkle.remove(), 800);
+});
 
 function typeWriter(text, elementId) {
     let i = 0; const el = document.getElementById(elementId); el.innerHTML = "";
@@ -211,19 +250,12 @@ let idx=0;
 function next(){ idx++; if(idx<images.length){slide.src=images[idx];} else{showGallery();} }
 function showGallery(){ show('gallery'); pgrid.innerHTML=""; images.forEach(src=>{let img=document.createElement("img"); img.src=src; pgrid.appendChild(img);}); }
 
-let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4","WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4","WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4","WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"];
+let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-07.12 PM.mp4","WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4","WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4","WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"];
 let curV=0;
 function startVideos(){ curV=0; show('videos'); loadV(); }
 function loadV(){ let v=document.getElementById("mainVideo"); curV<4?music.pause():music.play(); v.src=vids[curV]; v.load(); }
-function nextVideo() { 
-    curV++; 
-    if(curV < vids.length) { 
-        loadV(); 
-    } else { 
-        // This is the important change!
-        show('letter1'); 
-    } 
-}
+function nextVideo() { curV++; if(curV < vids.length) { loadV(); } else { show('letter1'); } }
+
 function signLetter(){ document.getElementById("signatureArea").style.opacity="1"; document.getElementById("signBtn").style.display="none"; document.getElementById("nextBtn").classList.remove("hidden"); }
 
 function openHeart(){
@@ -264,4 +296,3 @@ setInterval(()=>{
 </script>
 </body>
 </html>
-
