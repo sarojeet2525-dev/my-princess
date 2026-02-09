@@ -32,7 +32,7 @@ transition:.8s ease;
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* Moving background photos */
+/* Background */
 .bg-strip{
 position:fixed;
 inset:0;
@@ -54,7 +54,7 @@ from{transform:translateX(0)}
 to{transform:translateX(-50%)}
 }
 
-/* Typing effect */
+/* Typing */
 #typingText{
 font-size:22px;
 max-width:85%;
@@ -137,22 +137,48 @@ animation:pulse 2s infinite;
 100%{transform:scale(1)}
 }
 
-/* Confetti upgraded */
+/* BURST GIF */
+.magicGif{
+position:absolute;
+top:40%;
+left:50%;
+transform:translate(-50%,-50%) scale(.2);
+width:min(70vw,240px);
+opacity:0;
+transition:1s ease;
+z-index:1;
+}
+.magicGif.show{
+opacity:1;
+transform:translate(-50%,-50%) scale(1);
+}
+
+/* Burst particles */
+.burst{
+position:absolute;
+font-size:24px;
+animation:burstAnim 1s ease-out forwards;
+}
+@keyframes burstAnim{
+0%{transform:scale(0);}
+100%{
+transform:translate(
+calc(200px * cos(var(--angle))),
+calc(200px * sin(var(--angle)))
+) scale(2);
+opacity:0;
+}
+}
+
+/* Confetti */
 .confetti{
 position:fixed;
 top:-20px;
 animation:fall linear forwards;
 }
-
 @keyframes fall{
-0%{
-transform:translateY(0) rotate(0deg);
-opacity:1;
-}
-100%{
-transform:translateY(110vh) rotate(720deg);
-opacity:0;
-}
+0%{transform:translateY(0) rotate(0deg);opacity:1;}
+100%{transform:translateY(110vh) rotate(720deg);opacity:0;}
 }
 
 /* Fireworks */
@@ -192,10 +218,9 @@ animation:explode 1s ease-out forwards;
 <button onclick="show('message')">Next 💖</button>
 </div>
 
-<!-- MESSAGE PAGE -->
+<!-- MESSAGE -->
 <div id="message" class="screen hidden">
 <h2>Abhi kahani khatam nahi hui meri princess… 💖</h2>
-<p>Abhi aur yaadein baaki hain…</p>
 <button onclick="startVideos()">Videos 🎬</button>
 </div>
 
@@ -219,8 +244,11 @@ Aur dekho aage meri princess 💖
 </div>
 
 <!-- FINAL -->
-<div id="final" class="screen hidden">
+<div id="final" class="screen hidden" style="position:relative;">
 <div class="envelope" onclick="openLetter()">💌</div>
+
+<video id="magicGif" class="magicGif" src="gif.mp4" loop muted playsinline></video>
+
 <div id="proposalArea" style="display:none;">
 <h2>Will you stay with me forever? 💍</h2>
 <button onclick="celebrate()">Yes 💖</button>
@@ -232,13 +260,20 @@ Mughe to pata hi tha meri Surrii haa boltii 💞✨
 </div>
 
 <script>
-const music=document.getElementById("music");
-const slide=document.getElementById("slide");
-const pgrid=document.getElementById("pgrid");
-const bgTrack=document.getElementById("bgTrack");
 
-/* 13 Photos */
-let images=[
+/* Typing */
+let text="Tughe dekhna hai mere dil mai kyy haii 💖";
+let ti=0;
+function type(){
+if(ti<text.length){
+document.getElementById("typingText").innerHTML+=text[ti];
+ti++;
+setTimeout(type,50);
+}}
+type();
+
+/* Photos */
+let images=[ /* 13 images */ 
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
@@ -257,10 +292,9 @@ let images=[
 images.concat(images).forEach(src=>{
 let img=document.createElement("img");
 img.src=src;
-bgTrack.appendChild(img);
+document.getElementById("bgTrack").appendChild(img);
 });
 
-/* Screen show */
 function show(id){
 document.querySelectorAll('.screen').forEach(s=>{
 s.classList.remove('show');
@@ -271,33 +305,23 @@ el.classList.remove('hidden');
 setTimeout(()=>el.classList.add('show'),20);
 }
 
-/* Typing effect */
-let text="Tughe dekhna hai mere dil mai kyy haii 💖";
-let i=0;
-function type(){
-if(i<text.length){
-document.getElementById("typingText").innerHTML+=text[i];
-i++;
-setTimeout(type,50);
-}
-}
-type();
-
 /* Slideshow */
 let index=0;
-function start(){music.play();show('s2');slide.src=images[0];}
+function start(){show('s2');document.getElementById("slide").src=images[0];}
 function next(){
 index++;
-if(index<images.length){slide.src=images[index];}
-else{showGallery();}
+if(index<images.length){
+document.getElementById("slide").src=images[index];
+}else{showGallery();}
 }
 function showGallery(){
 show('gallery');
-pgrid.innerHTML="";
+let grid=document.getElementById("pgrid");
+grid.innerHTML="";
 images.forEach(src=>{
 let img=document.createElement("img");
 img.src=src;
-pgrid.appendChild(img);
+grid.appendChild(img);
 });
 }
 
@@ -310,18 +334,11 @@ let vids=[
 "WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"
 ];
 let currentVideo=0;
-
-function startVideos(){
-currentVideo=0;
-show('videos');
-loadVideo();
-}
+function startVideos(){currentVideo=0;show('videos');loadVideo();}
 function loadVideo(){
-let video=document.getElementById("mainVideo");
-if(currentVideo<4){music.pause();}
-else{music.play();}
-video.src=vids[currentVideo];
-video.load();
+let v=document.getElementById("mainVideo");
+v.src=vids[currentVideo];
+v.load();
 }
 function nextVideo(){
 currentVideo++;
@@ -342,9 +359,29 @@ heartBtn.style.display="block";
 },1500);
 }
 
-/* Final */
+/* Envelope Burst */
 function openLetter(){
+
+let gif=document.getElementById("magicGif");
+gif.currentTime=0;
+gif.play();
+gif.classList.add("show");
+
+/* burst particles */
+for(let i=0;i<20;i++){
+let b=document.createElement("div");
+b.className="burst";
+b.innerHTML="✨";
+b.style.left="50%";
+b.style.top="40%";
+b.style.setProperty('--angle', (Math.random()*360)+"deg");
+document.getElementById("final").appendChild(b);
+setTimeout(()=>b.remove(),1000);
+}
+
+setTimeout(()=>{
 document.getElementById("proposalArea").style.display="block";
+},1500);
 }
 
 /* Celebration */
@@ -352,46 +389,32 @@ function celebrate(){
 
 document.getElementById("yesText").style.display="block";
 
-/* CONFETTI UPGRADED */
+/* Confetti */
 for(let i=0;i<80;i++){
-
-  let c=document.createElement("div");
-  c.className="confetti";
-  
-  let emojis=["💖","💞","✨","🌸","🎉"];
-  c.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
-
-  c.style.left=Math.random()*100+"vw";
-
-  /* random size */
-  c.style.fontSize=(16 + Math.random()*20)+"px";
-
-  /* random duration */
-  let duration = 3 + Math.random()*3;
-  c.style.animationDuration = duration+"s";
-
-  /* random delay */
-  c.style.animationDelay = Math.random()*2+"s";
-
-  /* random horizontal sway */
-  c.style.transform = "translateX(" + (Math.random()*100-50) + "px)";
-
-  document.body.appendChild(c);
-
-  setTimeout(()=>c.remove(), (duration+2)*1000);
+let c=document.createElement("div");
+c.className="confetti";
+let emojis=["💖","💞","✨","🌸","🎉"];
+c.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
+c.style.left=Math.random()*100+"vw";
+c.style.fontSize=(16+Math.random()*20)+"px";
+let dur=3+Math.random()*3;
+c.style.animationDuration=dur+"s";
+c.style.animationDelay=Math.random()*2+"s";
+document.body.appendChild(c);
+setTimeout(()=>c.remove(),6000);
 }
 
-/* FIREWORK BURST */
-for(let i=0;i<15;i++){
-  setTimeout(()=>{
-    let f=document.createElement("div");
-    f.className="firework";
-    f.innerHTML="💖";
-    f.style.left=Math.random()*100+"vw";
-    f.style.top=Math.random()*80+"vh";
-    document.body.appendChild(f);
-    setTimeout(()=>f.remove(),1000);
-  }, i*150);
+/* Fireworks */
+for(let i=0;i<12;i++){
+setTimeout(()=>{
+let f=document.createElement("div");
+f.className="firework";
+f.innerHTML="💖";
+f.style.left=Math.random()*100+"vw";
+f.style.top=Math.random()*80+"vh";
+document.body.appendChild(f);
+setTimeout(()=>f.remove(),1000);
+},i*200);
 }
 
 }
@@ -399,4 +422,3 @@ for(let i=0;i<15;i++){
 </script>
 </body>
 </html>
-
