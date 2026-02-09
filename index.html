@@ -5,17 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For My Princess ❤️</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
 body{
 margin:0;
-font-family:Arial;
+font-family: 'Poppins', sans-serif;
 color:white;
 text-align:center;
 overflow-x:hidden;
 background:linear-gradient(45deg,#ff4e50,#ff8fab,#ffe066);
 }
 
-/* Screens */
+h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+
+/* Screens with Glassmorphism */
 .screen{
 min-height:100vh;
 display:flex;
@@ -24,7 +28,10 @@ justify-content:center;
 align-items:center;
 padding:25px;
 box-sizing:border-box;
-background:rgba(0,0,0,.35);
+background: rgba(255, 255, 255, 0.1); 
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.2);
 opacity:0;
 transform:translateY(40px);
 transition:.8s ease;
@@ -32,13 +39,35 @@ transition:.8s ease;
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
+/* Floating Hearts Background */
+.floating-heart {
+    position: fixed;
+    color: rgba(255, 255, 255, 0.4);
+    user-select: none;
+    pointer-events: none;
+    z-index: -1;
+    animation: floatUp linear forwards;
+}
+@keyframes floatUp {
+    from { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+    to { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+/* Sparkle Trail */
+.sparkle {
+    position: fixed;
+    pointer-events: none;
+    font-size: 14px;
+    z-index: 9999;
+    transition: 0.8s;
+}
+
 /* Moving background */
 .bg-strip{
 position:fixed;
 inset:0;
 z-index:-2;
 opacity:.25;
-overflow:hidden;
 }
 .bg-track{
 display:flex;
@@ -62,6 +91,7 @@ border-radius:20px;
 border:5px solid white;
 object-fit:cover;
 margin-bottom:20px;
+box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 /* Gallery */
@@ -88,12 +118,13 @@ border-radius:25px;
 border:none;
 cursor:pointer;
 font-size:16px;
+font-weight: 600;
 background:white;
 color:#ff4e50;
 transition:.3s ease;
-box-shadow:0 8px 20px rgba(0,0,0,.25);
+box-shadow:0 8px 20px rgba(0,0,0,0.25);
 }
-button:hover{transform:scale(1.08)}
+button:hover{transform:scale(1.08); background: #fff1f1;}
 
 /* Video */
 .videoFrame{
@@ -107,6 +138,7 @@ width:100%;
 height:100%;
 object-fit:contain;
 border-radius:16px;
+box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
 
 /* Heart */
@@ -157,8 +189,9 @@ display:none;
 #yesText{
 display:none;
 font-size:28px;
-color:#ff4e50;
+color:#fff;
 margin-top:20px;
+text-shadow: 2px 2px 10px rgba(255,78,80,0.8);
 }
 
 /* Confetti burst */
@@ -189,33 +222,28 @@ animation:explode 1s ease-out forwards;
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<!-- START -->
 <div id="s1" class="screen show">
 <h2>Tap the heart meri princess 💖</h2>
 <div onclick="start()" style="font-size:90px;cursor:pointer">💖</div>
 </div>
 
-<!-- SLIDESHOW -->
 <div id="s2" class="screen hidden">
 <h2>Kuch acchii yaadien 📸</h2>
 <img id="slide">
 <button onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
-<!-- GALLERY -->
 <div id="gallery" class="screen hidden">
 <h2>Hamaare kaarname 📸</h2>
 <div id="pgrid" class="pgrid"></div>
 <button onclick="show('message')">Next 💖</button>
 </div>
 
-<!-- MESSAGE -->
 <div id="message" class="screen hidden">
-<h2>Abhi kahani khatam nahi hui meri princess… 💖</h2>
+<h2 id="typedMsg"></h2>
 <button onclick="startVideos()">Videos 🎬</button>
 </div>
 
-<!-- VIDEOS -->
 <div id="videos" class="screen hidden">
 <div class="videoFrame">
 <video id="mainVideo" controls playsinline></video>
@@ -223,18 +251,16 @@ animation:explode 1s ease-out forwards;
 <button onclick="nextVideo()">Next Video 💖</button>
 </div>
 
-<!-- HEART -->
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
 <div onclick="openHeart()" style="font-size:90px;cursor:pointer">❤️</div>
-<div id="heartText"></div>
+<div id="heartText" style="font-size: 1.2rem; min-height: 50px; margin-top: 10px;"></div>
 <img id="heartPhoto">
 <button id="heartBtn" style="display:none" onclick="show('final')">
 Aur dekho aage meri princess 💖
 </button>
 </div>
 
-<!-- FINAL -->
 <div id="final" class="screen hidden" style="position:relative;">
 <div class="envelope" onclick="openLetter()">💌</div>
 
@@ -279,6 +305,21 @@ img.src=src;
 bgTrack.appendChild(img);
 });
 
+/* TYPING EFFECT HELPER */
+function typeWriter(text, elementId, speed = 60) {
+    let i = 0;
+    const element = document.getElementById(elementId);
+    element.innerHTML = "";
+    function type() {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type, speed);
+        }
+    }
+    type();
+}
+
 /* SHOW SCREEN */
 function show(id){
 document.querySelectorAll('.screen').forEach(s=>{
@@ -288,6 +329,10 @@ s.classList.add('hidden');
 let el=document.getElementById(id);
 el.classList.remove('hidden');
 setTimeout(()=>el.classList.add('show'),20);
+
+if(id === 'message') {
+    typeWriter("Abhi kahani khatam nahi hui meri princess… 💖", "typedMsg");
+}
 }
 
 /* START */
@@ -317,7 +362,7 @@ pgrid.appendChild(img);
 /* VIDEOS */
 let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
-"WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
+"WhatsApp Video 2026-02-07 at 2.07.12 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4",
 "WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4",
 "WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"
@@ -342,17 +387,22 @@ if(currentVideo<vids.length){loadVideo();}
 else{show('heart');}
 }
 
-/* HEART */
+/* HEART WITH TYPING */
 function openHeart(){
-heartText.innerHTML="Someone is there in my heart ❤️";
-setTimeout(()=>{
-heartPhoto.src=images[1];
-heartPhoto.style.display="block";
-setTimeout(()=>{
-heartText.innerHTML+="<br><br>It’s youuuu ❤️";
-heartBtn.style.display="block";
-},1500);
-},1500);
+    const heartText = document.getElementById("heartText");
+    const heartPhoto = document.getElementById("heartPhoto");
+    const heartBtn = document.getElementById("heartBtn");
+    
+    typeWriter("Someone is there in my heart ❤️", "heartText", 60);
+    
+    setTimeout(()=>{
+        heartPhoto.src=images[1];
+        heartPhoto.style.display="block";
+        setTimeout(()=>{
+            typeWriter("Someone is there in my heart ❤️ <br><br> It’s youuuu ❤️", "heartText", 60);
+            heartBtn.style.display="block";
+        },1500);
+    },2000);
 }
 
 /* LETTER FIXED */
@@ -397,6 +447,33 @@ setTimeout(()=>f.remove(),1000);
 },i*200);
 }
 }
+
+/* BACKGROUND UPGRADES (Hearts & Sparkles) */
+function createFloatingHeart() {
+    const heart = document.createElement("div");
+    heart.className = "floating-heart";
+    heart.innerHTML = ["❤️","💖","💝","🌸"][Math.floor(Math.random()*4)];
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (10 + Math.random() * 20) + "px";
+    heart.style.animationDuration = (6 + Math.random() * 4) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 10000);
+}
+setInterval(createFloatingHeart, 600);
+
+document.addEventListener('mousemove', (e) => {
+    const star = document.createElement("div");
+    star.className = "sparkle";
+    star.innerHTML = "✨";
+    star.style.left = e.clientX + "px";
+    star.style.top = e.clientY + "px";
+    document.body.appendChild(star);
+    setTimeout(() => {
+        star.style.opacity = "0";
+        star.style.transform = "translateY(20px)";
+    }, 20);
+    setTimeout(() => star.remove(), 800);
+});
 </script>
 </body>
 </html>
