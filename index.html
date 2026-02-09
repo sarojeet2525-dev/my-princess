@@ -8,7 +8,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#ff4e50">
-<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/833/833472.png" type="image/x-icon">
 
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
 
@@ -19,31 +18,17 @@ font-family: 'Poppins', sans-serif;
 color:white;
 text-align:center;
 overflow-x:hidden;
-background: linear-gradient(180deg, #ff758c 0%, #ff7eb3 100%);
+background: #ff758c;
 transition: background 2s ease;
 }
 
 h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
 
-/* Glassmorphism Screens */
-.screen{
-min-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-padding:25px;
-box-sizing:border-box;
-background: rgba(255, 255, 255, 0.1); 
-backdrop-filter: blur(10px);
--webkit-backdrop-filter: blur(10px);
-border: 1px solid rgba(255, 255, 255, 0.2);
-opacity:0;
-transform:translateY(40px);
-transition:.8s ease;
-}
-.screen.show{opacity:1;transform:translateY(0)}
-.hidden{display:none}
+/* Moving Background Photo Track */
+.bg-strip{position:fixed;inset:0;z-index:-2;opacity:.35;}
+.bg-track{display:flex;width:max-content;animation:move 90s linear infinite;}
+.bg-track img{height:100vh;filter:blur(4px);object-fit:cover;}
+@keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* Glowing Pink Heart Rain */
 .heart-rain {
@@ -56,59 +41,62 @@ transition:.8s ease;
     text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
     animation: fall linear forwards;
 }
-@keyframes fall {
-    to { transform: translateY(110vh) rotate(360deg); }
-}
+@keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
-/* Letter Design */
-.letter-container {
-    width: 100%;
-    max-width: 450px;
-    max-height: 50vh;
-    overflow-y: auto;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+/* Glassmorphism Screens */
+.screen{
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:25px;
+box-sizing:border-box;
+background: rgba(0, 0, 0, 0.2); 
+backdrop-filter: blur(8px);
+-webkit-backdrop-filter: blur(8px);
+opacity:0;
+transform:translateY(40px);
+transition:.8s ease;
 }
-.letter-card {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 20px;
+.screen.show{opacity:1;transform:translateY(0)}
+.hidden{display:none}
+
+/* ADJUSTED VIDEO CONTAINER */
+.video-wrapper {
+    width: 90%;
+    max-width: 320px; /* Smaller, more elegant size */
+    aspect-ratio: 9/16; /* Portrait style common for WhatsApp/Phone videos */
+    background: #000;
     border-radius: 20px;
-    text-align: left;
+    overflow: hidden;
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    margin: 10px auto;
 }
-.letter-card h3 { font-family: 'Dancing Script', cursive; color: #ffe066; margin:0; }
-
-/* Signature Area */
-#signatureArea {
-    margin-top: 20px;
-    font-family: 'Great Vibes', cursive;
-    font-size: 3rem;
-    color: #fff;
-    height: 60px;
-    opacity: 0;
-    transition: opacity 1.5s ease;
+#mainVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Keeps video filling the frame beautifully */
 }
 
-/* Visuals & Buttons */
-.pulse-aura {
-    width: 100px; height: 100px; background: rgba(255, 255, 255, 0.4);
-    border-radius: 50%; position: absolute; z-index: -1; animation: aura-pulse 2s infinite;
-}
+/* Letters & Signature */
+.letter-container { width: 100%; max-width: 450px; max-height: 50vh; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+.letter-card { background: rgba(255, 255, 255, 0.15); padding: 20px; border-radius: 20px; text-align: left; border: 1px solid rgba(255,255,255,0.2); }
+#signatureArea { font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: #ffe066; height: 70px; opacity: 0; transition: 1.5s; text-shadow: 0 0 10px rgba(255,224,102,0.5); }
+
+/* Pulse Aura */
+.pulse-aura { width: 100px; height: 100px; background: rgba(255, 255, 255, 0.4); border-radius: 50%; position: absolute; z-index: -1; animation: aura-pulse 2s infinite; }
 @keyframes aura-pulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(2.5); opacity: 0; } }
 
-button{ margin-top:20px;padding:12px 25px;border-radius:25px;border:none;cursor:pointer; font-size:16px;font-weight:600;background:white;color:#ff4e50; transition:.3s ease; }
-button:hover{transform:scale(1.08);}
-
-.videoFrame video{width:100%; max-width:800px; border-radius:16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);}
-#togetherTimer { background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 20px; margin-top: 20px; }
-
+button{ margin-top:20px;padding:12px 25px;border-radius:25px;border:none;cursor:pointer; font-size:16px;font-weight:600;background:white;color:#ff4e50; transition:.3s; }
+#slide{ width:min(85vw,280px); border-radius:20px; border:5px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.pgrid img{ width:100%; border-radius:10px; border: 2px solid white; }
 </style>
 </head>
 <body>
 
+<div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
 <div id="s1" class="screen show">
@@ -121,7 +109,7 @@ button:hover{transform:scale(1.08);}
 
 <div id="s2" class="screen hidden">
     <h2>Kuch acchii yaadien 📸</h2>
-    <img id="slide" style="width:min(85vw,300px); border-radius:20px; border:5px solid white;">
+    <img id="slide">
     <button onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
@@ -133,12 +121,14 @@ button:hover{transform:scale(1.08);}
 
 <div id="message" class="screen hidden">
     <h2 id="typedMsg"></h2>
-    <div id="togetherTimer"></div>
+    <div id="togetherTimer" style="background:rgba(255,255,255,0.2); padding:20px; border-radius:20px;"></div>
     <button onclick="startVideos()">Videos 🎬</button>
 </div>
 
 <div id="videos" class="screen hidden">
-    <div class="videoFrame"><video id="mainVideo" controls playsinline></video></div>
+    <div class="video-wrapper">
+        <video id="mainVideo" controls playsinline></video>
+    </div>
     <button onclick="nextVideo()">Next Video 💖</button>
 </div>
 
@@ -146,9 +136,8 @@ button:hover{transform:scale(1.08);}
     <h2>Pyaar Bhare Khat 💌</h2>
     <div class="letter-container">
         <div class="letter-card"><h3>To My Princess,</h3><p>January 14th was the day my luck changed. You are the most beautiful part of my life.</p></div>
-        <div class="letter-card"><h3>Why I Love You,</h3><p>I love the way you make me smile even on the hardest days. You're my home.</p></div>
+        <div class="letter-card"><h3>My Promise,</h3><p>I promise to hold your hand through every storm. You are my forever.</p></div>
     </div>
-    
     <div id="signatureArea">Anu</div>
     <button id="signBtn" onclick="signLetter()">Sign Our Forever ✍️</button>
     <button id="nextBtn" class="hidden" onclick="show('heart')">Aage Chale? ❤️</button>
@@ -158,13 +147,13 @@ button:hover{transform:scale(1.08);}
     <h2>Open My Heart ❤️</h2>
     <div onclick="openHeart()" style="font-size:90px;cursor:pointer">❤️</div>
     <div id="heartText" style="font-size: 1.2rem; min-height: 50px; margin-top: 10px;"></div>
-    <img id="heartPhoto" style="width:min(80vw,220px); border-radius:20px; border:4px solid white; display:none; margin-top:15px;">
-    <button id="heartBtn" style="display:none" onclick="show('final')">Aage Dekho Princess 💖</button>
+    <img id="heartPhoto" style="width:200px; border-radius:20px; border:4px solid white; display:none; margin-top:15px;">
+    <button id="heartBtn" style="display:none" onclick="show('final')">Aage Dekho 💖</button>
 </div>
 
 <div id="final" class="screen hidden">
     <div onclick="openLetter()" style="font-size:90px; cursor:pointer;">💌</div>
-    <video id="magicGif" style="display:none; width:250px;" loop muted playsinline><source src="gif.mp4" type="video/mp4"></video>
+    <video id="magicGif" style="display:none; width:220px;" loop muted playsinline><source src="gif.mp4" type="video/mp4"></video>
     <div id="proposalArea" style="display:none;">
         <h2 id="proposalHeading"></h2>
         <button onclick="celebrate()">Yes 💖</button>
@@ -177,8 +166,11 @@ button:hover{transform:scale(1.08);}
 const music=document.getElementById("music");
 const slide=document.getElementById("slide");
 const pgrid=document.getElementById("pgrid");
+const bgTrack=document.getElementById("bgTrack");
 
 let images=["WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg","WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg","WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg","WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"];
+
+images.concat(images).forEach(src=>{let img=document.createElement("img"); img.src=src; bgTrack.appendChild(img);});
 
 function typeWriter(text, elementId, speed = 60) {
     let i = 0; const el = document.getElementById(elementId); el.innerHTML = "";
@@ -187,81 +179,60 @@ function typeWriter(text, elementId, speed = 60) {
 }
 
 function updateTimer() {
-    const startDate = new Date("2024-01-14T00:00:00");
-    const diff = new Date() - startDate;
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const mins = Math.floor((diff / 1000 / 60) % 60);
-    const secs = Math.floor((diff / 1000) % 60);
-    document.getElementById("togetherTimer").innerHTML = `Hamari Kahani Ko:<br>${days} Din, ${hours} Ghante, ${mins} Mins aur ${secs} Secs Ho Gaye Hain ❤️`;
+    const diff = new Date() - new Date("2024-01-14T00:00:00");
+    const d = Math.floor(diff/86400000);
+    const h = Math.floor((diff/3600000)%24);
+    const m = Math.floor((diff/60000)%60);
+    const s = Math.floor((diff/1000)%60);
+    document.getElementById("togetherTimer").innerHTML = `Hamari Kahani Ko:<br>${d} Din, ${h} Ghante, ${m} Mins aur ${s} Secs ❤️`;
 }
 setInterval(updateTimer, 1000);
 
 function show(id){
-    document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('show');s.classList.add('hidden');});
+    document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('show'); s.classList.add('hidden');});
     let el=document.getElementById(id); el.classList.remove('hidden');
     setTimeout(()=>el.classList.add('show'),20);
-    if(id === 'message') typeWriter("Abhi kahani khatam nahi hui meri princess… 💖", "typedMsg");
+    if(id==='message') typeWriter("Abhi kahani khatam nahi hui meri princess… 💖", "typedMsg");
 }
 
 function start(){ music.play().catch(()=>{}); show('s2'); slide.src=images[0]; }
 let index=0;
 function next(){ index++; if(index<images.length){slide.src=images[index];} else{showGallery();} }
-function showGallery(){ show('gallery'); pgrid.innerHTML=""; images.forEach(src=>{let img=document.createElement("img");img.src=src;img.style.width="100%";img.style.borderRadius="10px";pgrid.appendChild(img);}); }
+function showGallery(){ show('gallery'); pgrid.innerHTML=""; images.forEach(src=>{let img=document.createElement("img"); img.src=src; pgrid.appendChild(img);}); }
 
 let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-07 at 2.07.12 PM.mp4","WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4","WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4","WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"];
-let currentVideo=0;
-function startVideos(){ currentVideo=0; show('videos'); loadVideo(); }
-function loadVideo(){ let v=document.getElementById("mainVideo"); currentVideo<4?music.pause():music.play(); v.src=vids[currentVideo]; v.load(); }
-function nextVideo(){ currentVideo++; if(currentVideo<vids.length){loadVideo();} else{show('lettersPage');} }
+let curV=0;
+function startVideos(){ curV=0; show('videos'); loadV(); }
+function loadV(){ let v=document.getElementById("mainVideo"); curV<4?music.pause():music.play(); v.src=vids[curV]; v.load(); }
+function nextVideo(){ curV++; if(curV<vids.length){loadV();} else{show('lettersPage');} }
 
-function signLetter() {
-    document.getElementById("signatureArea").style.opacity = "1";
-    document.getElementById("signBtn").classList.add("hidden");
-    document.getElementById("nextBtn").classList.remove("hidden");
-}
+function signLetter(){ document.getElementById("signatureArea").style.opacity="1"; document.getElementById("signBtn").style.display="none"; document.getElementById("nextBtn").classList.remove("hidden"); }
 
 function openHeart(){
-    typeWriter("Someone is there in my heart ❤️", "heartText", 60);
+    typeWriter("Someone is there in my heart ❤️", "heartText");
     setTimeout(()=>{
-        const photo = document.getElementById("heartPhoto"); photo.src=images[1]; photo.style.display="block";
+        const p=document.getElementById("heartPhoto"); p.src=images[1]; p.style.display="block";
         setTimeout(()=>{
-            const currentText = "Someone is there in my heart ❤️"; const element = document.getElementById("heartText");
-            let i = 0; const extraText = "\n\n It’s youuuu ❤️"; 
-            function typeSecondLine() {
-                if (i < extraText.length) {
-                    element.innerHTML = (currentText + extraText.substring(0, i + 1)).replace(/\n/g, "<br>");
-                    i++; setTimeout(typeSecondLine, 60);
-                } else { document.getElementById("heartBtn").style.display="block"; }
-            }
-            typeSecondLine();
-        }, 2000); 
+            let i=0, txt="\n\n It’s youuuu ❤️";
+            function type(){ if(i<txt.length){ document.getElementById("heartText").innerHTML += txt[i++].replace("\n","<br>"); setTimeout(type,60);} else{document.getElementById("heartBtn").style.display="block";} }
+            type();
+        }, 2000);
     }, 2000);
 }
 
 function openLetter(){
     let g=document.getElementById("magicGif"); g.style.display="block"; g.play();
-    setTimeout(()=>{ document.getElementById("proposalArea").style.display="block"; typeWriter("Will you stay with me forever, Anu? 💍", "proposalHeading", 80); }, 2000);
+    setTimeout(()=>{ document.getElementById("proposalArea").style.display="block"; typeWriter("Will you stay with me forever, Anu? 💍", "proposalHeading"); }, 2000);
 }
 
-function celebrate(){
-    document.getElementById("yesText").style.display="block";
-    document.body.style.background = "linear-gradient(45deg, #FFD700, #ff8fab)";
-}
+function celebrate(){ document.getElementById("yesText").style.display="block"; document.body.style.background="gold"; }
 
-// Glowing Pink Heart Rain Logic
-function createHeart() {
-    const h = document.createElement("div");
-    h.className = "heart-rain";
-    h.innerHTML = "💗";
-    h.style.left = Math.random() * 100 + "vw";
-    h.style.fontSize = (Math.random() * 20 + 10) + "px";
-    h.style.animationDuration = (Math.random() * 3 + 2) + "s";
-    h.style.opacity = Math.random();
-    document.body.appendChild(h);
-    setTimeout(() => h.remove(), 5000);
-}
-setInterval(createHeart, 150);
+setInterval(()=>{
+    const h=document.createElement("div"); h.className="heart-rain"; h.innerHTML="💗";
+    h.style.left=Math.random()*100+"vw"; h.style.fontSize=(Math.random()*20+10)+"px";
+    h.style.animationDuration=(Math.random()*3+2)+"s"; document.body.appendChild(h);
+    setTimeout(()=>h.remove(),5000);
+}, 200);
 </script>
 </body>
 </html>
