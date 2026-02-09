@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#ff4e50">
 <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/833/833472.png" type="image/x-icon">
 
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
 body{
@@ -19,8 +19,8 @@ font-family: 'Poppins', sans-serif;
 color:white;
 text-align:center;
 overflow-x:hidden;
-background:linear-gradient(45deg,#ff4e50,#ff8fab,#ffe066);
-transition: background 2s ease; /* Smooth color shift for the end */
+background: linear-gradient(180deg, #ff758c 0%, #ff7eb3 100%);
+transition: background 2s ease;
 }
 
 h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
@@ -34,9 +34,9 @@ justify-content:center;
 align-items:center;
 padding:25px;
 box-sizing:border-box;
-background: rgba(255, 255, 255, 0.12); 
-backdrop-filter: blur(12px);
--webkit-backdrop-filter: blur(12px);
+background: rgba(255, 255, 255, 0.1); 
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
 border: 1px solid rgba(255, 255, 255, 0.2);
 opacity:0;
 transform:translateY(40px);
@@ -45,193 +45,140 @@ transition:.8s ease;
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* Pulsing Aura for Start Screen */
-.pulse-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    margin-top: 20px;
-}
-.pulse-aura {
-    width: 100px;
-    height: 100px;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
-    position: absolute;
-    z-index: -1;
-    animation: aura-pulse 2s infinite;
-}
-@keyframes aura-pulse {
-    0% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(2.5); opacity: 0; }
-}
-
-/* Floating Elements */
-.floating-item {
+/* Glowing Pink Heart Rain */
+.heart-rain {
     position: fixed;
+    top: -10%;
     user-select: none;
     pointer-events: none;
-    z-index: -1;
-    animation: floatUp linear forwards;
+    z-index: 1000;
+    color: #ffb6c1;
+    text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
+    animation: fall linear forwards;
 }
-@keyframes floatUp {
-    from { transform: translateY(110vh) rotate(0deg); opacity: 1; }
-    to { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-}
-
-/* Sparkle Trail */
-.sparkle {
-    position: fixed;
-    pointer-events: none;
-    font-size: 14px;
-    z-index: 9999;
-    transition: 0.8s;
+@keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); }
 }
 
-/* Moving background track */
-.bg-strip{position:fixed;inset:0;z-index:-2;opacity:.25;}
-.bg-track{display:flex;width:max-content;animation:move 90s linear infinite;}
-.bg-track img{height:100vh;filter:blur(6px);}
-@keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-/* Anniversary Timer Box */
-#togetherTimer {
-    background: rgba(255, 182, 193, 0.3);
-    padding: 15px;
+/* Letter Design */
+.letter-container {
+    width: 100%;
+    max-width: 450px;
+    max-height: 50vh;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.letter-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 20px;
     border-radius: 20px;
+    text-align: left;
+}
+.letter-card h3 { font-family: 'Dancing Script', cursive; color: #ffe066; margin:0; }
+
+/* Signature Area */
+#signatureArea {
     margin-top: 20px;
-    font-size: 1rem;
-    font-weight: 600;
-    border: 1px solid rgba(255,255,255,0.4);
-    box-shadow: 0 4px 15px rgba(255, 78, 80, 0.2);
+    font-family: 'Great Vibes', cursive;
+    font-size: 3rem;
+    color: #fff;
+    height: 60px;
+    opacity: 0;
+    transition: opacity 1.5s ease;
 }
 
-/* Visuals */
-#slide{
-width:min(85vw,300px);
-height:min(85vw,300px);
-border-radius:20px;
-border:5px solid white;
-object-fit:cover;
-margin-bottom:20px;
-box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+/* Visuals & Buttons */
+.pulse-aura {
+    width: 100px; height: 100px; background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%; position: absolute; z-index: -1; animation: aura-pulse 2s infinite;
 }
+@keyframes aura-pulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(2.5); opacity: 0; } }
 
-.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;width:100%;max-width:800px;}
-.pgrid img{width:100%;height:120px;border-radius:12px;border:3px solid white;object-fit:cover;}
+button{ margin-top:20px;padding:12px 25px;border-radius:25px;border:none;cursor:pointer; font-size:16px;font-weight:600;background:white;color:#ff4e50; transition:.3s ease; }
+button:hover{transform:scale(1.08);}
 
-button{
-margin-top:20px;padding:12px 25px;border-radius:25px;border:none;cursor:pointer;
-font-size:16px;font-weight:600;background:white;color:#ff4e50;transition:.3s ease;
-box-shadow:0 8px 20px rgba(0,0,0,0.25);
-}
-button:hover{transform:scale(1.08); background: #fff1f1;}
+.videoFrame video{width:100%; max-width:800px; border-radius:16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);}
+#togetherTimer { background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 20px; margin-top: 20px; }
 
-.videoFrame{width:100%;max-width:800px;aspect-ratio:16/9;margin-top:20px;}
-.videoFrame video{width:100%;height:100%;object-fit:contain;border-radius:16px;}
-
-#heartPhoto{width:min(80vw,220px);border-radius:20px;border:4px solid white;margin-top:15px;display:none;}
-.envelope{font-size:90px;cursor:pointer;animation:pulse 2s infinite;}
-@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
-
-.magicGif{position:absolute;top:35%;left:50%;transform:translate(-50%,-50%) scale(.8);width:min(70vw,240px);opacity:0;pointer-events:none;z-index:1;transition:1.5s ease;}
-.magicGif.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
-
-#proposalArea{margin-top:220px;position:relative;z-index:2;display:none;}
-#proposalHeading{min-height: 40px;} /* Keeps layout stable during typing */
-#yesText{display:none;font-size:28px;color:#fff;margin-top:20px;text-shadow: 2px 2px 10px rgba(255,78,80,0.8);}
-
-.confetti{position:fixed;top:-20px;animation:fall linear forwards;}
-@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
-.firework{position:fixed;font-size:26px;animation:explode 1s ease-out forwards;}
-@keyframes explode{0%{transform:scale(0);}100%{transform:scale(3);opacity:0;}}
 </style>
 </head>
 <body>
 
-<div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
 <div id="s1" class="screen show">
     <h2>Tap the heart meri princess 💖</h2>
-    <div onclick="start()" class="pulse-container">
+    <div onclick="start()" style="position:relative; display:flex; justify-content:center; align-items:center; cursor:pointer;">
         <div class="pulse-aura"></div>
         <div style="font-size:90px;">💖</div>
     </div>
 </div>
 
 <div id="s2" class="screen hidden">
-<h2>Kuch acchii yaadien 📸</h2>
-<img id="slide">
-<button onclick="next()">Aur dekhogi princess 💖</button>
+    <h2>Kuch acchii yaadien 📸</h2>
+    <img id="slide" style="width:min(85vw,300px); border-radius:20px; border:5px solid white;">
+    <button onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
 <div id="gallery" class="screen hidden">
-<h2>Hamaare kaarname 📸</h2>
-<div id="pgrid" class="pgrid"></div>
-<button onclick="show('message')">Next 💖</button>
+    <h2>Hamaare kaarname 📸</h2>
+    <div id="pgrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;width:100%;max-width:800px;"></div>
+    <button onclick="show('message')">Next 💖</button>
 </div>
 
 <div id="message" class="screen hidden">
-<h2 id="typedMsg"></h2>
-<div id="togetherTimer"></div>
-<button onclick="startVideos()">Videos 🎬</button>
+    <h2 id="typedMsg"></h2>
+    <div id="togetherTimer"></div>
+    <button onclick="startVideos()">Videos 🎬</button>
 </div>
 
 <div id="videos" class="screen hidden">
-<div class="videoFrame"><video id="mainVideo" controls playsinline></video></div>
-<button onclick="nextVideo()">Next Video 💖</button>
+    <div class="videoFrame"><video id="mainVideo" controls playsinline></video></div>
+    <button onclick="nextVideo()">Next Video 💖</button>
+</div>
+
+<div id="lettersPage" class="screen hidden">
+    <h2>Pyaar Bhare Khat 💌</h2>
+    <div class="letter-container">
+        <div class="letter-card"><h3>To My Princess,</h3><p>January 14th was the day my luck changed. You are the most beautiful part of my life.</p></div>
+        <div class="letter-card"><h3>Why I Love You,</h3><p>I love the way you make me smile even on the hardest days. You're my home.</p></div>
+    </div>
+    
+    <div id="signatureArea">Anu</div>
+    <button id="signBtn" onclick="signLetter()">Sign Our Forever ✍️</button>
+    <button id="nextBtn" class="hidden" onclick="show('heart')">Aage Chale? ❤️</button>
 </div>
 
 <div id="heart" class="screen hidden">
-<h2>Open My Heart ❤️</h2>
-<div onclick="openHeart()" style="font-size:90px;cursor:pointer">❤️</div>
-<div id="heartText" style="font-size: 1.2rem; min-height: 50px; margin-top: 10px;"></div>
-<img id="heartPhoto">
-<button id="heartBtn" style="display:none" onclick="show('final')">Aur dekho aage meri princess 💖</button>
+    <h2>Open My Heart ❤️</h2>
+    <div onclick="openHeart()" style="font-size:90px;cursor:pointer">❤️</div>
+    <div id="heartText" style="font-size: 1.2rem; min-height: 50px; margin-top: 10px;"></div>
+    <img id="heartPhoto" style="width:min(80vw,220px); border-radius:20px; border:4px solid white; display:none; margin-top:15px;">
+    <button id="heartBtn" style="display:none" onclick="show('final')">Aage Dekho Princess 💖</button>
 </div>
 
-<div id="final" class="screen hidden" style="position:relative;">
-<div class="envelope" onclick="openLetter()">💌</div>
-<video id="magicGif" class="magicGif" loop muted playsinline><source src="gif.mp4" type="video/mp4"></video>
-<div id="proposalArea">
-<h2 id="proposalHeading"></h2>
-<button onclick="celebrate()">Yes 💖</button>
-<button onclick="celebrate()">Of Course Yesss 💞</button>
-<h1 id="yesText">ANU said YES to SARU 💞✨</h1>
-</div>
+<div id="final" class="screen hidden">
+    <div onclick="openLetter()" style="font-size:90px; cursor:pointer;">💌</div>
+    <video id="magicGif" style="display:none; width:250px;" loop muted playsinline><source src="gif.mp4" type="video/mp4"></video>
+    <div id="proposalArea" style="display:none;">
+        <h2 id="proposalHeading"></h2>
+        <button onclick="celebrate()">Yes 💖</button>
+        <button onclick="celebrate()">Of Course Yesss 💞</button>
+        <h1 id="yesText" style="display:none;">ANU said YES to SARU 💞</h1>
+    </div>
 </div>
 
 <script>
 const music=document.getElementById("music");
 const slide=document.getElementById("slide");
 const pgrid=document.getElementById("pgrid");
-const bgTrack=document.getElementById("bgTrack");
 
-/* ASSETS */
-let images=[
-"WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
-"WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg",
-"WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"
-];
-
-images.concat(images).forEach(src=>{
-    let img=document.createElement("img");
-    img.src=src;
-    bgTrack.appendChild(img);
-});
+let images=["WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg","WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg","WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg","WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"];
 
 function typeWriter(text, elementId, speed = 60) {
     let i = 0; const el = document.getElementById(elementId); el.innerHTML = "";
@@ -239,7 +186,6 @@ function typeWriter(text, elementId, speed = 60) {
     type();
 }
 
-/* TIMER LOGIC - SET TO 2024-01-14 */
 function updateTimer() {
     const startDate = new Date("2024-01-14T00:00:00");
     const diff = new Date() - startDate;
@@ -259,41 +205,33 @@ function show(id){
 }
 
 function start(){ music.play().catch(()=>{}); show('s2'); slide.src=images[0]; }
-
 let index=0;
 function next(){ index++; if(index<images.length){slide.src=images[index];} else{showGallery();} }
-function showGallery(){ show('gallery'); pgrid.innerHTML=""; images.forEach(src=>{let img=document.createElement("img");img.src=src;pgrid.appendChild(img);}); }
+function showGallery(){ show('gallery'); pgrid.innerHTML=""; images.forEach(src=>{let img=document.createElement("img");img.src=src;img.style.width="100%";img.style.borderRadius="10px";pgrid.appendChild(img);}); }
 
-/* VIDEOS */
-let vids=[
-"WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
-"WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
-"WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4",
-"WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4",
-"WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"
-];
+let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-07 at 2.07.12 PM.mp4","WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4","WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4","WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"];
 let currentVideo=0;
 function startVideos(){ currentVideo=0; show('videos'); loadVideo(); }
 function loadVideo(){ let v=document.getElementById("mainVideo"); currentVideo<4?music.pause():music.play(); v.src=vids[currentVideo]; v.load(); }
-function nextVideo(){ currentVideo++; currentVideo<vids.length?loadVideo():show('heart'); }
+function nextVideo(){ currentVideo++; if(currentVideo<vids.length){loadVideo();} else{show('lettersPage');} }
 
-/* HEART SURPRISE */
+function signLetter() {
+    document.getElementById("signatureArea").style.opacity = "1";
+    document.getElementById("signBtn").classList.add("hidden");
+    document.getElementById("nextBtn").classList.remove("hidden");
+}
+
 function openHeart(){
     typeWriter("Someone is there in my heart ❤️", "heartText", 60);
     setTimeout(()=>{
-        const photo = document.getElementById("heartPhoto");
-        photo.src=images[1];
-        photo.style.display="block";
+        const photo = document.getElementById("heartPhoto"); photo.src=images[1]; photo.style.display="block";
         setTimeout(()=>{
-            const currentText = "Someone is there in my heart ❤️";
-            const element = document.getElementById("heartText");
-            let i = 0;
-            const extraText = "\n\n It’s youuuu ❤️"; 
+            const currentText = "Someone is there in my heart ❤️"; const element = document.getElementById("heartText");
+            let i = 0; const extraText = "\n\n It’s youuuu ❤️"; 
             function typeSecondLine() {
                 if (i < extraText.length) {
                     element.innerHTML = (currentText + extraText.substring(0, i + 1)).replace(/\n/g, "<br>");
-                    i++;
-                    setTimeout(typeSecondLine, 60);
+                    i++; setTimeout(typeSecondLine, 60);
                 } else { document.getElementById("heartBtn").style.display="block"; }
             }
             typeSecondLine();
@@ -301,56 +239,29 @@ function openHeart(){
     }, 2000);
 }
 
-/* FINAL LETTER WITH TYPING PROPOSAL */
 function openLetter(){
-    let g=document.getElementById("magicGif"); g.currentTime=0; g.classList.add("show"); g.play().catch(()=>{});
-    setTimeout(()=>{
-        document.getElementById("proposalArea").style.display="block";
-        typeWriter("Will you stay with me forever, Anu? 💍", "proposalHeading", 80);
-    },2000);
+    let g=document.getElementById("magicGif"); g.style.display="block"; g.play();
+    setTimeout(()=>{ document.getElementById("proposalArea").style.display="block"; typeWriter("Will you stay with me forever, Anu? 💍", "proposalHeading", 80); }, 2000);
 }
 
-/* CELEBRATION UPGRADED */
 function celebrate(){
     document.getElementById("yesText").style.display="block";
     document.body.style.background = "linear-gradient(45deg, #FFD700, #ff8fab)";
-
-    for(let i=0;i<80;i++){
-        let c=document.createElement("div"); c.className="confetti";
-        c.innerHTML=["💖","💞","✨","🌸","🎉","💍"][Math.floor(Math.random()*6)];
-        c.style.left=Math.random()*100+"vw"; c.style.animationDuration=(3+Math.random()*3)+"s";
-        document.body.appendChild(c); setTimeout(()=>c.remove(),5000);
-    }
-    for(let i=0;i<15;i++){
-        setTimeout(()=>{
-            let f=document.createElement("div"); f.className="firework";
-            f.innerHTML="✨"; f.style.left=Math.random()*100+"vw"; f.style.top=Math.random()*80+"vh";
-            document.body.appendChild(f); setTimeout(()=>f.remove(),1000);
-        },i*200);
-    }
 }
 
-/* DECORATION */
-function createFloatItem() {
-    const item = document.createElement("div");
-    item.className = "floating-item";
-    item.innerHTML = ["❤️","💖","🌸","🌹","✨"][Math.floor(Math.random()*5)];
-    item.style.left = Math.random() * 100 + "vw";
-    item.style.fontSize = (15 + Math.random() * 20) + "px";
-    item.style.animationDuration = (7 + Math.random() * 5) + "s";
-    document.body.appendChild(item);
-    setTimeout(() => item.remove(), 12000);
+// Glowing Pink Heart Rain Logic
+function createHeart() {
+    const h = document.createElement("div");
+    h.className = "heart-rain";
+    h.innerHTML = "💗";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.fontSize = (Math.random() * 20 + 10) + "px";
+    h.style.animationDuration = (Math.random() * 3 + 2) + "s";
+    h.style.opacity = Math.random();
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 5000);
 }
-setInterval(createFloatItem, 600);
-
-document.addEventListener('mousemove', (e) => {
-    const s = document.createElement("div"); s.className = "sparkle"; s.innerHTML = "✨";
-    s.style.left = e.clientX + "px"; s.style.top = e.clientY + "px";
-    document.body.appendChild(s);
-    setTimeout(() => { s.style.opacity = "0"; s.style.transform = "translateY(20px)"; }, 20);
-    setTimeout(() => s.remove(), 800);
-});
+setInterval(createHeart, 150);
 </script>
 </body>
 </html>
-
