@@ -15,7 +15,7 @@ overflow-x:hidden;
 background:linear-gradient(45deg,#ff4e50,#ff8fab,#ffe066);
 }
 
-/* Screen animation */
+/* Screens */
 .screen{
 min-height:100vh;
 display:flex;
@@ -32,7 +32,7 @@ transition:.8s ease;
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* Background moving photos */
+/* Background moving images */
 .bg-strip{
 position:fixed;
 inset:0;
@@ -109,7 +109,7 @@ object-fit:contain;
 border-radius:16px;
 }
 
-/* Heart photo */
+/* Heart */
 #heartPhoto{
 width:min(80vw,220px);
 border-radius:20px;
@@ -139,9 +139,11 @@ transform:translate(-50%,-50%) scale(.8);
 width:min(70vw,240px);
 opacity:0;
 transition:1.5s ease;
+display:none;
 z-index:1;
 }
 .magicGif.show{
+display:block;
 opacity:1;
 transform:translate(-50%,-50%) scale(1);
 }
@@ -153,6 +155,7 @@ position:relative;
 z-index:2;
 display:none;
 }
+
 #ring{
 font-size:80px;
 display:none;
@@ -167,16 +170,30 @@ cursor:pointer;
 
 #yesText{
 display:none;
-font-size:30px;
-color:#ff4e50;
+font-size:28px;
 margin-top:20px;
 }
 
-/* Confetti */
-.confetti{
+/* Fireworks */
+.fire{
 position:fixed;
-top:-10px;
-font-size:20px;
+width:8px;
+height:8px;
+border-radius:50%;
+pointer-events:none;
+animation:explode 1s ease-out forwards;
+}
+@keyframes explode{
+to{
+transform:translate(var(--x),var(--y));
+opacity:0;
+}
+}
+
+/* Hearts + Roses */
+.floatHeart,.rose{
+position:fixed;
+font-size:24px;
 animation:fall 3s linear forwards;
 }
 @keyframes fall{
@@ -200,34 +217,28 @@ to{transform:translateY(20px);opacity:0}
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<!-- Start -->
+<!-- START -->
 <div id="s1" class="screen show">
 <h2>Tap the heart meri princess 💖</h2>
 <div onclick="start()" style="font-size:90px;cursor:pointer">💖</div>
 </div>
 
-<!-- Slideshow -->
+<!-- SLIDESHOW -->
 <div id="s2" class="screen hidden">
 <h2>Kuch acchii yaadien 📸</h2>
 <img id="slide">
 <button onclick="next()">Aur dekhogi princess 💖</button>
 </div>
 
-<!-- Gallery -->
+<!-- GALLERY -->
 <div id="gallery" class="screen hidden">
 <h2>Hamaare kaarname 📸</h2>
 <div id="pgrid" class="pgrid"></div>
-<button onclick="show('message')">Next 💖</button>
+<button onclick="show('videoSection')">Next 💖</button>
 </div>
 
-<!-- Message -->
-<div id="message" class="screen hidden">
-<h2>Abhi kahani khatam nahi hui meri princess… 💖</h2>
-<button onclick="startVideos()">Videos 🎬</button>
-</div>
-
-<!-- Videos -->
-<div id="videos" class="screen hidden">
+<!-- VIDEO SECTION -->
+<div id="videoSection" class="screen hidden">
 <h2 id="videoTitle"></h2>
 <div class="videoFrame">
 <video id="mainVideo" controls playsinline></video>
@@ -235,7 +246,7 @@ to{transform:translateY(20px);opacity:0}
 <button onclick="nextVideo()">Next Video 💖</button>
 </div>
 
-<!-- Heart -->
+<!-- HEART -->
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
 <div onclick="openHeart()" style="font-size:90px;cursor:pointer">❤️</div>
@@ -246,16 +257,18 @@ Aur dekho aage meri princess 💖
 </button>
 </div>
 
-<!-- Final -->
+<!-- FINAL -->
 <div id="final" class="screen hidden" style="position:relative;">
 <div class="envelope" onclick="openLetter()">💌</div>
 <div id="loveText"></div>
+<video id="magicGif" class="magicGif" src="gif.mp4" loop muted playsinline></video>
+
 <div id="proposalArea">
 <h2 style="color:#ffe066;">Will you stay with me forever? 💍</h2>
 <div id="ring" onclick="celebrate()">💍</div>
 <button onclick="celebrate()">Yes 💖</button>
 <button onclick="celebrate()">Of Course Yesss 💞</button>
-<h1 id="yesText">Anu said YES to Saru now they are ANUSARU 💞✨</h1>
+<h1 id="yesText">ANU said YES to SARU 💞✨</h1>
 </div>
 </div>
 
@@ -265,6 +278,7 @@ const slide=document.getElementById("slide");
 const pgrid=document.getElementById("pgrid");
 const bgTrack=document.getElementById("bgTrack");
 
+/* 13 PHOTOS */
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -287,6 +301,7 @@ img.src=src;
 bgTrack.appendChild(img);
 });
 
+/* Screen switch */
 function show(id){
 document.querySelectorAll('.screen').forEach(s=>{
 s.classList.remove('show');
@@ -297,10 +312,21 @@ el.classList.remove('hidden');
 setTimeout(()=>el.classList.add('show'),20);
 }
 
+/* SLIDESHOW */
 let i=0;
-function start(){music.play();show('s2');slide.src=images[0];}
-function next(){i++; if(i<images.length){slide.src=images[i];} else{showGallery();}}
-
+function start(){
+music.play();
+show('s2');
+slide.src=images[0];
+}
+function next(){
+i++;
+if(i<images.length){
+slide.src=images[i];
+}else{
+showGallery();
+}
+}
 function showGallery(){
 show('gallery');
 pgrid.innerHTML="";
@@ -311,7 +337,7 @@ pgrid.appendChild(img);
 });
 }
 
-/* Videos */
+/* VIDEOS */
 let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
@@ -319,29 +345,24 @@ let vids=[
 "WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4",
 "WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"
 ];
+
 let currentVideo=0;
 
-function startVideos(){
-currentVideo=0;
-show('videos');
-loadVideo();
-}
-
-function loadVideo(){
+function nextVideo(){
 let video=document.getElementById("mainVideo");
-if(currentVideo<4){music.pause();} else{music.play();}
+if(currentVideo<vids.length){
 video.src=vids[currentVideo];
 video.load();
+if(currentVideo<4){music.pause();}
+else{music.play();}
 video.play().catch(()=>{});
-}
-
-function nextVideo(){
 currentVideo++;
-if(currentVideo<vids.length){loadVideo();}
-else{show('heart');}
+}else{
+show('heart');
+}
 }
 
-/* Heart */
+/* HEART */
 function openHeart(){
 heartText.innerHTML="Someone is there in my heart ❤️";
 setTimeout(()=>{
@@ -354,21 +375,12 @@ heartBtn.style.display="block";
 },1500);
 }
 
-/* Final */
+/* FINAL LETTER */
 function openLetter(){
 document.getElementById("loveText").innerHTML="I made this memory for us ❤️";
-
-let final=document.getElementById("final");
-
-/* create gif dynamically */
-let gif=document.createElement("video");
-gif.src="gif.mp4";
-gif.loop=true;
-gif.muted=true;
-gif.playsInline=true;
-gif.className="magicGif";
-final.appendChild(gif);
-
+let gif=document.getElementById("magicGif");
+gif.style.display="block";
+gif.currentTime=0;
 setTimeout(()=>{
 gif.play();
 gif.classList.add("show");
@@ -380,25 +392,41 @@ document.getElementById("ring").style.display="block";
 },2000);
 }
 
+/* CELEBRATE */
 function celebrate(){
 document.getElementById("yesText").style.display="block";
 
-/* confetti */
-for(let i=0;i<50;i++){
-let c=document.createElement("div");
-c.className="confetti";
-c.innerHTML="💖";
-c.style.left=Math.random()*100+"vw";
-document.body.appendChild(c);
-setTimeout(()=>c.remove(),3000);
+/* Fireworks */
+for(let i=0;i<80;i++){
+let f=document.createElement("div");
+f.className="fire";
+f.style.background=["#ff4e50","#ffe066","#ff8fab","#ffffff"][Math.floor(Math.random()*4)];
+f.style.left="50vw";
+f.style.top="50vh";
+f.style.setProperty('--x',(Math.random()*600-300)+"px");
+f.style.setProperty('--y',(Math.random()*600-300)+"px");
+document.body.appendChild(f);
+setTimeout(()=>f.remove(),1000);
 }
 
-/* roses */
+/* Hearts */
+for(let i=0;i<20;i++){
+let h=document.createElement("div");
+h.className="floatHeart";
+h.innerHTML="💖";
+h.style.left=Math.random()*100+"vw";
+h.style.top="-10px";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),3000);
+}
+
+/* Roses */
 for(let i=0;i<20;i++){
 let r=document.createElement("div");
-r.className="confetti";
+r.className="rose";
 r.innerHTML="🌹";
 r.style.left=Math.random()*100+"vw";
+r.style.top="-10px";
 document.body.appendChild(r);
 setTimeout(()=>r.remove(),3000);
 }
@@ -417,4 +445,3 @@ setTimeout(()=>s.remove(),1000);
 </script>
 </body>
 </html>
-
