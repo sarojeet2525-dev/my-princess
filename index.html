@@ -5,93 +5,62 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>For My Princess ❤️</title>
 
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#ff4e50">
-
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
 body{
-margin:0;
-font-family: 'Poppins', sans-serif;
-color:white;
-text-align:center;
-overflow-x:hidden;
-background: #ff758c;
-transition: background 2s ease;
+    margin:0; font-family: 'Poppins', sans-serif; color:white; text-align:center; overflow-x:hidden;
+    background: #ff758c; transition: background 2s ease;
 }
 
 h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
 
 /* Moving Background Photo Track */
-.bg-strip{position:fixed;inset:0;z-index:-2;opacity:.35;}
+.bg-strip{position:fixed;inset:0;z-index:-2;opacity:.3;}
 .bg-track{display:flex;width:max-content;animation:move 90s linear infinite;}
 .bg-track img{height:100vh;filter:blur(4px);object-fit:cover;}
 @keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* Glowing Pink Heart Rain */
 .heart-rain {
-    position: fixed;
-    top: -10%;
-    user-select: none;
-    pointer-events: none;
-    z-index: 1000;
-    color: #ffb6c1;
-    text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
-    animation: fall linear forwards;
+    position: fixed; top: -10%; user-select: none; pointer-events: none; z-index: 1000;
+    color: #ffb6c1; text-shadow: 0 0 10px #ff69b4; animation: fall linear forwards;
 }
 @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
 
-/* Glassmorphism Screens */
+/* Screens */
 .screen{
-min-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-padding:25px;
-box-sizing:border-box;
-background: rgba(0, 0, 0, 0.2); 
-backdrop-filter: blur(8px);
--webkit-backdrop-filter: blur(8px);
-opacity:0;
-transform:translateY(40px);
-transition:.8s ease;
+    min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
+    padding:20px; box-sizing:border-box; background: rgba(0, 0, 0, 0.25); 
+    backdrop-filter: blur(8px); opacity:0; transform:translateY(30px); transition:.8s ease;
 }
-.screen.show{opacity:1;transform:translateY(0)}
+.screen.show{opacity:1; transform:translateY(0)}
 .hidden{display:none}
 
-/* ADJUSTED VIDEO CONTAINER */
+/* GALLERY SIZE FIX (Small & Clean) */
+.pgrid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; 
+    width:100%; max-width:320px; margin: 0 auto;
+}
+.pgrid img{ width:100%; height:100px; object-fit:cover; border-radius:8px; border:2px solid white; }
+
+/* VIDEO SIZE FIX */
 .video-wrapper {
-    width: 90%;
-    max-width: 320px; /* Smaller, more elegant size */
-    aspect-ratio: 9/16; /* Portrait style common for WhatsApp/Phone videos */
-    background: #000;
-    border-radius: 20px;
-    overflow: hidden;
-    border: 3px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-    margin: 10px auto;
+    width: 280px; aspect-ratio: 9/16; background: #000; border-radius: 15px; 
+    overflow: hidden; border: 3px solid white; margin: 10px auto;
 }
-#mainVideo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Keeps video filling the frame beautifully */
-}
+#mainVideo { width:100%; height:100%; object-fit:cover; }
 
-/* Letters & Signature */
-.letter-container { width: 100%; max-width: 450px; max-height: 50vh; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-.letter-card { background: rgba(255, 255, 255, 0.15); padding: 20px; border-radius: 20px; text-align: left; border: 1px solid rgba(255,255,255,0.2); }
-#signatureArea { font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: #ffe066; height: 70px; opacity: 0; transition: 1.5s; text-shadow: 0 0 10px rgba(255,224,102,0.5); }
+/* LETTERS & SIGNATURE */
+.letter-container { width: 100%; max-width: 400px; max-height: 45vh; overflow-y: auto; gap: 15px; display:flex; flex-direction:column; }
+.letter-card { background: rgba(255, 255, 255, 0.15); padding: 15px; border-radius: 15px; text-align: left; border: 1px solid rgba(255,255,255,0.2); }
+#signatureArea { font-family: 'Great Vibes', cursive; font-size: 3rem; color: #ffe066; height: 60px; opacity: 0; transition: 1.5s; }
 
-/* Pulse Aura */
-.pulse-aura { width: 100px; height: 100px; background: rgba(255, 255, 255, 0.4); border-radius: 50%; position: absolute; z-index: -1; animation: aura-pulse 2s infinite; }
-@keyframes aura-pulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(2.5); opacity: 0; } }
+/* CELEBRATION ELEMENTS */
+.confetti { position: fixed; top: -20px; z-index: 2000; animation: fallConfetti linear forwards; }
+@keyframes fallConfetti { to { transform: translateY(110vh) rotate(720deg); } }
 
-button{ margin-top:20px;padding:12px 25px;border-radius:25px;border:none;cursor:pointer; font-size:16px;font-weight:600;background:white;color:#ff4e50; transition:.3s; }
-#slide{ width:min(85vw,280px); border-radius:20px; border:5px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-.pgrid img{ width:100%; border-radius:10px; border: 2px solid white; }
+button{ margin-top:15px; padding:10px 20px; border-radius:20px; border:none; cursor:pointer; font-weight:600; background:white; color:#ff4e50; }
 </style>
 </head>
 <body>
@@ -101,42 +70,37 @@ button{ margin-top:20px;padding:12px 25px;border-radius:25px;border:none;cursor:
 
 <div id="s1" class="screen show">
     <h2>Tap the heart meri princess 💖</h2>
-    <div onclick="start()" style="position:relative; display:flex; justify-content:center; align-items:center; cursor:pointer;">
-        <div class="pulse-aura"></div>
-        <div style="font-size:90px;">💖</div>
-    </div>
+    <div onclick="start()" style="cursor:pointer; font-size:80px;">💖</div>
 </div>
 
 <div id="s2" class="screen hidden">
     <h2>Kuch acchii yaadien 📸</h2>
-    <img id="slide">
-    <button onclick="next()">Aur dekhogi princess 💖</button>
+    <img id="slide" style="width:260px; border-radius:15px; border:4px solid white;">
+    <button onclick="next()">Next Memory 💖</button>
 </div>
 
 <div id="gallery" class="screen hidden">
-    <h2>Hamaare kaarname 📸</h2>
-    <div id="pgrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;width:100%;max-width:800px;"></div>
+    <h2>Our Moments 📸</h2>
+    <div id="pgrid" class="pgrid"></div>
     <button onclick="show('message')">Next 💖</button>
 </div>
 
 <div id="message" class="screen hidden">
     <h2 id="typedMsg"></h2>
-    <div id="togetherTimer" style="background:rgba(255,255,255,0.2); padding:20px; border-radius:20px;"></div>
+    <div id="togetherTimer" style="background:rgba(255,255,255,0.2); padding:15px; border-radius:15px; font-size:0.9rem;"></div>
     <button onclick="startVideos()">Videos 🎬</button>
 </div>
 
 <div id="videos" class="screen hidden">
-    <div class="video-wrapper">
-        <video id="mainVideo" controls playsinline></video>
-    </div>
+    <div class="video-wrapper"><video id="mainVideo" controls playsinline></video></div>
     <button onclick="nextVideo()">Next Video 💖</button>
 </div>
 
 <div id="lettersPage" class="screen hidden">
     <h2>Pyaar Bhare Khat 💌</h2>
     <div class="letter-container">
-        <div class="letter-card"><h3>To My Princess,</h3><p>January 14th was the day my luck changed. You are the most beautiful part of my life.</p></div>
-        <div class="letter-card"><h3>My Promise,</h3><p>I promise to hold your hand through every storm. You are my forever.</p></div>
+        <div class="letter-card"><h3>To My Princess,</h3><p>Your custom message here...</p></div>
+        <div class="letter-card"><h3>My Promise,</h3><p>Your custom message here...</p></div>
     </div>
     <div id="signatureArea">Anu</div>
     <button id="signBtn" onclick="signLetter()">Sign Our Forever ✍️</button>
@@ -145,20 +109,20 @@ button{ margin-top:20px;padding:12px 25px;border-radius:25px;border:none;cursor:
 
 <div id="heart" class="screen hidden">
     <h2>Open My Heart ❤️</h2>
-    <div onclick="openHeart()" style="font-size:90px;cursor:pointer">❤️</div>
-    <div id="heartText" style="font-size: 1.2rem; min-height: 50px; margin-top: 10px;"></div>
-    <img id="heartPhoto" style="width:200px; border-radius:20px; border:4px solid white; display:none; margin-top:15px;">
-    <button id="heartBtn" style="display:none" onclick="show('final')">Aage Dekho 💖</button>
+    <div onclick="openHeart()" style="font-size:80px; cursor:pointer">❤️</div>
+    <div id="heartText" style="margin-top:10px;"></div>
+    <img id="heartPhoto" style="width:180px; border-radius:15px; border:3px solid white; display:none;">
+    <button id="heartBtn" class="hidden" onclick="show('final')">Aage Dekho 💖</button>
 </div>
 
 <div id="final" class="screen hidden">
-    <div onclick="openLetter()" style="font-size:90px; cursor:pointer;">💌</div>
-    <video id="magicGif" style="display:none; width:220px;" loop muted playsinline><source src="gif.mp4" type="video/mp4"></video>
+    <div id="env" onclick="openLetter()" style="font-size:80px; cursor:pointer;">💌</div>
+    <video id="magicGif" style="display:none; width:200px;" loop muted playsinline><source src="gif.mp4" type="video/mp4"></video>
     <div id="proposalArea" style="display:none;">
         <h2 id="proposalHeading"></h2>
         <button onclick="celebrate()">Yes 💖</button>
         <button onclick="celebrate()">Of Course Yesss 💞</button>
-        <h1 id="yesText" style="display:none;">ANU said YES to SARU 💞</h1>
+        <h1 id="yesText" style="display:none; font-family:'Great Vibes'; color:#fff;">ANU said YES! 💞</h1>
     </div>
 </div>
 
@@ -172,9 +136,9 @@ let images=["WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg","WhatsApp Image 
 
 images.concat(images).forEach(src=>{let img=document.createElement("img"); img.src=src; bgTrack.appendChild(img);});
 
-function typeWriter(text, elementId, speed = 60) {
+function typeWriter(text, elementId) {
     let i = 0; const el = document.getElementById(elementId); el.innerHTML = "";
-    function type() { if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(type, speed); } }
+    function type() { if (i < text.length) { el.innerHTML += text.charAt(i++); setTimeout(type, 60); } }
     type();
 }
 
@@ -184,7 +148,7 @@ function updateTimer() {
     const h = Math.floor((diff/3600000)%24);
     const m = Math.floor((diff/60000)%60);
     const s = Math.floor((diff/1000)%60);
-    document.getElementById("togetherTimer").innerHTML = `Hamari Kahani Ko:<br>${d} Din, ${h} Ghante, ${m} Mins aur ${s} Secs ❤️`;
+    document.getElementById("togetherTimer").innerHTML = `${d} Din, ${h} Ghante, ${m} Mins aur ${s} Secs ❤️`;
 }
 setInterval(updateTimer, 1000);
 
@@ -196,11 +160,11 @@ function show(id){
 }
 
 function start(){ music.play().catch(()=>{}); show('s2'); slide.src=images[0]; }
-let index=0;
-function next(){ index++; if(index<images.length){slide.src=images[index];} else{showGallery();} }
+let idx=0;
+function next(){ idx++; if(idx<images.length){slide.src=images[idx];} else{showGallery();} }
 function showGallery(){ show('gallery'); pgrid.innerHTML=""; images.forEach(src=>{let img=document.createElement("img"); img.src=src; pgrid.appendChild(img);}); }
 
-let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-07 at 2.07.12 PM.mp4","WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4","WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4","WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"];
+let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4","WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4","WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4","WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"];
 let curV=0;
 function startVideos(){ curV=0; show('videos'); loadV(); }
 function loadV(){ let v=document.getElementById("mainVideo"); curV<4?music.pause():music.play(); v.src=vids[curV]; v.load(); }
@@ -212,27 +176,37 @@ function openHeart(){
     typeWriter("Someone is there in my heart ❤️", "heartText");
     setTimeout(()=>{
         const p=document.getElementById("heartPhoto"); p.src=images[1]; p.style.display="block";
-        setTimeout(()=>{
-            let i=0, txt="\n\n It’s youuuu ❤️";
-            function type(){ if(i<txt.length){ document.getElementById("heartText").innerHTML += txt[i++].replace("\n","<br>"); setTimeout(type,60);} else{document.getElementById("heartBtn").style.display="block";} }
-            type();
-        }, 2000);
-    }, 2000);
+        setTimeout(()=>document.getElementById("heartBtn").classList.remove("hidden"), 2000);
+    }, 1500);
 }
 
 function openLetter(){
+    document.getElementById("env").style.display="none";
     let g=document.getElementById("magicGif"); g.style.display="block"; g.play();
     setTimeout(()=>{ document.getElementById("proposalArea").style.display="block"; typeWriter("Will you stay with me forever, Anu? 💍", "proposalHeading"); }, 2000);
 }
 
-function celebrate(){ document.getElementById("yesText").style.display="block"; document.body.style.background="gold"; }
+function celebrate(){
+    document.getElementById("yesText").style.display="block";
+    document.body.style.background = "linear-gradient(to bottom, #ff758c, #ff9a9e, #fecfef)";
+    
+    for(let i=0; i<100; i++){
+        let c = document.createElement("div"); c.className="confetti";
+        c.innerHTML = ["💖","✨","🌸","🎉","💕"][Math.floor(Math.random()*5)];
+        c.style.left = Math.random()*100+"vw";
+        c.style.animationDuration = (Math.random()*3+2)+"s";
+        c.style.fontSize = (Math.random()*20+15)+"px";
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(), 5000);
+    }
+}
 
 setInterval(()=>{
     const h=document.createElement("div"); h.className="heart-rain"; h.innerHTML="💗";
-    h.style.left=Math.random()*100+"vw"; h.style.fontSize=(Math.random()*20+10)+"px";
+    h.style.left=Math.random()*100+"vw"; h.style.fontSize=(Math.random()*15+10)+"px";
     h.style.animationDuration=(Math.random()*3+2)+"s"; document.body.appendChild(h);
-    setTimeout(()=>h.remove(),5000);
-}, 200);
+    setTimeout(()=>h.remove(), 5000);
+}, 250);
 </script>
 </body>
 </html>
