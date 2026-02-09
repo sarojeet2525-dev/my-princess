@@ -96,11 +96,58 @@ button{ margin-top:15px; padding:10px 20px; border-radius:20px; border:none; cur
     <button onclick="nextVideo()">Next Video 💖</button>
 </div>
 
-<div id="lettersPage" class="screen hidden">
-    <h2>Pyaar Bhare Khat 💌</h2>
-    <div class="letter-container">
-        <div class="letter-card"><h3>To My Princess,</h3><p>Your custom message here...</p></div>
-        <div class="letter-card"><h3>My Promise,</h3><p>Your custom message here...</p></div>
+<div id="letter1" class="screen hidden">
+    <h2>Pehle Kuch Baatien... 🤨</h2>
+    <div class="letter-card" style="max-width:320px;">
+        <p>
+            Kaise batau mai tumhe..🤨<br>
+            Aanko mai tum... 👀<br>
+            Yaadon Mai tum..🤔<br>
+            Neendon mai tumm..😴<br>
+            Khawabo mai tumm..♥️<br><br>
+            Tum ho meri harr baat maii... tum ho meri din aur Raat maii..🌃<br>
+            Tum subh mai tum.. 🌅 shaam mai tumm.. 🌇<br>
+            Soch mai tumm.. kaam mai tumm..😵<br><br>
+            Mere liye paana bhi tum..🙃 Mere liye khona bhi tumm..♥️<br>
+            Mere liye hasna bhi tum 😂... mere liye roona bhi tum.. 😭<br>
+            Aur jaagna aur soona bhi tum.. 😴<br><br>
+            Jau kahi dekhu kahiii.. tum ho vaha tum ho vahii..♥️<br>
+            Kaise batau mai tumhe... tumhare bin toh mai kuch bhi naii..♥️
+        </p>
+    </div>
+    <button onclick="show('letter2')">Agla Khat 💌</button>
+</div>
+
+<div id="letter2" class="screen hidden">
+    <h2>Sirf Tumhari Chahat... 💦</h2>
+    <div class="letter-card" style="max-width:320px;">
+        <p>
+            Log bachte hai samandar se lekin..<br>
+            hum tumhari aakho mai dubne ko taiyaar hai..💦<br><br>
+            Kisko dekhne ki chahat kare..🫣..<br>
+            tumko dekh liya hai ek baar.. 👀<br><br>
+            Tumahari zulfo ki gehrayi hai bahot or...<br>
+            hum ko pasand nhi aata hai kinara.. 😶‍🌫️<br><br>
+            Log kehte hai Chand ka tukda ho tum..🌛..<br>
+            hum kehte hai Chand tukda hai tumhara..🌝
+        </p>
+    </div>
+    <button onclick="show('letter3')">Ek Aur Hai... 💖</button>
+</div>
+
+<div id="letter3" class="screen hidden">
+    <h2>Mera Har Wakt Tum... 🌎</h2>
+    <div class="letter-card" style="max-width:320px;">
+        <p>
+            Duniya ko khushi chaiye 🌎...<br>
+            aur mughe har Khushi mai tum..🫵<br><br>
+            Mere dosto ko wakt chaiye 🧑‍🤝‍🧑...<br>
+            aur mughe har wakt tum..🫂<br><br>
+            Pyaase ko kuuaa chaiye..💦...<br>
+            aur mughe har dua mai tum.. 🤝<br><br>
+            Meri mami ko bahu chaiye.. 🙃<br>
+            aur mughe Bahu ke roop mai tum..♥️
+        </p>
     </div>
     <div id="signatureArea">Anu</div>
     <button id="signBtn" onclick="signLetter()">Sign Our Forever ✍️</button>
@@ -168,8 +215,15 @@ let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-
 let curV=0;
 function startVideos(){ curV=0; show('videos'); loadV(); }
 function loadV(){ let v=document.getElementById("mainVideo"); curV<4?music.pause():music.play(); v.src=vids[curV]; v.load(); }
-function nextVideo(){ curV++; if(curV<vids.length){loadV();} else{show('lettersPage');} }
-
+function nextVideo() { 
+    curV++; 
+    if(curV < vids.length) { 
+        loadV(); 
+    } else { 
+        // This is the important change!
+        show('letter1'); 
+    } 
+}
 function signLetter(){ document.getElementById("signatureArea").style.opacity="1"; document.getElementById("signBtn").style.display="none"; document.getElementById("nextBtn").classList.remove("hidden"); }
 
 function openHeart(){
@@ -210,3 +264,4 @@ setInterval(()=>{
 </script>
 </body>
 </html>
+
