@@ -140,12 +140,19 @@ animation:pulse 2s infinite;
 /* Confetti upgraded */
 .confetti{
 position:fixed;
-top:-10px;
-font-size:22px;
-animation:fall 3s linear forwards;
+top:-20px;
+animation:fall linear forwards;
 }
+
 @keyframes fall{
-to{transform:translateY(110vh) rotate(720deg);opacity:0}
+0%{
+transform:translateY(0) rotate(0deg);
+opacity:1;
+}
+100%{
+transform:translateY(110vh) rotate(720deg);
+opacity:0;
+}
 }
 
 /* Fireworks */
@@ -219,7 +226,7 @@ Aur dekho aage meri princess 💖
 <button onclick="celebrate()">Yes 💖</button>
 <button onclick="celebrate()">Of Course Yesss 💞</button>
 <h1 id="yesText" style="display:none;">
-ANU said YES to SARU 💞✨
+Mughe to pata hi tha meri Surrii haa boltii 💞✨
 </h1>
 </div>
 </div>
@@ -265,7 +272,7 @@ setTimeout(()=>el.classList.add('show'),20);
 }
 
 /* Typing effect */
-let text="Saru made something special for his princess ANU 💖";
+let text="Tughe dekhna hai mere dil mai kyy haii 💖";
 let i=0;
 function type(){
 if(i<text.length){
@@ -342,29 +349,54 @@ document.getElementById("proposalArea").style.display="block";
 
 /* Celebration */
 function celebrate(){
+
 document.getElementById("yesText").style.display="block";
 
-/* Confetti */
-for(let i=0;i<60;i++){
-let c=document.createElement("div");
-c.className="confetti";
-c.innerHTML=["💖","✨","💞","🎉"][Math.floor(Math.random()*4)];
-c.style.left=Math.random()*100+"vw";
-document.body.appendChild(c);
-setTimeout(()=>c.remove(),3000);
+/* CONFETTI UPGRADED */
+for(let i=0;i<80;i++){
+
+  let c=document.createElement("div");
+  c.className="confetti";
+  
+  let emojis=["💖","💞","✨","🌸","🎉"];
+  c.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
+
+  c.style.left=Math.random()*100+"vw";
+
+  /* random size */
+  c.style.fontSize=(16 + Math.random()*20)+"px";
+
+  /* random duration */
+  let duration = 3 + Math.random()*3;
+  c.style.animationDuration = duration+"s";
+
+  /* random delay */
+  c.style.animationDelay = Math.random()*2+"s";
+
+  /* random horizontal sway */
+  c.style.transform = "translateX(" + (Math.random()*100-50) + "px)";
+
+  document.body.appendChild(c);
+
+  setTimeout(()=>c.remove(), (duration+2)*1000);
 }
 
-/* Fireworks */
-for(let i=0;i<20;i++){
-let f=document.createElement("div");
-f.className="firework";
-f.innerHTML="✨";
-f.style.left=Math.random()*100+"vw";
-f.style.top=Math.random()*100+"vh";
-document.body.appendChild(f);
-setTimeout(()=>f.remove(),1000);
+/* FIREWORK BURST */
+for(let i=0;i<15;i++){
+  setTimeout(()=>{
+    let f=document.createElement("div");
+    f.className="firework";
+    f.innerHTML="💖";
+    f.style.left=Math.random()*100+"vw";
+    f.style.top=Math.random()*80+"vh";
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1000);
+  }, i*150);
 }
+
 }
+
 </script>
 </body>
 </html>
+
