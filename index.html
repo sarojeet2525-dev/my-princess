@@ -32,7 +32,7 @@ transition:.8s ease;
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* Background moving images */
+/* Moving background photos */
 .bg-strip{
 position:fixed;
 inset:0;
@@ -43,7 +43,7 @@ overflow:hidden;
 .bg-track{
 display:flex;
 width:max-content;
-animation:move 80s linear infinite;
+animation:move 90s linear infinite;
 }
 .bg-track img{
 height:100vh;
@@ -52,6 +52,13 @@ filter:blur(6px);
 @keyframes move{
 from{transform:translateX(0)}
 to{transform:translateX(-50%)}
+}
+
+/* Typing effect */
+#typingText{
+font-size:22px;
+max-width:85%;
+min-height:60px;
 }
 
 /* Slideshow */
@@ -130,85 +137,26 @@ animation:pulse 2s infinite;
 100%{transform:scale(1)}
 }
 
-/* Magic GIF */
-.magicGif{
-position:absolute;
-top:40%;
-left:50%;
-transform:translate(-50%,-50%) scale(.8);
-width:min(70vw,240px);
-opacity:0;
-transition:1.5s ease;
-display:none;
-z-index:1;
-}
-.magicGif.show{
-display:block;
-opacity:1;
-transform:translate(-50%,-50%) scale(1);
-}
-
-/* Proposal */
-#proposalArea{
-margin-top:200px;
-position:relative;
-z-index:2;
-display:none;
-}
-
-#ring{
-font-size:80px;
-display:none;
-animation:float 2s infinite ease-in-out;
-cursor:pointer;
-}
-@keyframes float{
-0%{transform:translateY(0)}
-50%{transform:translateY(-15px)}
-100%{transform:translateY(0)}
-}
-
-#yesText{
-display:none;
-font-size:28px;
-margin-top:20px;
-}
-
-/* Fireworks */
-.fire{
+/* Confetti upgraded */
+.confetti{
 position:fixed;
-width:8px;
-height:8px;
-border-radius:50%;
-pointer-events:none;
-animation:explode 1s ease-out forwards;
-}
-@keyframes explode{
-to{
-transform:translate(var(--x),var(--y));
-opacity:0;
-}
-}
-
-/* Hearts + Roses */
-.floatHeart,.rose{
-position:fixed;
-font-size:24px;
+top:-10px;
+font-size:22px;
 animation:fall 3s linear forwards;
 }
 @keyframes fall{
-to{transform:translateY(110vh);opacity:0}
+to{transform:translateY(110vh) rotate(720deg);opacity:0}
 }
 
-/* Sparkle cursor */
-.sparkle{
+/* Fireworks */
+.firework{
 position:fixed;
-pointer-events:none;
-font-size:14px;
-animation:spark 1s linear forwards;
+font-size:28px;
+animation:explode 1s ease-out forwards;
 }
-@keyframes spark{
-to{transform:translateY(20px);opacity:0}
+@keyframes explode{
+0%{transform:scale(0)}
+100%{transform:scale(3);opacity:0}
 }
 </style>
 </head>
@@ -217,10 +165,10 @@ to{transform:translateY(20px);opacity:0}
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
-<!-- START -->
+<!-- FIRST PAGE -->
 <div id="s1" class="screen show">
-<h2>Tap the heart meri princess 💖</h2>
-<div onclick="start()" style="font-size:90px;cursor:pointer">💖</div>
+<h2 id="typingText"></h2>
+<button onclick="start()">Enter My Heart 💖</button>
 </div>
 
 <!-- SLIDESHOW -->
@@ -234,12 +182,18 @@ to{transform:translateY(20px);opacity:0}
 <div id="gallery" class="screen hidden">
 <h2>Hamaare kaarname 📸</h2>
 <div id="pgrid" class="pgrid"></div>
-<button onclick="show('videoSection')">Next 💖</button>
+<button onclick="show('message')">Next 💖</button>
 </div>
 
-<!-- VIDEO SECTION -->
-<div id="videoSection" class="screen hidden">
-<h2 id="videoTitle"></h2>
+<!-- MESSAGE PAGE -->
+<div id="message" class="screen hidden">
+<h2>Abhi kahani khatam nahi hui meri princess… 💖</h2>
+<p>Abhi aur yaadein baaki hain…</p>
+<button onclick="startVideos()">Videos 🎬</button>
+</div>
+
+<!-- VIDEOS -->
+<div id="videos" class="screen hidden">
 <div class="videoFrame">
 <video id="mainVideo" controls playsinline></video>
 </div>
@@ -250,7 +204,7 @@ to{transform:translateY(20px);opacity:0}
 <div id="heart" class="screen hidden">
 <h2>Open My Heart ❤️</h2>
 <div onclick="openHeart()" style="font-size:90px;cursor:pointer">❤️</div>
-<div id="heartText" style="margin-top:20px;color:#ffe066"></div>
+<div id="heartText"></div>
 <img id="heartPhoto">
 <button id="heartBtn" style="display:none" onclick="show('final')">
 Aur dekho aage meri princess 💖
@@ -258,17 +212,15 @@ Aur dekho aage meri princess 💖
 </div>
 
 <!-- FINAL -->
-<div id="final" class="screen hidden" style="position:relative;">
+<div id="final" class="screen hidden">
 <div class="envelope" onclick="openLetter()">💌</div>
-<div id="loveText"></div>
-<video id="magicGif" class="magicGif" src="gif.mp4" loop muted playsinline></video>
-
-<div id="proposalArea">
-<h2 style="color:#ffe066;">Will you stay with me forever? 💍</h2>
-<div id="ring" onclick="celebrate()">💍</div>
+<div id="proposalArea" style="display:none;">
+<h2>Will you stay with me forever? 💍</h2>
 <button onclick="celebrate()">Yes 💖</button>
 <button onclick="celebrate()">Of Course Yesss 💞</button>
-<h1 id="yesText">ANU said YES to SARU 💞✨</h1>
+<h1 id="yesText" style="display:none;">
+ANU said YES to SARU 💞✨
+</h1>
 </div>
 </div>
 
@@ -278,7 +230,7 @@ const slide=document.getElementById("slide");
 const pgrid=document.getElementById("pgrid");
 const bgTrack=document.getElementById("bgTrack");
 
-/* 13 PHOTOS */
+/* 13 Photos */
 let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
@@ -301,7 +253,7 @@ img.src=src;
 bgTrack.appendChild(img);
 });
 
-/* Screen switch */
+/* Screen show */
 function show(id){
 document.querySelectorAll('.screen').forEach(s=>{
 s.classList.remove('show');
@@ -312,20 +264,25 @@ el.classList.remove('hidden');
 setTimeout(()=>el.classList.add('show'),20);
 }
 
-/* SLIDESHOW */
+/* Typing effect */
+let text="Saru made something special for his princess ANU 💖";
 let i=0;
-function start(){
-music.play();
-show('s2');
-slide.src=images[0];
-}
-function next(){
+function type(){
+if(i<text.length){
+document.getElementById("typingText").innerHTML+=text[i];
 i++;
-if(i<images.length){
-slide.src=images[i];
-}else{
-showGallery();
+setTimeout(type,50);
 }
+}
+type();
+
+/* Slideshow */
+let index=0;
+function start(){music.play();show('s2');slide.src=images[0];}
+function next(){
+index++;
+if(index<images.length){slide.src=images[index];}
+else{showGallery();}
 }
 function showGallery(){
 show('gallery');
@@ -337,7 +294,7 @@ pgrid.appendChild(img);
 });
 }
 
-/* VIDEOS */
+/* Videos */
 let vids=[
 "WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4",
 "WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4",
@@ -345,24 +302,27 @@ let vids=[
 "WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4",
 "WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"
 ];
-
 let currentVideo=0;
 
-function nextVideo(){
+function startVideos(){
+currentVideo=0;
+show('videos');
+loadVideo();
+}
+function loadVideo(){
 let video=document.getElementById("mainVideo");
-if(currentVideo<vids.length){
-video.src=vids[currentVideo];
-video.load();
 if(currentVideo<4){music.pause();}
 else{music.play();}
-video.play().catch(()=>{});
-currentVideo++;
-}else{
-show('heart');
+video.src=vids[currentVideo];
+video.load();
 }
+function nextVideo(){
+currentVideo++;
+if(currentVideo<vids.length){loadVideo();}
+else{show('heart');}
 }
 
-/* HEART */
+/* Heart */
 function openHeart(){
 heartText.innerHTML="Someone is there in my heart ❤️";
 setTimeout(()=>{
@@ -375,73 +335,36 @@ heartBtn.style.display="block";
 },1500);
 }
 
-/* FINAL LETTER */
+/* Final */
 function openLetter(){
-document.getElementById("loveText").innerHTML="I made this memory for us ❤️";
-let gif=document.getElementById("magicGif");
-gif.style.display="block";
-gif.currentTime=0;
-setTimeout(()=>{
-gif.play();
-gif.classList.add("show");
-},100);
-
-setTimeout(()=>{
 document.getElementById("proposalArea").style.display="block";
-document.getElementById("ring").style.display="block";
-},2000);
 }
 
-/* CELEBRATE */
+/* Celebration */
 function celebrate(){
 document.getElementById("yesText").style.display="block";
 
+/* Confetti */
+for(let i=0;i<60;i++){
+let c=document.createElement("div");
+c.className="confetti";
+c.innerHTML=["💖","✨","💞","🎉"][Math.floor(Math.random()*4)];
+c.style.left=Math.random()*100+"vw";
+document.body.appendChild(c);
+setTimeout(()=>c.remove(),3000);
+}
+
 /* Fireworks */
-for(let i=0;i<80;i++){
+for(let i=0;i<20;i++){
 let f=document.createElement("div");
-f.className="fire";
-f.style.background=["#ff4e50","#ffe066","#ff8fab","#ffffff"][Math.floor(Math.random()*4)];
-f.style.left="50vw";
-f.style.top="50vh";
-f.style.setProperty('--x',(Math.random()*600-300)+"px");
-f.style.setProperty('--y',(Math.random()*600-300)+"px");
+f.className="firework";
+f.innerHTML="✨";
+f.style.left=Math.random()*100+"vw";
+f.style.top=Math.random()*100+"vh";
 document.body.appendChild(f);
 setTimeout(()=>f.remove(),1000);
 }
-
-/* Hearts */
-for(let i=0;i<20;i++){
-let h=document.createElement("div");
-h.className="floatHeart";
-h.innerHTML="💖";
-h.style.left=Math.random()*100+"vw";
-h.style.top="-10px";
-document.body.appendChild(h);
-setTimeout(()=>h.remove(),3000);
 }
-
-/* Roses */
-for(let i=0;i<20;i++){
-let r=document.createElement("div");
-r.className="rose";
-r.innerHTML="🌹";
-r.style.left=Math.random()*100+"vw";
-r.style.top="-10px";
-document.body.appendChild(r);
-setTimeout(()=>r.remove(),3000);
-}
-}
-
-/* Sparkle cursor */
-document.addEventListener("mousemove",e=>{
-let s=document.createElement("div");
-s.className="sparkle";
-s.innerHTML="✨";
-s.style.left=e.clientX+"px";
-s.style.top=e.clientY+"px";
-document.body.appendChild(s);
-setTimeout(()=>s.remove(),1000);
-});
 </script>
 </body>
 </html>
