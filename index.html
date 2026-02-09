@@ -32,7 +32,7 @@ transition:.8s ease;
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
 
-/* Background */
+/* Moving background photos */
 .bg-strip{
 position:fixed;
 inset:0;
@@ -57,7 +57,6 @@ to{transform:translateX(-50%)}
 /* Typing */
 #typingText{
 font-size:22px;
-max-width:85%;
 min-height:60px;
 }
 
@@ -137,66 +136,84 @@ animation:pulse 2s infinite;
 100%{transform:scale(1)}
 }
 
-/* BURST GIF */
+/* GIF (BEHIND proposal) */
 .magicGif{
 position:absolute;
-top:40%;
+top:35%;
 left:50%;
-transform:translate(-50%,-50%) scale(.2);
+transform:translate(-50%,-50%);
 width:min(70vw,240px);
 opacity:0;
-transition:1s ease;
+transition:1.5s ease;
 z-index:1;
 }
-.magicGif.show{
-opacity:1;
-transform:translate(-50%,-50%) scale(1);
+.magicGif.show{opacity:1}
+
+/* Proposal */
+#proposalArea{
+margin-top:220px;
+position:relative;
+z-index:2;
+display:none;
 }
 
-/* Burst particles */
-.burst{
-position:absolute;
-font-size:24px;
-animation:burstAnim 1s ease-out forwards;
+#ring{
+font-size:80px;
+display:none;
+animation:float 2s infinite ease-in-out;
+cursor:pointer;
 }
-@keyframes burstAnim{
-0%{transform:scale(0);}
-100%{
-transform:translate(
-calc(200px * cos(var(--angle))),
-calc(200px * sin(var(--angle)))
-) scale(2);
-opacity:0;
-}
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(-15px)}
+100%{transform:translateY(0)}
 }
 
-/* Confetti */
+#yesText{
+display:none;
+font-size:28px;
+margin-top:20px;
+}
+
+/* Confetti slow */
 .confetti{
 position:fixed;
 top:-20px;
 animation:fall linear forwards;
 }
 @keyframes fall{
-0%{transform:translateY(0) rotate(0deg);opacity:1;}
-100%{transform:translateY(110vh) rotate(720deg);opacity:0;}
+0%{transform:translateY(0) rotate(0deg)}
+100%{transform:translateY(110vh) rotate(720deg);opacity:0}
 }
 
-/* Fireworks */
+/* Fireworks burst */
 .firework{
 position:fixed;
-font-size:28px;
+font-size:26px;
 animation:explode 1s ease-out forwards;
 }
 @keyframes explode{
 0%{transform:scale(0)}
 100%{transform:scale(3);opacity:0}
 }
+
+/* Sparkle cursor */
+.sparkle{
+position:fixed;
+pointer-events:none;
+font-size:14px;
+animation:spark 1s linear forwards;
+}
+@keyframes spark{
+to{transform:translateY(20px);opacity:0}
+}
 </style>
 </head>
 <body>
 
 <div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
-<audio id="music" src="Perfect.mp3" loop></audio>
+
+<audio id="music" src="Perfect.mp3" preload="auto" loop></audio>
 
 <!-- FIRST PAGE -->
 <div id="s1" class="screen show">
@@ -249,31 +266,23 @@ Aur dekho aage meri princess 💖
 
 <video id="magicGif" class="magicGif" src="gif.mp4" loop muted playsinline></video>
 
-<div id="proposalArea" style="display:none;">
+<div id="proposalArea">
 <h2>Will you stay with me forever? 💍</h2>
+<div id="ring" onclick="celebrate()">💍</div>
 <button onclick="celebrate()">Yes 💖</button>
 <button onclick="celebrate()">Of Course Yesss 💞</button>
-<h1 id="yesText" style="display:none;">
-Mughe to pata hi tha meri Surrii haa boltii 💞✨
-</h1>
+<h1 id="yesText">ANU said YES to SARU 💞✨</h1>
 </div>
 </div>
 
 <script>
+const music=document.getElementById("music");
+const slide=document.getElementById("slide");
+const pgrid=document.getElementById("pgrid");
+const bgTrack=document.getElementById("bgTrack");
 
-/* Typing */
-let text="Tughe dekhna hai mere dil mai kyy haii 💖";
-let ti=0;
-function type(){
-if(ti<text.length){
-document.getElementById("typingText").innerHTML+=text[ti];
-ti++;
-setTimeout(type,50);
-}}
-type();
-
-/* Photos */
-let images=[ /* 13 images */ 
+/* 13 Photos */
+let images=[
 "WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg",
 "WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg",
@@ -292,9 +301,21 @@ let images=[ /* 13 images */
 images.concat(images).forEach(src=>{
 let img=document.createElement("img");
 img.src=src;
-document.getElementById("bgTrack").appendChild(img);
+bgTrack.appendChild(img);
 });
 
+/* Typing */
+let text="Tughe dekhna hai mere dil mai kyy haii 💖";
+let ti=0;
+function type(){
+if(ti<text.length){
+document.getElementById("typingText").innerHTML+=text[ti];
+ti++;
+setTimeout(type,50);
+}}
+type();
+
+/* Screen switch */
 function show(id){
 document.querySelectorAll('.screen').forEach(s=>{
 s.classList.remove('show');
@@ -307,21 +328,23 @@ setTimeout(()=>el.classList.add('show'),20);
 
 /* Slideshow */
 let index=0;
-function start(){show('s2');document.getElementById("slide").src=images[0];}
+function start(){
+music.play().catch(()=>{});
+show('s2');
+slide.src=images[0];
+}
 function next(){
 index++;
-if(index<images.length){
-document.getElementById("slide").src=images[index];
-}else{showGallery();}
+if(index<images.length){slide.src=images[index];}
+else{showGallery();}
 }
 function showGallery(){
 show('gallery');
-let grid=document.getElementById("pgrid");
-grid.innerHTML="";
+pgrid.innerHTML="";
 images.forEach(src=>{
 let img=document.createElement("img");
 img.src=src;
-grid.appendChild(img);
+pgrid.appendChild(img);
 });
 }
 
@@ -334,11 +357,19 @@ let vids=[
 "WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"
 ];
 let currentVideo=0;
-function startVideos(){currentVideo=0;show('videos');loadVideo();}
+
+function startVideos(){
+currentVideo=0;
+show('videos');
+loadVideo();
+}
 function loadVideo(){
-let v=document.getElementById("mainVideo");
-v.src=vids[currentVideo];
-v.load();
+let video=document.getElementById("mainVideo");
+if(currentVideo<vids.length-1){music.pause();}
+else{music.play();}
+video.src=vids[currentVideo];
+video.load();
+video.play().catch(()=>{});
 }
 function nextVideo(){
 currentVideo++;
@@ -359,37 +390,21 @@ heartBtn.style.display="block";
 },1500);
 }
 
-/* Envelope Burst */
+/* Envelope */
 function openLetter(){
-
 let gif=document.getElementById("magicGif");
-gif.currentTime=0;
-gif.play();
 gif.classList.add("show");
-
-/* burst particles */
-for(let i=0;i<20;i++){
-let b=document.createElement("div");
-b.className="burst";
-b.innerHTML="✨";
-b.style.left="50%";
-b.style.top="40%";
-b.style.setProperty('--angle', (Math.random()*360)+"deg");
-document.getElementById("final").appendChild(b);
-setTimeout(()=>b.remove(),1000);
-}
-
+gif.play();
 setTimeout(()=>{
 document.getElementById("proposalArea").style.display="block";
+document.getElementById("ring").style.display="block";
 },1500);
 }
 
 /* Celebration */
 function celebrate(){
-
 document.getElementById("yesText").style.display="block";
 
-/* Confetti */
 for(let i=0;i<80;i++){
 let c=document.createElement("div");
 c.className="confetti";
@@ -397,15 +412,12 @@ let emojis=["💖","💞","✨","🌸","🎉"];
 c.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
 c.style.left=Math.random()*100+"vw";
 c.style.fontSize=(16+Math.random()*20)+"px";
-let dur=3+Math.random()*3;
-c.style.animationDuration=dur+"s";
-c.style.animationDelay=Math.random()*2+"s";
+c.style.animationDuration=(3+Math.random()*3)+"s";
 document.body.appendChild(c);
-setTimeout(()=>c.remove(),6000);
+setTimeout(()=>c.remove(),5000);
 }
 
-/* Fireworks */
-for(let i=0;i<12;i++){
+for(let i=0;i<15;i++){
 setTimeout(()=>{
 let f=document.createElement("div");
 f.className="firework";
@@ -414,11 +426,20 @@ f.style.left=Math.random()*100+"vw";
 f.style.top=Math.random()*80+"vh";
 document.body.appendChild(f);
 setTimeout(()=>f.remove(),1000);
-},i*200);
+},i*150);
+}
 }
 
-}
-
+/* Sparkle Cursor */
+document.addEventListener("mousemove",e=>{
+let s=document.createElement("div");
+s.className="sparkle";
+s.innerHTML="✨";
+s.style.left=e.clientX+"px";
+s.style.top=e.clientY+"px";
+document.body.appendChild(s);
+setTimeout(()=>s.remove(),1000);
+});
 </script>
 </body>
 </html>
