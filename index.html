@@ -172,7 +172,7 @@ button{ margin-top:15px; padding:10px 20px; border-radius:20px; border:none; cur
             aur mughe Bahu ke roop mai tum..♥️
         </p>
     </div>
-    <div id="signatureArea">Anu</div>
+    <div id="signatureArea">ANUJEET</div>
     <button id="signBtn" onclick="signLetter()">Sign Our Forever ✍️</button>
     <button id="nextBtn" class="hidden" onclick="show('heart')">Aage Chale? ❤️</button>
 </div>
@@ -249,7 +249,7 @@ let idx=0;
 function next(){ idx++; if(idx<images.length){slide.src=images[idx];} else{showGallery();} }
 function showGallery(){ show('gallery'); pgrid.innerHTML=""; images.forEach(src=>{let img=document.createElement("img"); img.src=src; pgrid.appendChild(img);}); }
 
-let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-07.12 PM.mp4","WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4","WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4","WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"];
+let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4","WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4","WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4","WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"];
 let curV=0;
 function startVideos(){ curV=0; show('videos'); loadV(); }
 function loadV(){ let v=document.getElementById("mainVideo"); curV<4?music.pause():music.play(); v.src=vids[curV]; v.load(); }
@@ -299,3 +299,4 @@ setInterval(()=>{
 </script>
 </body>
 </html>
+
