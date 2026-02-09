@@ -20,6 +20,7 @@ color:white;
 text-align:center;
 overflow-x:hidden;
 background:linear-gradient(45deg,#ff4e50,#ff8fab,#ffe066);
+transition: background 2s ease; /* Smooth color shift for the end */
 }
 
 h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
@@ -43,6 +44,29 @@ transition:.8s ease;
 }
 .screen.show{opacity:1;transform:translateY(0)}
 .hidden{display:none}
+
+/* Pulsing Aura for Start Screen */
+.pulse-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 20px;
+}
+.pulse-aura {
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    position: absolute;
+    z-index: -1;
+    animation: aura-pulse 2s infinite;
+}
+@keyframes aura-pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(2.5); opacity: 0; }
+}
 
 /* Floating Elements */
 .floating-item {
@@ -116,6 +140,7 @@ button:hover{transform:scale(1.08); background: #fff1f1;}
 .magicGif.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
 
 #proposalArea{margin-top:220px;position:relative;z-index:2;display:none;}
+#proposalHeading{min-height: 40px;} /* Keeps layout stable during typing */
 #yesText{display:none;font-size:28px;color:#fff;margin-top:20px;text-shadow: 2px 2px 10px rgba(255,78,80,0.8);}
 
 .confetti{position:fixed;top:-20px;animation:fall linear forwards;}
@@ -130,8 +155,11 @@ button:hover{transform:scale(1.08); background: #fff1f1;}
 <audio id="music" src="Perfect.mp3" loop></audio>
 
 <div id="s1" class="screen show">
-<h2>Tap the heart meri princess 💖</h2>
-<div onclick="start()" style="font-size:90px;cursor:pointer">💖</div>
+    <h2>Tap the heart meri princess 💖</h2>
+    <div onclick="start()" class="pulse-container">
+        <div class="pulse-aura"></div>
+        <div style="font-size:90px;">💖</div>
+    </div>
 </div>
 
 <div id="s2" class="screen hidden">
@@ -169,7 +197,7 @@ button:hover{transform:scale(1.08); background: #fff1f1;}
 <div class="envelope" onclick="openLetter()">💌</div>
 <video id="magicGif" class="magicGif" loop muted playsinline><source src="gif.mp4" type="video/mp4"></video>
 <div id="proposalArea">
-<h2>Will you stay with me forever? 💍</h2>
+<h2 id="proposalHeading"></h2>
 <button onclick="celebrate()">Yes 💖</button>
 <button onclick="celebrate()">Of Course Yesss 💞</button>
 <h1 id="yesText">ANU said YES to SARU 💞✨</h1>
@@ -205,7 +233,6 @@ images.concat(images).forEach(src=>{
     bgTrack.appendChild(img);
 });
 
-/* TYPING EFFECT HELPER */
 function typeWriter(text, elementId, speed = 60) {
     let i = 0; const el = document.getElementById(elementId); el.innerHTML = "";
     function type() { if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(type, speed); } }
@@ -224,7 +251,6 @@ function updateTimer() {
 }
 setInterval(updateTimer, 1000);
 
-/* NAVIGATION */
 function show(id){
     document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('show');s.classList.add('hidden');});
     let el=document.getElementById(id); el.classList.remove('hidden');
@@ -251,47 +277,56 @@ function startVideos(){ currentVideo=0; show('videos'); loadVideo(); }
 function loadVideo(){ let v=document.getElementById("mainVideo"); currentVideo<4?music.pause():music.play(); v.src=vids[currentVideo]; v.load(); }
 function nextVideo(){ currentVideo++; currentVideo<vids.length?loadVideo():show('heart'); }
 
-/* HEART SURPRISE - FIXED TIMING */
+/* HEART SURPRISE */
 function openHeart(){
     typeWriter("Someone is there in my heart ❤️", "heartText", 60);
-    
     setTimeout(()=>{
         const photo = document.getElementById("heartPhoto");
         photo.src=images[1];
         photo.style.display="block";
-        
         setTimeout(()=>{
             const currentText = "Someone is there in my heart ❤️";
             const element = document.getElementById("heartText");
             let i = 0;
             const extraText = "\n\n It’s youuuu ❤️"; 
-            
             function typeSecondLine() {
                 if (i < extraText.length) {
                     element.innerHTML = (currentText + extraText.substring(0, i + 1)).replace(/\n/g, "<br>");
                     i++;
                     setTimeout(typeSecondLine, 60);
-                } else {
-                    document.getElementById("heartBtn").style.display="block";
-                }
+                } else { document.getElementById("heartBtn").style.display="block"; }
             }
             typeSecondLine();
         }, 2000); 
     }, 2000);
 }
 
+/* FINAL LETTER WITH TYPING PROPOSAL */
 function openLetter(){
     let g=document.getElementById("magicGif"); g.currentTime=0; g.classList.add("show"); g.play().catch(()=>{});
-    setTimeout(()=>{document.getElementById("proposalArea").style.display="block";},2000);
+    setTimeout(()=>{
+        document.getElementById("proposalArea").style.display="block";
+        typeWriter("Will you stay with me forever, Anu? 💍", "proposalHeading", 80);
+    },2000);
 }
 
+/* CELEBRATION UPGRADED */
 function celebrate(){
     document.getElementById("yesText").style.display="block";
-    for(let i=0;i<60;i++){
+    document.body.style.background = "linear-gradient(45deg, #FFD700, #ff8fab)";
+
+    for(let i=0;i<80;i++){
         let c=document.createElement("div"); c.className="confetti";
-        c.innerHTML=["💖","💞","✨","🌸","🎉"][Math.floor(Math.random()*5)];
+        c.innerHTML=["💖","💞","✨","🌸","🎉","💍"][Math.floor(Math.random()*6)];
         c.style.left=Math.random()*100+"vw"; c.style.animationDuration=(3+Math.random()*3)+"s";
         document.body.appendChild(c); setTimeout(()=>c.remove(),5000);
+    }
+    for(let i=0;i<15;i++){
+        setTimeout(()=>{
+            let f=document.createElement("div"); f.className="firework";
+            f.innerHTML="✨"; f.style.left=Math.random()*100+"vw"; f.style.top=Math.random()*80+"vh";
+            document.body.appendChild(f); setTimeout(()=>f.remove(),1000);
+        },i*200);
     }
 }
 
