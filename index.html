@@ -16,7 +16,7 @@ body{
 
 h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
 
-/* --- UPDATED: Brighter Background Track --- */
+/* Brighter Background Track */
 .bg-strip{position:fixed;inset:0;z-index:-2;opacity:.6; background: #ff758c;}
 .bg-track{display:flex;width:max-content;animation:move 90s linear infinite;}
 .bg-track img{height:100vh;filter:blur(2px); object-fit:cover;}
@@ -27,13 +27,28 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
     position: fixed; top: -10%; user-select: none; pointer-events: none; z-index: 1000;
     color: #fff1f5; text-shadow: 0 0 10px #ff69b4; animation: fall linear forwards;
 }
-@keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+@keyframes fall { to { transform: translateY(115vh) rotate(360deg); } }
 
-/* --- UPDATED: Brighter Screen Overlays --- */
+/* FIXED CONFETTI ANIMATION */
+.confetti { 
+    position: fixed; 
+    top: -50px; 
+    left: 0;
+    user-select: none; 
+    pointer-events: none; 
+    z-index: 9999; 
+    animation: fallConfetti linear forwards; 
+}
+@keyframes fallConfetti { 
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(120vh) rotate(720deg); opacity: 0; } 
+}
+
+/* Brighter Screen Overlays */
 .screen{
     min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
     padding:20px; box-sizing:border-box; 
-    background: rgba(255, 255, 255, 0.15); /* Light translucent white instead of dark */
+    background: rgba(255, 255, 255, 0.15); 
     backdrop-filter: blur(4px); 
     opacity:0; transform:translateY(30px); transition:.8s ease;
 }
@@ -281,10 +296,12 @@ function openLetter(){
 function celebrate(){
     document.getElementById("yesText").style.display="block";
     document.getElementById("restartBtn").style.display="inline-block";
-    // BRIGHTER GRADIENT
     document.body.style.background = "linear-gradient(to bottom, #ff9a9e, #fad0c4, #ffd1ff)";
+    
+    // Confetti Logic
     for(let i=0; i<100; i++){
-        let c = document.createElement("div"); c.className="confetti";
+        let c = document.createElement("div"); 
+        c.className="confetti";
         c.innerHTML = ["💖","✨","🌸","🎉","💕"][Math.floor(Math.random()*5)];
         c.style.left = Math.random()*100+"vw";
         c.style.animationDuration = (Math.random()*3+2)+"s";
