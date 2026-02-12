@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>For My Princess ❤️</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&family=Great+Vibes&family=Cinzel:wght@700&display=swap" rel="stylesheet">
 
 <style>
 body {
@@ -16,8 +16,21 @@ body {
 
 h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
 
+/* --- MOVIE INTRO STYLES --- */
+.intro-text {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 5px;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 2s ease;
+    position: absolute;
+    width: 100%;
+    pointer-events: none;
+}
+.intro-active { opacity: 1; transform: scale(1); }
+
 /* --- BACKGROUND ANIMATION --- */
-.bg-strip{position:fixed;inset:0;z-index:-2;opacity:.6; background: #ff758c;}
+.bg-strip{position:fixed;inset:0;z-index:-2;opacity:.6; background: #ff758c; transition: opacity 2s;}
 .bg-track{display:flex;width:max-content;animation:move 90s linear infinite;}
 .bg-track img{height:100vh;filter:blur(2px); object-fit:cover;}
 @keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -84,15 +97,6 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
     filter: blur(8px);
 }
 
-#caption {
-    margin-top: 15px;
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.5rem;
-    height: 30px;
-    transition: opacity 0.4s;
-    text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
-}
-
 /* --- UPGRADED GALLERY GRID --- */
 .pgrid { 
     display: grid; 
@@ -108,15 +112,13 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
     height: 100px; 
     object-fit: cover; 
     border: 4px solid white; 
-    border-bottom: 12px solid white; /* Polaroid Style */
+    border-bottom: 12px solid white;
     border-radius: 2px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     opacity: 0;
-    cursor: zoom-in;
 }
 
-/* Staggered pop-in animation */
 .pop-in {
     animation: polaroidPop 0.6s ease forwards;
 }
@@ -124,13 +126,6 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 @keyframes polaroidPop {
     from { opacity: 0; transform: translateY(30px) scale(0.8) rotate(var(--r)); }
     to { opacity: 1; transform: translateY(0) scale(1) rotate(var(--r)); }
-}
-
-/* Zoom effect when tapped */
-.pgrid img:active {
-    transform: scale(1.8) rotate(0deg) !important;
-    z-index: 100;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
 }
 
 /* --- SCREENS --- */
@@ -172,7 +167,7 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 
 button{ 
     margin-top:15px; padding:10px 25px; border-radius:25px; border:none; cursor:pointer; 
-    font-weight:600; background:white; color:#ff4e50; box-shadow: 0 4px 15px rgba(255,255,255,0.4);
+    font-weight:600; background:white; color:#ff4e50;
 }
 
 .sparkle { position: fixed; pointer-events: none; z-index: 9999; font-size: 20px; transition: opacity 0.8s, transform 0.8s; }
@@ -180,21 +175,27 @@ button{
 </head>
 <body>
 
-<div class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
+<div id="bgStrip" class="bg-strip"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
 <div id="s1" class="screen show">
     <div class="welcome-box">
         <h2 style="margin: 0;">Ready for a surprise,<br>Meri Princess? 👑</h2>
-        <div onclick="start()" class="pulse-heart">💖</div>
+        <div onclick="playIntro()" class="pulse-heart">💖</div>
         <p class="hint-text">Tap the heart to begin our story...<br>🎧 Recommended</p>
     </div>
+</div>
+
+<div id="movieIntro" class="screen hidden" style="background: #000; z-index: 100;">
+    <h1 id="introLine1" class="intro-text" style="font-size: 1.2rem; color: #aaa;">ANUJEET PRODUCTIONS PRESENTS</h1>
+    <h1 id="introLine2" class="intro-text" style="font-size: 1rem; color: #fff;">A STORY OF TWO HEARTS...</h1>
+    <h1 id="introLine3" class="intro-text" style="font-size: 2.5rem; color: #ff4d6d; text-shadow: 0 0 20px #ff4d6d;">FOREVER WITH YOU ❤️</h1>
 </div>
 
 <div id="s2" class="screen hidden">
     <h2>Kuch acchii yaadien 📸</h2>
     <img id="slide">
-    <div id="caption"></div>
+    <div id="caption" style="margin-top:15px; font-family:'Dancing Script'; font-size:1.5rem; height:30px;"></div>
     <button onclick="next()">MERI CUTIEE💖</button>
 </div>
 
@@ -218,7 +219,7 @@ button{
 <div id="letter1" class="screen hidden">
     <h2>Pehle Kuch Baatien... 🤨</h2>
     <div class="letter-card" style="max-width:320px;">
-        <p>Kaise batau mai tumhe..🤨<br>Aanko mai tum... 👀<br>Yaadon Mai tum..🤔<br>Neendon mai tumm..😴<br>Khawabo mai tumm..♥️<br><br>Tum ho meri harr baat maii... tum ho meri din aur Raat maii..🌃<br>Tum subh mai tum.. 🌅 shaam mai tumm.. 🌇<br>Soch mai tumm.. kaam mai tumm..😵<br><br>Mere liye paana bhi tum..🙃 Mere liye khona bhi tumm..♥️<br>Mere liye hasna bhi tum 😂... mere liye roona bhi tum.. 😭<br>Aur jaagna aur soona bhi tum.. 😴<br><br>Jau kahi dekhu kahiii.. tum ho vaha tum ho vahii..♥️<br>Kaise batau mai tumhe... tumhare bin toh mai kuch bhi naii..♥️</p>
+        <p>Kaise batau mai tumhe..🤨<br>Aanko mai tum... 👀<br>Yaadon Mai tum..🤔<br>Neendon mai tumm..😴<br>Khawabo mai tumm..♥️<br><br>Tum ho meri harr baat maii... tum ho meri din aur Raat maii..🌃<br>Jau kahi dekhu kahiii.. tum ho vaha tum ho vahii..♥️</p>
     </div>
     <button onclick="show('letter2')">Agla Khat 💌</button>
 </div>
@@ -226,7 +227,7 @@ button{
 <div id="letter2" class="screen hidden">
     <h2>Sirf Tumhari Chahat... 💦</h2>
     <div class="letter-card" style="max-width:320px;">
-        <p>Log bachte hai samandar se lekin..<br>hum tumhari aakho mai dubne ko taiyaar hai..💦<br><br>Kisko dekhne ki chahat kare..🫣..<br>tumko dekh liya hai ek baar.. 👀<br><br>Tumahari zulfo ki gehrayi hai bahot or...<br>hum ko pasand nhi aata hai kinara.. 😶‍🌫️<br><br>Log kehte hai Chand ka tukda ho tum..🌛..<br>hum kehte hai Chand tukda hai tumhara..🌝</p>
+        <p>Log bachte hai samandar se lekin..<br>hum tumhari aakho mai dubne ko taiyaar hai..💦<br><br>Kisko dekhne ki chahat kare..🫣..<br>tumko dekh liya hai ek baar.. 👀</p>
     </div>
     <button onclick="show('letter3')">Ek Aur Hai... 💖</button>
 </div>
@@ -234,7 +235,7 @@ button{
 <div id="letter3" class="screen hidden">
     <h2>Mera Har Wakt Tum... 🌎</h2>
     <div class="letter-card" style="max-width:320px;">
-        <p>Duniya ko khushi chaiye 🌎...<br>aur mughe har Khushi mai tum..🫵<br><br>Mere dosto ko wakt chaiye 🧑‍🤝‍🧑...<br>aur mughe har wakt tum..🫂<br><br>Pyaase ko kuuaa chaiye..💦...<br>aur mughe har dua mai tum.. 🤝<br><br>Meri mami ko bahu chaiye.. 🙃<br>aur mughe Bahu ke roop mai tum..♥️</p>
+        <p>Duniya ko khushi chaiye 🌎...<br>aur mughe har Khushi mai tum..🫵<br><br>Meri mami ko bahu chaiye.. 🙃<br>aur mughe Bahu ke roop mai tum..♥️</p>
     </div>
     <div id="signatureArea">ANUJEET</div>
     <button id="signBtn" onclick="signLetter()">Sign Our Forever ✍️</button>
@@ -278,43 +279,55 @@ const pgrid=document.getElementById("pgrid");
 const bgTrack=document.getElementById("bgTrack");
 
 let images=["WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg","WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg","WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg","WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"];
-
-let captions = [
-    "The most beautiful girl in the world! 😍",
-    "Meri cute si smile wali... 💖",
-    "Every moment with you is special. ✨",
-    "Jitna dekhu utna kam hai... 👀",
-    "Tera chehra meri har dua mein... 🤲",
-    "You are my favourite person! 🫂",
-    "Ek ladki ko dekha toh aisa laga... 🎶",
-    "My heart belongs to you only. ❤️",
-    "Hayee... yeh adayein! 😉",
-    "Perfect in every single way. 💍",
-    "Shining brighter than the stars. ⭐",
-    "Tu hai toh sab kuch hai. 🌎",
-    "Love you to the moon and back! 🌛"
-];
-
-function preloadImages() {
-    images.forEach(src => { const img = new Image(); img.src = src; });
-}
-window.onload = preloadImages;
+let captions=["The most beautiful girl! 😍","Meri cute smile! 💖","Special moments ✨","Jitna dekhu utna kam 👀","Tera chehra meri dua 🤲","Favourite person 🫂","Ek ladki ko dekha... 🎶","My heart belongs to you ❤️","Hayee adayein! 😉","Perfect way 💍","Shining star ⭐","Tu hai toh sab hai 🌎","Love you moon & back! 🌛"];
 
 images.concat(images).forEach(src=>{let img=document.createElement("img"); img.src=src; bgTrack.appendChild(img);});
 
+// SPARKLE TRAIL
 document.addEventListener('mousemove', (e) => {
-    const sparkle = document.createElement("div");
-    sparkle.className = "sparkle";
-    sparkle.innerHTML = ["✨", "⭐", "💖"][Math.floor(Math.random() * 3)];
-    sparkle.style.left = e.clientX + "px";
-    sparkle.style.top = e.clientY + "px";
-    document.body.appendChild(sparkle);
-    setTimeout(() => {
-        sparkle.style.opacity = "0";
-        sparkle.style.transform = "translateY(20px) scale(0.5)";
-    }, 50);
-    setTimeout(() => sparkle.remove(), 800);
+    const s = document.createElement("div"); s.className = "sparkle";
+    s.innerHTML = ["✨", "⭐", "💖"][Math.floor(Math.random() * 3)];
+    s.style.left = e.clientX + "px"; s.style.top = e.clientY + "px";
+    document.body.appendChild(s);
+    setTimeout(() => { s.style.opacity = "0"; s.style.transform = "translateY(20px) scale(0.5)"; }, 50);
+    setTimeout(() => s.remove(), 800);
 });
+
+// MOVIE INTRO LOGIC
+function playIntro() {
+    music.play().catch(()=>{});
+    document.body.style.background = "#000";
+    document.getElementById("bgStrip").style.opacity = "0";
+    show('movieIntro');
+    
+    setTimeout(() => { document.getElementById('introLine1').classList.add('intro-active'); }, 500);
+    setTimeout(() => { document.getElementById('introLine1').classList.remove('intro-active'); }, 3000);
+    
+    setTimeout(() => { document.getElementById('introLine2').classList.add('intro-active'); }, 4000);
+    setTimeout(() => { document.getElementById('introLine2').classList.remove('intro-active'); }, 6500);
+    
+    setTimeout(() => { document.getElementById('introLine3').classList.add('intro-active'); }, 7500);
+    
+    setTimeout(() => {
+        document.body.style.background = "#ff758c";
+        document.getElementById("bgStrip").style.opacity = "0.6";
+        start();
+    }, 11000);
+}
+
+function start(){ 
+    show('s2'); 
+    slide.src=images[0]; 
+    caption.innerHTML = captions[0];
+    idx=0; 
+}
+
+function show(id){
+    document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('show'); s.classList.add('hidden');});
+    let el=document.getElementById(id); el.classList.remove('hidden');
+    setTimeout(()=>el.classList.add('show'),20);
+    if(id==='message') typeWriter("Abhi kahani khatam nahi hui meri princess… 💖", "typedMsg");
+}
 
 function typeWriter(text, elementId) {
     let i = 0; const el = document.getElementById(elementId); el.innerHTML = "";
@@ -328,61 +341,31 @@ function updateTimer() {
     const h = Math.floor((diff/3600000)%24);
     const m = Math.floor((diff/60000)%60);
     const s = Math.floor((diff/1000)%60);
-    document.getElementById("togetherTimer").innerHTML = `${d} Din, ${h} Ghante, ${m} Mins aur ${s} Secs ❤️`;
+    if(document.getElementById("togetherTimer"))
+        document.getElementById("togetherTimer").innerHTML = `${d} Din, ${h} Ghante, ${m} Mins aur ${s} Secs ❤️`;
 }
 setInterval(updateTimer, 1000);
-
-function show(id){
-    document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('show'); s.classList.add('hidden');});
-    let el=document.getElementById(id); el.classList.remove('hidden');
-    setTimeout(()=>el.classList.add('show'),20);
-    if(id==='message') typeWriter("Abhi kahani khatam nahi hui meri princess… 💖", "typedMsg");
-}
-
-function start(){ 
-    music.play().catch(()=>{}); 
-    show('s2'); 
-    slide.src=images[0]; 
-    caption.innerHTML = captions[0];
-    idx=0; 
-}
 
 let idx=0;
 function next(){ 
     idx++; 
     if(idx < images.length){
-        const slideImg = document.getElementById("slide");
-        const capText = document.getElementById("caption");
-        slideImg.classList.add("photo-transition");
-        capText.style.opacity = "0";
+        slide.classList.add("photo-transition");
         setTimeout(() => {
-            slideImg.src = images[idx];
-            capText.innerHTML = captions[idx];
-            const randomTilt = (Math.random() * 8 - 4).toFixed(2);
-            slideImg.style.transform = `rotate(${randomTilt}deg)`;
-            slideImg.classList.remove("photo-transition");
-            capText.style.opacity = "1";
+            slide.src = images[idx];
+            caption.innerHTML = captions[idx];
+            slide.style.transform = `rotate(${(Math.random()*8-4)}deg)`;
+            slide.classList.remove("photo-transition");
         }, 300);
     } else { showGallery(); } 
 }
 
-/* --- UPGRADED GALLERY LOGIC --- */
 function showGallery(){ 
-    show('gallery'); 
-    pgrid.innerHTML=""; 
+    show('gallery'); pgrid.innerHTML=""; 
     images.forEach((src, i) => {
-        let img = document.createElement("img");
-        img.src = src;
-        
-        // Random tilt for the polaroid look
-        const randomRot = (Math.random() * 10 - 5).toFixed(2);
-        img.style.setProperty('--r', randomRot + 'deg');
-        
-        // Pop-in with delay
-        setTimeout(() => {
-            img.classList.add("pop-in");
-        }, i * 120); 
-
+        let img = document.createElement("img"); img.src = src;
+        img.style.setProperty('--r', (Math.random()*10-5)+'deg');
+        setTimeout(() => img.classList.add("pop-in"), i * 120); 
         pgrid.appendChild(img);
     }); 
 }
@@ -396,7 +379,7 @@ function nextVideo() { curV++; if(curV < vids.length) { loadV(); } else { show('
 function signLetter(){ document.getElementById("signatureArea").style.opacity="1"; document.getElementById("signBtn").style.display="none"; document.getElementById("nextBtn").classList.remove("hidden"); }
 
 function openHeart(){
-    typeWriter("YEH KAUN HAI JISNE MERA DILL CHURA LIYA ❤️", "heartText");
+    typeWriter("MERA DILL CHURA LIYA ❤️", "heartText");
     setTimeout(()=>{
         const p=document.getElementById("heartPhoto"); p.src=images[1]; p.style.display="block";
         setTimeout(()=>document.getElementById("heartBtn").classList.remove("hidden"), 2000);
@@ -410,19 +393,14 @@ function openLetter(){
 }
 
 function celebrate(){
-    if (navigator.vibrate) navigator.vibrate([100, 50, 100]); 
     document.getElementById("preYesButtons").style.display="none";
     document.getElementById("proposalHeading").style.display="none";
     document.getElementById("finalKeepsake").style.display="block";
-    document.body.style.background = "radial-gradient(circle, #ff9a9e 0%, #fad0c4 100%)";
-    
     for(let i=0; i<80; i++){
-        let c = document.createElement("div"); 
-        c.className="confetti";
+        let c = document.createElement("div"); c.className="confetti";
         c.innerHTML = ["💖","✨","🌸","🎉","💕","💍"][Math.floor(Math.random()*6)];
         c.style.left = Math.random()*100+"vw";
         c.style.animationDuration = (Math.random()*3+2)+"s";
-        c.style.fontSize = (Math.random()*20+15)+"px";
         document.body.appendChild(c);
         setTimeout(()=>c.remove(), 5000);
     }
@@ -430,18 +408,13 @@ function celebrate(){
 
 function restart() { location.reload(); }
 
-/* --- PERSONALIZED RAIN: Anu ❤️ Saru --- */
+// PERSONALIZED RAIN
 setInterval(()=>{
     const h=document.createElement("div"); h.className="heart-rain"; 
     const isName = Math.random() > 0.8;
     h.innerHTML = isName ? "Anu❤️Saru" : "💗";
     h.style.left=Math.random()*100+"vw"; 
-    h.style.fontSize= isName ? "20px" : (Math.random()*15+10)+"px";
-    h.style.fontWeight = isName ? "bold" : "normal";
-    if(isName) {
-        h.style.color = "#ffe066";
-        h.style.textShadow = "0 0 12px #ff69b4";
-    }
+    if(isName) { h.style.color = "#ffe066"; h.style.fontWeight = "bold"; }
     h.style.animationDuration=(Math.random()*3+2)+"s"; document.body.appendChild(h);
     setTimeout(()=>h.remove(), 5000);
 }, 250);
