@@ -16,6 +16,19 @@ body {
 
 h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
 
+/* --- NEW CINEMATIC TRANSITION STYLES --- */
+#pageTransition {
+    position: fixed; inset: 0; background: black; z-index: 99999;
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.8s ease; pointer-events: none;
+}
+#transitionText {
+    font-family: 'Cinzel', serif; letter-spacing: 4px; font-size: 1.2rem; color: #ff4d6d;
+    transform: translateY(20px); transition: 0.8s ease;
+}
+.transition-active { opacity: 1 !important; pointer-events: all !important; }
+.transition-active #transitionText { transform: translateY(0); }
+
 /* --- MOVIE INTRO STYLES --- */
 .intro-text {
     font-family: 'Cinzel', serif;
@@ -184,6 +197,10 @@ button{
 <div class="bg-strip" id="mainBg"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
+<div id="pageTransition">
+    <div id="transitionText">CHAPTER ONE</div>
+</div>
+
 <div id="outroScreen">
     <div class="credits-container">
         <div class="credit-job">THE PRINCESS</div>
@@ -230,13 +247,13 @@ button{
 <div id="gallery" class="screen hidden">
     <h2>The Gallery Of My Heart 📸</h2>
     <div id="pgrid" class="pgrid"></div>
-    <button onclick="show('message')">MERII PRINCESS 💖</button>
+    <button onclick="transitionTo('message', 'A MESSAGE FOR YOU')">MERII PRINCESS 💖</button>
 </div>
 
 <div id="message" class="screen hidden">
     <h2 id="typedMsg"></h2>
     <div id="togetherTimer" style="background:rgba(255,255,255,0.3); padding:15px; border-radius:15px; font-size:0.9rem; font-weight:600;"></div>
-    <button onclick="startVideos()">Videos 🎬</button>
+    <button onclick="transitionTo('videos', 'OUR MOMENTS IN MOTION')">Videos 🎬</button>
 </div>
 
 <div id="videos" class="screen hidden">
@@ -249,7 +266,7 @@ button{
     <div class="letter-card" style="max-width:320px;">
         <p>Kaise batau mai tumhe..🤨<br>Aanko mai tum... 👀<br>Yaadon Mai tum..🤔<br>Neendon mai tumm..😴<br>Khawabo mai tumm..♥️<br><br>Tum ho meri harr baat maii... tum ho meri din aur Raat maii..🌃<br>Tum subh mai tum.. 🌅 shaam mai tumm.. 🌇<br>Soch mai tumm.. kaam mai tumm..😵<br><br>Mere liye paana bhi tum..🙃 Mere liye khona bhi tumm..♥️<br>Mere liye hasna bhi tum 😂... mere liye roona bhi tum.. 😭<br>Aur jaagna aur soona bhi tum.. 😴<br><br>Jau kahi dekhu kahiii.. tum ho vaha tum ho vahii..♥️<br>Kaise batau mai tumhe... tumhare bin toh mai kuch bhi naii..♥️</p>
     </div>
-    <button onclick="show('letter2')">Agla Khat 💌</button>
+    <button onclick="transitionTo('letter2', 'SIRF TUMHARI CHAHAT')">Agla Khat 💌</button>
 </div>
 
 <div id="letter2" class="screen hidden">
@@ -257,7 +274,7 @@ button{
     <div class="letter-card" style="max-width:320px;">
         <p>Log bachte hai samandar se lekin..<br>hum tumhari aakho mai dubne ko taiyaar hai..💦<br><br>Kisko dekhne ki chahat kare..🫣..<br>tumko dekh liya hai ek baar.. 👀<br><br>Tumahari zulfo ki gehrayi hai bahot or...<br>hum ko pasand nhi aata hai kinara.. 😶‍🌫️<br><br>Log kehte hai Chand ka tukda ho tum..🌛..<br>hum kehte hai Chand tukda hai tumhara..🌝</p>
     </div>
-    <button onclick="show('letter3')">Ek Aur Hai... 💖</button>
+    <button onclick="transitionTo('letter3', 'MERA HAR WAKT TUM')">Ek Aur Hai... 💖</button>
 </div>
 
 <div id="letter3" class="screen hidden">
@@ -267,15 +284,15 @@ button{
     </div>
     <div id="signatureArea">ANUJEET</div>
     <button id="signBtn" onclick="signLetter()">Sign Our Forever ✍️</button>
-    <button id="nextBtn" class="hidden" onclick="show('heart')">Aage Chale? ❤️</button>
+    <button id="nextBtn" class="hidden" onclick="transitionTo('heart', 'DEEP INSIDE MY HEART')">Aage Chale? ❤️</button>
 </div>
 
 <div id="heart" class="screen hidden">
     <h2>Open My Heart ❤️</h2>
     <div onclick="openHeart()" style="font-size:80px; cursor:pointer;">❤️</div>
     <div id="heartText" style="margin-top:10px; font-weight: 600;"></div>
-    <img id="heartPhoto" style="width:180px; border-radius:15px; border:3px solid white; display:none;">
-    <button id="heartBtn" class="hidden" onclick="show('final')">Aage Dekho 💖</button>
+    <img id="heartPhoto" style="width:180px; border-radius:15px; border:3px solid white; display:none; margin: 0 auto;">
+    <button id="heartBtn" class="hidden" onclick="transitionTo('final', 'THE FINAL STEP')">Aage Dekho 💖</button>
 </div>
 
 <div id="final" class="screen hidden">
@@ -324,6 +341,22 @@ let captions = [
     "Tu hai toh sab kuch hai. 🌎",
     "Love you to the moon and back! 🌛"
 ];
+
+// --- NEW TRANSITION LOGIC ---
+function transitionTo(nextScreenId, text) {
+    const trans = document.getElementById("pageTransition");
+    const transText = document.getElementById("transitionText");
+    transText.innerText = text;
+    trans.style.display = "flex";
+    setTimeout(() => trans.classList.add("transition-active"), 10);
+
+    setTimeout(() => {
+        show(nextScreenId);
+        if(nextScreenId === 'gallery') showGallery();
+        trans.classList.remove("transition-active");
+        setTimeout(() => trans.style.display = "none", 800);
+    }, 2000);
+}
 
 function preloadImages() {
     images.forEach(src => { const img = new Image(); img.src = src; });
@@ -387,12 +420,13 @@ function startIntro() {
     setTimeout(() => {
         document.body.style.background = "#ff758c";
         document.getElementById("mainBg").style.opacity = "0.6";
+        transitionTo('s2', 'KUCH ACCHII YAADIEN');
         start();
     }, 11000);
 }
 
 function start(){ 
-    show('s2'); slide.src=images[0]; caption.innerHTML = captions[0]; idx=0; 
+    slide.src=images[0]; caption.innerHTML = captions[0]; idx=0; 
 }
 
 let idx=0;
@@ -410,16 +444,16 @@ function next(){
             slideImg.classList.remove("photo-transition");
             capText.style.opacity = "1";
         }, 300);
-    } else { showGallery(); } 
+    } else { transitionTo('gallery', 'THE GALLERY OF MY HEART'); } 
 }
 
 function showGallery(){ 
-    show('gallery'); pgrid.innerHTML=""; 
+    pgrid.innerHTML=""; 
     images.forEach((src, i) => {
         let img = document.createElement("img"); img.src = src;
         const randomRot = (Math.random() * 10 - 5).toFixed(2);
         img.style.setProperty('--r', randomRot + 'deg');
-        setTimeout(() => { img.classList.add("pop-in"); }, i * 120); 
+        setTimeout(() => { img.classList.add("pop-in"); img.style.opacity="1"; }, i * 120); 
         pgrid.appendChild(img);
     }); 
 }
@@ -428,7 +462,7 @@ let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-
 let curV=0;
 function startVideos(){ curV=0; show('videos'); loadV(); }
 function loadV(){ let v=document.getElementById("mainVideo"); curV<4?music.pause():music.play(); v.src=vids[curV]; v.load(); }
-function nextVideo() { curV++; if(curV < vids.length) { loadV(); } else { show('letter1'); } }
+function nextVideo() { curV++; if(curV < vids.length) { loadV(); } else { transitionTo('letter1', 'PEHLE KUCH BAATIEN'); } }
 
 function signLetter(){ document.getElementById("signatureArea").style.opacity="1"; document.getElementById("signBtn").style.display="none"; document.getElementById("nextBtn").classList.remove("hidden"); }
 
@@ -464,12 +498,10 @@ function celebrate(){
     }
 }
 
-/* --- OUTRO & SECRET SCENE LOGIC --- */
 function playOutro() {
     document.getElementById("outroScreen").style.display = "flex";
     setTimeout(() => {
         document.getElementById("finalEnd").style.opacity = "1";
-        // After "The End" shows for 4 seconds, fade into Secret Scene
         setTimeout(showSecretScene, 4000);
     }, 13000);
 }
@@ -486,7 +518,6 @@ function showSecretScene() {
 
 function restart() { location.reload(); }
 
-/* --- PERSONALIZED RAIN: Anu ❤️ Saru --- */
 setInterval(()=>{
     const h=document.createElement("div"); h.className="heart-rain"; 
     const isName = Math.random() > 0.8;
@@ -504,4 +535,3 @@ setInterval(()=>{
 </script>
 </body>
 </html>
-
