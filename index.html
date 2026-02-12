@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
-body{
+body {
     margin:0; font-family: 'Poppins', sans-serif; color:white; text-align:center; overflow-x:hidden;
     background: #ff758c; transition: background 3s ease;
     cursor: crosshair; 
@@ -16,20 +16,19 @@ body{
 
 h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
 
-/* Brighter Background Track */
+/* --- BACKGROUND ANIMATION --- */
 .bg-strip{position:fixed;inset:0;z-index:-2;opacity:.6; background: #ff758c;}
 .bg-track{display:flex;width:max-content;animation:move 90s linear infinite;}
 .bg-track img{height:100vh;filter:blur(2px); object-fit:cover;}
 @keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* Glowing Pink Heart Rain */
+/* --- RAIN & SPARKLE EFFECTS --- */
 .heart-rain {
     position: fixed; top: -10%; user-select: none; pointer-events: none; z-index: 1000;
     color: #fff1f5; text-shadow: 0 0 10px #ff69b4; animation: fall linear forwards;
 }
 @keyframes fall { to { transform: translateY(115vh) rotate(360deg); } }
 
-/* Confetti Fix */
 .confetti { 
     position: fixed; top: -50px; left: 0; user-select: none; pointer-events: none; 
     z-index: 9999; animation: fallConfetti linear forwards; 
@@ -39,19 +38,51 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
     100% { transform: translateY(120vh) rotate(720deg); opacity: 0; } 
 }
 
-/* Screen Overlays */
+/* --- FIRST PAGE UPGRADES --- */
+.welcome-box {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    max-width: 320px;
+}
+
+.pulse-heart {
+    font-size: 80px;
+    cursor: pointer;
+    filter: drop-shadow(0 0 15px #fff);
+    animation: heartBeat 1.2s infinite;
+    display: inline-block;
+    user-select: none;
+    margin: 20px 0;
+}
+
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.25); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); }
+    60% { transform: scale(1); }
+}
+
+.hint-text { font-size: 0.8rem; opacity: 0.8; font-style: italic; }
+
+/* --- SCREEN OVERLAYS --- */
 .screen{
     min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
     padding:20px; box-sizing:border-box; 
-    background: rgba(255, 255, 255, 0.15); 
+    background: rgba(255, 255, 255, 0.12); 
     backdrop-filter: blur(4px); 
     opacity:0; transform:translateY(30px); transition:.8s ease;
 }
 .screen.show{opacity:1; transform:translateY(0)}
 .hidden{display:none}
 
+/* --- CONTENT STYLING --- */
 .pgrid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; width:100%; max-width:320px; margin: 0 auto; }
-.pgrid img{ width:100%; height:100px; object-fit:cover; border-radius:8px; border:2px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+.pgrid img{ width:100%; height:100px; object-fit:cover; border-radius:8px; border:2px solid white; }
 
 .video-wrapper { width: 280px; aspect-ratio: 9/16; background: #000; border-radius: 15px; overflow: hidden; border: 3px solid white; margin: 10px auto; }
 #mainVideo { width:100%; height:100%; object-fit:cover; }
@@ -61,31 +92,30 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
     border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 8px 32px rgba(255, 105, 180, 0.2);
 }
 
-#signatureArea { font-family: 'Great Vibes', cursive; font-size: 3rem; color: #ffe066; height: 60px; opacity: 0; transition: 1.5s; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+#signatureArea { font-family: 'Great Vibes', cursive; font-size: 3rem; color: #ffe066; height: 60px; opacity: 0; transition: 1.5s; }
 
-/* FINAL KEEPSAKE CARD */
+/* --- FINAL PAGE UPGRADES --- */
 .final-keepsake {
     display: none; background: rgba(255, 255, 255, 0.2); border: 2px solid white;
     padding: 30px 20px; border-radius: 20px; backdrop-filter: blur(10px);
     box-shadow: 0 0 30px rgba(255, 255, 255, 0.4); animation: zoomIn 1s ease forwards;
-    max-width: 300px; margin-top: 20px;
+    max-width: 300px;
 }
 @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
 #yesText {
     display: none; font-family: 'Dancing Script', cursive; font-size: 2.2rem;
-    line-height: 1.3; color: #fff; text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
-    animation: pulse 2s infinite; margin-top: 20px;
+    color: #fff; text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
+    animation: pulse 2s infinite; margin-bottom: 15px;
 }
 @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
-/* Sparkle */
-.sparkle { position: fixed; pointer-events: none; z-index: 9999; font-size: 20px; transition: opacity 0.8s, transform 0.8s; }
-
 button{ 
-    margin-top:15px; padding:10px 20px; border-radius:20px; border:none; cursor:pointer; 
+    margin-top:15px; padding:10px 25px; border-radius:25px; border:none; cursor:pointer; 
     font-weight:600; background:white; color:#ff4e50; box-shadow: 0 4px 15px rgba(255,255,255,0.4);
 }
+
+.sparkle { position: fixed; pointer-events: none; z-index: 9999; font-size: 20px; transition: opacity 0.8s, transform 0.8s; }
 </style>
 </head>
 <body>
@@ -94,8 +124,11 @@ button{
 <audio id="music" src="Perfect.mp3" loop></audio>
 
 <div id="s1" class="screen show">
-    <h2 style="color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5);">Tap the heart meri princess 💖</h2>
-    <div onclick="start()" style="cursor:pointer; font-size:80px; filter: drop-shadow(0 0 10px #fff);">💖</div>
+    <div class="welcome-box">
+        <h2 style="margin: 0;">Ready for a surprise,<br>Meri Princess? 👑</h2>
+        <div onclick="start()" class="pulse-heart">💖</div>
+        <p class="hint-text">Tap the heart to begin our story...<br>🎧 Recommended</p>
+    </div>
 </div>
 
 <div id="s2" class="screen hidden">
@@ -124,21 +157,7 @@ button{
 <div id="letter1" class="screen hidden">
     <h2>Pehle Kuch Baatien... 🤨</h2>
     <div class="letter-card" style="max-width:320px;">
-        <p style="font-weight: 500;">
-            Kaise batau mai tumhe..🤨<br>
-            Aanko mai tum... 👀<br>
-            Yaadon Mai tum..🤔<br>
-            Neendon mai tumm..😴<br>
-            Khawabo mai tumm..♥️<br><br>
-            Tum ho meri harr baat maii... tum ho meri din aur Raat maii..🌃<br>
-            Tum subh mai tum.. 🌅 shaam mai tumm.. 🌇<br>
-            Soch mai tumm.. kaam mai tumm..😵<br><br>
-            Mere liye paana bhi tum..🙃 Mere liye khona bhi tumm..♥️<br>
-            Mere liye hasna bhi tum 😂... mere liye roona bhi tum.. 😭<br>
-            Aur jaagna aur soona bhi tum.. 😴<br><br>
-            Jau kahi dekhu kahiii.. tum ho vaha tum ho vahii..♥️<br>
-            Kaise batau mai tumhe... tumhare bin toh mai kuch bhi naii..♥️
-        </p>
+        <p>Kaise batau mai tumhe..🤨<br>Aanko mai tum... 👀<br>Yaadon Mai tum..🤔<br>Neendon mai tumm..😴<br>Khawabo mai tumm..♥️<br><br>Tum ho meri harr baat maii... tum ho meri din aur Raat maii..🌃<br>Tum subh mai tum.. 🌅 shaam mai tumm.. 🌇<br>Soch mai tumm.. kaam mai tumm..😵<br><br>Mere liye paana bhi tum..🙃 Mere liye khona bhi tumm..♥️<br>Mere liye hasna bhi tum 😂... mere liye roona bhi tum.. 😭<br>Aur jaagna aur soona bhi tum.. 😴<br><br>Jau kahi dekhu kahiii.. tum ho vaha tum ho vahii..♥️<br>Kaise batau mai tumhe... tumhare bin toh mai kuch bhi naii..♥️</p>
     </div>
     <button onclick="show('letter2')">Agla Khat 💌</button>
 </div>
@@ -146,16 +165,7 @@ button{
 <div id="letter2" class="screen hidden">
     <h2>Sirf Tumhari Chahat... 💦</h2>
     <div class="letter-card" style="max-width:320px;">
-        <p style="font-weight: 500;">
-            Log bachte hai samandar se lekin..<br>
-            hum tumhari aakho mai dubne ko taiyaar hai..💦<br><br>
-            Kisko dekhne ki chahat kare..🫣..<br>
-            tumko dekh liya hai ek baar.. 👀<br><br>
-            Tumahari zulfo ki gehrayi hai bahot or...<br>
-            hum ko pasand nhi aata hai kinara.. 😶‍<br><br>
-            Log kehte hai Chand ka tukda ho tum..🌛..<br>
-            hum kehte hai Chand tukda hai tumhara..🌝
-        </p>
+        <p>Log bachte hai samandar se lekin..<br>hum tumhari aakho mai dubne ko taiyaar hai..💦<br><br>Kisko dekhne ki chahat kare..🫣..<br>tumko dekh liya hai ek baar.. 👀<br><br>Tumahari zulfo ki gehrayi hai bahot or...<br>hum ko pasand nhi aata hai kinara.. 😶‍🌫️<br><br>Log kehte hai Chand ka tukda ho tum..🌛..<br>hum kehte hai Chand tukda hai tumhara..🌝</p>
     </div>
     <button onclick="show('letter3')">Ek Aur Hai... 💖</button>
 </div>
@@ -163,16 +173,7 @@ button{
 <div id="letter3" class="screen hidden">
     <h2>Mera Har Wakt Tum... 🌎</h2>
     <div class="letter-card" style="max-width:320px;">
-        <p style="font-weight: 500;">
-            Duniya ko khushi chaiye 🌎...<br>
-            aur mughe har Khushi mai tum..🫵<br><br>
-            Mere dosto ko wakt chaiye 🧑‍🤝‍🧑...<br>
-            aur mughe har wakt tum..🫂<br><br>
-            Pyaase ko kuuaa chaiye..💦...<br>
-            aur mughe har dua mai tum.. 🤝<br><br>
-            Meri mami ko bahu chaiye.. 🙃<br>
-            aur mughe Bahu ke roop mai tum..♥️
-        </p>
+        <p>Duniya ko khushi chaiye 🌎...<br>aur mughe har Khushi mai tum..🫵<br><br>Mere dosto ko wakt chaiye 🧑‍🤝‍🧑...<br>aur mughe har wakt tum..🫂<br><br>Pyaase ko kuuaa chaiye..💦...<br>aur mughe har dua mai tum.. 🤝<br><br>Meri mami ko bahu chaiye.. 🙃<br>aur mughe Bahu ke roop mai tum..♥️</p>
     </div>
     <div id="signatureArea">ANUJEET</div>
     <button id="signBtn" onclick="signLetter()">Sign Our Forever ✍️</button>
@@ -181,14 +182,14 @@ button{
 
 <div id="heart" class="screen hidden">
     <h2>Open My Heart ❤️</h2>
-    <div onclick="openHeart()" style="font-size:80px; cursor:pointer; filter: drop-shadow(0 0 10px #fff);">❤️</div>
+    <div onclick="openHeart()" style="font-size:80px; cursor:pointer;">❤️</div>
     <div id="heartText" style="margin-top:10px; font-weight: 600;"></div>
     <img id="heartPhoto" style="width:180px; border-radius:15px; border:3px solid white; display:none;">
     <button id="heartBtn" class="hidden" onclick="show('final')">Aage Dekho 💖</button>
 </div>
 
 <div id="final" class="screen hidden">
-    <div id="env" onclick="openLetter()" style="font-size:80px; cursor:pointer; filter: drop-shadow(0 0 15px gold);">💌</div>
+    <div id="env" onclick="openLetter()" style="font-size:80px; cursor:pointer;">💌</div>
     <video id="magicGif" style="display:none; width:200px; border-radius: 15px; border: 2px solid white;" loop muted playsinline><source src="gif.mp4" type="video/mp4"></video>
     
     <div id="proposalArea" style="display:none;">
@@ -199,8 +200,8 @@ button{
         </div>
 
         <div id="finalKeepsake" class="final-keepsake">
-            <h1 id="yesText" style="display:block; margin:0 0 15px 0;">I LOVE YOU FOREVER! 💞</h1>
-            <p style="font-size: 0.9rem; line-height: 1.5; color: #fff;">
+            <h1 id="yesText" style="display:block;">I LOVE YOU FOREVER! 💞</h1>
+            <p style="font-size: 0.9rem; line-height: 1.5; color: #fff; margin-bottom: 20px;">
                 This page is our little secret corner. Whenever you miss me or want to smile, just open this again. You are my forever, Anu. 💍
             </p>
             <button id="restartBtn" style="background:#ff4e50; color:white; border: 2px solid white; font-size: 0.8rem;" onclick="restart()">Watch Memories Again 🔄</button>
@@ -286,7 +287,6 @@ function celebrate(){
     document.getElementById("preYesButtons").style.display="none";
     document.getElementById("proposalHeading").style.display="none";
     document.getElementById("finalKeepsake").style.display="block";
-    
     document.body.style.background = "radial-gradient(circle, #ff9a9e 0%, #fad0c4 100%)";
     
     for(let i=0; i<80; i++){
