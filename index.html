@@ -93,6 +93,46 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
     text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
 }
 
+/* --- UPGRADED GALLERY GRID --- */
+.pgrid { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 12px; 
+    width: 100%; 
+    max-width: 340px; 
+    margin: 20px auto; 
+}
+
+.pgrid img { 
+    width: 100%; 
+    height: 100px; 
+    object-fit: cover; 
+    border: 4px solid white; 
+    border-bottom: 12px solid white; /* Polaroid Style */
+    border-radius: 2px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0;
+    cursor: zoom-in;
+}
+
+/* Staggered pop-in animation */
+.pop-in {
+    animation: polaroidPop 0.6s ease forwards;
+}
+
+@keyframes polaroidPop {
+    from { opacity: 0; transform: translateY(30px) scale(0.8) rotate(var(--r)); }
+    to { opacity: 1; transform: translateY(0) scale(1) rotate(var(--r)); }
+}
+
+/* Zoom effect when tapped */
+.pgrid img:active {
+    transform: scale(1.8) rotate(0deg) !important;
+    z-index: 100;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
 /* --- SCREENS --- */
 .screen{
     min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
@@ -103,9 +143,6 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 }
 .screen.show{opacity:1; transform:translateY(0)}
 .hidden{display:none}
-
-.pgrid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; width:100%; max-width:320px; margin: 0 auto; }
-.pgrid img{ width:100%; height:100px; object-fit:cover; border-radius:8px; border:2px solid white; }
 
 .video-wrapper { width: 280px; aspect-ratio: 9/16; background: #000; border-radius: 15px; overflow: hidden; border: 3px solid white; margin: 10px auto; }
 #mainVideo { width:100%; height:100%; object-fit:cover; }
@@ -329,7 +366,26 @@ function next(){
     } else { showGallery(); } 
 }
 
-function showGallery(){ show('gallery'); pgrid.innerHTML=""; images.forEach(src=>{let img=document.createElement("img"); img.src=src; pgrid.appendChild(img);}); }
+/* --- UPGRADED GALLERY LOGIC --- */
+function showGallery(){ 
+    show('gallery'); 
+    pgrid.innerHTML=""; 
+    images.forEach((src, i) => {
+        let img = document.createElement("img");
+        img.src = src;
+        
+        // Random tilt for the polaroid look
+        const randomRot = (Math.random() * 10 - 5).toFixed(2);
+        img.style.setProperty('--r', randomRot + 'deg');
+        
+        // Pop-in with delay
+        setTimeout(() => {
+            img.classList.add("pop-in");
+        }, i * 120); 
+
+        pgrid.appendChild(img);
+    }); 
+}
 
 let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4","WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4","WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4","WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"];
 let curV=0;
@@ -374,7 +430,7 @@ function celebrate(){
 
 function restart() { location.reload(); }
 
-/* --- PERSONALIZED RAIN: Anu & SARU --- */
+/* --- PERSONALIZED RAIN: Anu ❤️ Saru --- */
 setInterval(()=>{
     const h=document.createElement("div"); h.className="heart-rain"; 
     const isName = Math.random() > 0.8;
@@ -392,5 +448,3 @@ setInterval(()=>{
 </script>
 </body>
 </html>
-
-
