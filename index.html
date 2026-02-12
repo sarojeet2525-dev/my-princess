@@ -30,6 +30,28 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 }
 .intro-active { opacity: 1; transform: scale(1); }
 
+/* --- CINEMATIC OUTRO STYLES --- */
+#outroScreen {
+    position: fixed; inset: 0; background: black; z-index: 9999;
+    display: none; flex-direction: column; align-items: center; justify-content: flex-start;
+    overflow: hidden;
+}
+.credits-container {
+    position: absolute; top: 100%; width: 100%;
+    animation: rollCredits 15s linear forwards;
+    font-family: 'Cinzel', serif;
+}
+@keyframes rollCredits {
+    0% { top: 100%; }
+    100% { top: -120%; }
+}
+.credit-job { color: #aaa; font-size: 0.8rem; letter-spacing: 3px; margin-top: 40px; }
+.credit-name { color: #fff; font-size: 1.6rem; margin-top: 5px; }
+#finalEnd {
+    opacity: 0; font-family: 'Cinzel', serif; font-size: 3rem; color: #ff4d6d;
+    margin: auto; transition: opacity 3s ease;
+}
+
 /* --- BACKGROUND ANIMATION --- */
 .bg-strip{position:fixed;inset:0;z-index:-2;opacity:.6; background: #ff758c;}
 .bg-track{display:flex;width:max-content;animation:move 90s linear infinite;}
@@ -197,6 +219,22 @@ button{
 <div class="bg-strip" id="mainBg"><div class="bg-track" id="bgTrack"></div></div>
 <audio id="music" src="Perfect.mp3" loop></audio>
 
+<div id="outroScreen">
+    <div class="credits-container">
+        <div class="credit-job">THE PRINCESS</div>
+        <div class="credit-name">ANU</div>
+        <div class="credit-job">HER PROTECTOR</div>
+        <div class="credit-name">ANUJEET</div>
+        <div class="credit-job">DIRECTED BY</div>
+        <div class="credit-name">TRUE LOVE</div>
+        <div class="credit-job">LOCATION</div>
+        <div class="credit-name">IN OUR HEARTS</div>
+        <div class="credit-job">SOUNDTRACK</div>
+        <div class="credit-name">PERFECT - ED SHEERAN</div>
+    </div>
+    <div id="finalEnd">THE END</div>
+</div>
+
 <div id="s1" class="screen show">
     <div class="welcome-box">
         <h2 style="margin: 0;">Ready for a surprise,<br>Meri Princess? 👑</h2>
@@ -285,6 +323,7 @@ button{
             <p style="font-size: 0.9rem; line-height: 1.5; color: #fff; margin-bottom: 20px;">
                 This page is our little secret corner. Whenever you miss me or want to smile, just open this again. You are my forever, Anu. 💍
             </p>
+            <button onclick="playOutro()" style="background: gold; color: black; border: 2px solid white;">The End ✨</button>
             <button id="restartBtn" style="background:#ff4e50; color:white; border: 2px solid white; font-size: 0.8rem;" onclick="restart()">Watch Memories Again 🔄</button>
         </div>
     </div>
@@ -422,7 +461,7 @@ function showGallery(){
     }); 
 }
 
-let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4","WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4","WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4","WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"];
+let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-07.mp4","WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4","WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4","WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"];
 let curV=0;
 function startVideos(){ curV=0; show('videos'); loadV(); }
 function loadV(){ let v=document.getElementById("mainVideo"); curV<4?music.pause():music.play(); v.src=vids[curV]; v.load(); }
@@ -461,6 +500,15 @@ function celebrate(){
         document.body.appendChild(c);
         setTimeout(()=>c.remove(), 5000);
     }
+}
+
+/* --- OUTRO LOGIC --- */
+function playOutro() {
+    const screen = document.getElementById("outroScreen");
+    screen.style.display = "flex";
+    setTimeout(() => {
+        document.getElementById("finalEnd").style.opacity = "1";
+    }, 13000);
 }
 
 function restart() { location.reload(); }
