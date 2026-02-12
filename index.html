@@ -8,78 +8,41 @@
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
-:root {
-    --pink: #ff758c;
-    --purple: #6a11cb;
-    --gold: #ffe066;
-}
-
 body {
     margin:0; font-family: 'Poppins', sans-serif; color:white; text-align:center; overflow-x:hidden;
-    background: var(--pink); transition: background 2s ease;
+    background: #ff758c; 
     cursor: crosshair; 
 }
 
 h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
 
-/* --- BACKGROUND ANIMATION --- */
-.bg-strip{position:fixed;inset:0;z-index:-2;opacity:.4; background: transparent;}
+/* --- ORIGINAL BACKGROUND PHOTO STRIP --- */
+.bg-strip{position:fixed;inset:0;z-index:-2;opacity:.6; background: #ff758c;}
 .bg-track{display:flex;width:max-content;animation:move 90s linear infinite;}
 .bg-track img{height:100vh;filter:blur(3px); object-fit:cover;}
 @keyframes move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* --- RAIN EFFECTS --- */
+/* --- RAIN & SPARKLES --- */
 .heart-rain {
     position: fixed; top: -10%; user-select: none; pointer-events: none; z-index: 1000;
     color: #fff1f5; text-shadow: 0 0 10px #ff69b4; animation: fall linear forwards;
 }
 @keyframes fall { to { transform: translateY(115vh) rotate(360deg); } }
 
-/* --- ENVELOPE & LETTER STYLING --- */
-.envelope-wrapper {
-    perspective: 1000px;
-    margin: 20px auto;
-    cursor: pointer;
+.sparkle { position: fixed; pointer-events: none; z-index: 9999; font-size: 20px; transition: opacity 0.8s, transform 0.8s; }
+
+/* --- SCREENS --- */
+.screen{
+    min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
+    padding:20px; box-sizing:border-box; 
+    background: rgba(255, 255, 255, 0.12); 
+    backdrop-filter: blur(4px); 
+    opacity:0; transform:translateY(30px); transition:.8s ease;
 }
+.screen.show{opacity:1; transform:translateY(0)}
+.hidden{display:none}
 
-.envelope {
-    position: relative;
-    width: 250px; height: 150px;
-    background: #ff4d6d;
-    border-radius: 0 0 10px 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    transition: 0.5s;
-}
-
-.envelope::before {
-    content: ''; position: absolute; top: 0; z-index: 2;
-    border-left: 125px solid transparent; border-right: 125px solid transparent;
-    border-top: 90px solid #ff758c; transform-origin: top; transition: 0.5s;
-}
-
-.envelope.open::before { transform: rotateX(180deg); z-index: 0; }
-
-.letter-paper {
-    background: #fff9e6;
-    color: #333;
-    padding: 25px;
-    width: 85%;
-    max-width: 320px;
-    border-radius: 5px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.3rem;
-    line-height: 1.5;
-    text-align: left;
-    margin-top: -50px;
-    transform: translateY(20px);
-    opacity: 0;
-    transition: 1s all ease;
-}
-
-.letter-paper.visible { opacity: 1; transform: translateY(0) rotate(-1deg); }
-
-/* --- GRID & POLAROID --- */
+/* --- POLAROID GALLERY --- */
 .pgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; max-width: 340px; margin: 20px auto; }
 .pgrid img { 
     width: 100%; height: 100px; object-fit: cover; border: 4px solid white; border-bottom: 12px solid white;
@@ -89,13 +52,31 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 @keyframes polaroidPop { from { opacity: 0; transform: scale(0.8) rotate(var(--r)); } to { opacity: 1; transform: scale(1) rotate(var(--r)); } }
 .pgrid img:active { transform: scale(1.8) rotate(0deg) !important; z-index: 100; }
 
-/* --- GENERAL UTILITY --- */
-.screen{ min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px; box-sizing:border-box; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(4px); opacity:0; transform:translateY(30px); transition:.8s ease; }
-.screen.show{opacity:1; transform:translateY(0)}
-.hidden{display:none}
-button{ margin-top:15px; padding:10px 25px; border-radius:25px; border:none; cursor:pointer; font-weight:600; background:white; color:#ff4e50; box-shadow: 0 4px 15px rgba(255,255,255,0.4); }
+/* --- ENVELOPE & FULL LETTER STYLING --- */
+.envelope {
+    position: relative; width: 220px; height: 130px; background: #ff4d6d;
+    border-radius: 0 0 10px 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); cursor: pointer;
+}
+.envelope::before {
+    content: ''; position: absolute; top: 0; border-left: 110px solid transparent;
+    border-right: 110px solid transparent; border-top: 80px solid #ff758c;
+    transform-origin: top; transition: 0.5s; z-index: 2;
+}
+.envelope.open::before { transform: rotateX(180deg); z-index: 0; }
 
-#signatureArea { font-family: 'Great Vibes', cursive; font-size: 3rem; color: #ffe066; height: 60px; opacity: 0; transition: 1.5s; }
+.letter-paper {
+    background: #fff9e6; color: #333; padding: 25px; width: 90%; max-width: 320px;
+    border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    font-family: 'Poppins', sans-serif; font-size: 0.95rem; line-height: 1.6;
+    text-align: left; opacity: 0; transform: translateY(20px); transition: 0.8s;
+    max-height: 70vh; overflow-y: auto; /* Allows scrolling if text is very long */
+}
+.letter-paper p { margin-bottom: 10px; }
+.letter-paper.visible { opacity: 1; transform: translateY(-10px) rotate(-1deg); }
+
+/* --- BUTTONS & MISC --- */
+button{ margin-top:15px; padding:10px 25px; border-radius:25px; border:none; cursor:pointer; font-weight:600; background:white; color:#ff4e50; box-shadow: 0 4px 15px rgba(255,255,255,0.4); }
+#signatureArea { font-family: 'Great Vibes', cursive; font-size: 3rem; color: #ffeb3b; height: 60px; opacity: 0; transition: 1.5s; text-align: center; }
 </style>
 </head>
 <body>
@@ -105,23 +86,22 @@ button{ margin-top:15px; padding:10px 25px; border-radius:25px; border:none; cur
 
 <div id="s1" class="screen show">
     <div style="background: rgba(255,255,255,0.2); padding: 30px; border-radius: 25px; backdrop-filter: blur(10px);">
-        <h2 style="margin: 0;">Ready for a surprise,<br>Meri Princess? 👑</h2>
+        <h2>Ready for a surprise,<br>Meri Princess? 👑</h2>
         <div onclick="start()" style="font-size: 80px; cursor: pointer; animation: heartBeat 1.2s infinite; display: inline-block;">💖</div>
-        <p style="font-size: 0.8rem; opacity: 0.8;">Tap the heart to begin...</p>
     </div>
 </div>
 
 <div id="s2" class="screen hidden">
     <h2>Kuch acchii yaadien 📸</h2>
-    <img id="slide" style="width:260px; border-radius:15px; border:4px solid white; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+    <img id="slide" style="width:260px; border:4px solid white; border-radius:15px;">
     <div id="caption" style="margin-top:15px; font-family:'Dancing Script'; font-size:1.5rem;"></div>
     <button onclick="next()">MERI CUTIEE💖</button>
 </div>
 
 <div id="gallery" class="screen hidden">
-    <h2>The Gallery Of My Heart 📸</h2>
+    <h2>Our Memory Wall 📸</h2>
     <div id="pgrid" class="pgrid"></div>
-    <button onclick="show('message')">MERII PRINCESS 💖</button>
+    <button onclick="show('message')">CONTINUE 💖</button>
 </div>
 
 <div id="message" class="screen hidden">
@@ -137,39 +117,48 @@ button{ margin-top:15px; padding:10px 25px; border-radius:25px; border:none; cur
 
 <div id="letter1" class="screen hidden">
     <h2>Pehle Kuch Baatien... ✉️</h2>
-    <div class="envelope-wrapper" id="envWrap1" onclick="openEnvelope(1)">
-        <div class="envelope" id="env1"><div style="padding-top:100px; font-weight:bold;">Tap to Open</div></div>
+    <div class="envelope" id="env1" onclick="openEnv(1)">
+        <div style="padding-top:85px; font-weight:bold;">Tap to Open</div>
     </div>
     <div id="paper1" class="letter-paper">
-        <p>Kaise batau mai tumhe..🤨<br>Aanko mai tum... 👀<br>Yaadon Mai tum..🤔<br>Neendon mai tumm..😴<br>Khawabo mai tumm..♥️<br><br>Tum ho meri harr baat maii... tum ho meri din aur Raat maii..🌃</p>
+        <p>Kaise batau mai tumhe..🤨<br>Aanko mai tum... 👀<br>Yaadon Mai tum..🤔<br>Neendon mai tumm..😴<br>Khawabo mai tumm..♥️</p>
+        <p>Tum ho meri harr baat maii... tum ho meri din aur Raat maii..🌃<br>Tum subh mai tum.. 🌅 shaam mai tumm.. 🌇<br>Soch mai tumm.. kaam mai tumm..😵</p>
+        <p>Mere liye paana bhi tum..🙃 Mere liye khona bhi tumm..♥️<br>Mere liye hasna bhi tum 😂... mere liye roona bhi tum.. 😭<br>Aur jaagna aur soona bhi tum.. 😴</p>
+        <p>Jau kahi dekhu kahiii.. tum ho vaha tum ho vahii..♥️<br>Kaise batau mai tumhe... tumhare bin toh mai kuch bhi naii..♥️</p>
         <button onclick="show('letter2')">Agla Khat 💌</button>
     </div>
 </div>
 
 <div id="letter2" class="screen hidden">
     <h2>Sirf Tumhari Chahat... 💦</h2>
-    <div class="letter-paper visible" style="transform: rotate(1deg); background: #f0f0ff;">
-        <p>Log bachte hai samandar se lekin..<br>hum tumhari aakho mai dubne ko taiyaar hai..💦<br><br>Kisko dekhne ki chahat kare..🫣..<br>tumko dekh liya hai ek baar.. 👀<br><br>Log kehte hai Chand ka tukda ho tum..🌛</p>
-        <button onclick="show('letter3')">Ek Aur Hai... 💖</button>
+    <div class="letter-paper visible" style="background:#fff;">
+        <p>Log bachte hai samandar se lekin..<br>hum tumhari aakho mai dubne ko taiyaar hai..💦</p>
+        <p>Kisko dekhne ki chahat kare..🫣..<br>tumko dekh liya hai ek baar.. 👀</p>
+        <p>Tumahari zulfo ki gehrayi hai bahot or...<br>hum ko pasand nhi aata hai kinara.. 😶‍🌫️</p>
+        <p>Log kehte hai Chand ka tukda ho tum..🌛..<br>hum kehte hai Chand tukda hai tumhara..🌝</p>
+        <button onclick="show('letter3')">One More... 💖</button>
     </div>
 </div>
 
 <div id="letter3" class="screen hidden">
     <h2>Mera Har Wakt Tum... 🌎</h2>
-    <div class="letter-paper visible" style="background: #fffdf0; border: 2px solid gold;">
-        <p>Duniya ko khushi chaiye 🌎...<br>aur mughe har Khushi mai tum..🫵<br><br>Mere dosto ko wakt chaiye 🧑‍🤝‍🧑...<br>aur mughe har wakt tum..🫂<br><br>Meri mami ko bahu chaiye.. 🙃<br>aur mughe Bahu ke roop mai tum..♥️</p>
+    <div class="letter-paper visible" style="border: 2px solid gold;">
+        <p>Duniya ko khushi chaiye 🌎...<br>aur mughe har Khushi mai tum..🫵</p>
+        <p>Mere dosto ko wakt chaiye 🧑‍🤝‍🧑...<br>aur mughe har wakt tum..🫂</p>
+        <p>Pyaase ko kuuaa chaiye..💦...<br>aur mughe har dua mai tum.. 🤝</p>
+        <p>Meri mami ko bahu chaiye.. 🙃<br>aur mughe Bahu ke roop mai tum..♥️</p>
         <div id="signatureArea">Anujeet</div>
     </div>
     <button id="signBtn" onclick="signLetter()">Sign Our Forever ✍️</button>
-    <button id="nextBtn" class="hidden" onclick="show('heart')">Aage Chale? ❤️</button>
+    <button id="nextBtn" class="hidden" onclick="show('heart')">Next ❤️</button>
 </div>
 
 <div id="heart" class="screen hidden">
     <h2>Open My Heart ❤️</h2>
     <div onclick="openHeart()" style="font-size:80px; cursor:pointer;">❤️</div>
-    <div id="heartText" style="margin-top:10px; font-weight:600;"></div>
-    <img id="heartPhoto" style="width:180px; border-radius:15px; border:3px solid white; display:none;">
-    <button id="heartBtn" class="hidden" onclick="show('final')">Aage Dekho 💖</button>
+    <div id="heartText" style="margin-top:10px; font-weight:600; font-family:'Dancing Script'; font-size: 1.2rem;"></div>
+    <img id="heartPhoto" style="width:180px; border-radius:15px; border:3px solid white; display:none; margin-top: 10px;">
+    <button id="heartBtn" class="hidden" onclick="show('final')">Final Surprise 💖</button>
 </div>
 
 <div id="final" class="screen hidden">
@@ -182,8 +171,8 @@ button{ margin-top:15px; padding:10px 25px; border-radius:25px; border:none; cur
     </div>
     <div id="finalKeepsake" style="display:none; background:rgba(255,255,255,0.2); padding:20px; border-radius:20px; border:2px solid white;">
         <h1 style="font-family:'Dancing Script'">I LOVE YOU FOREVER! 💞</h1>
-        <p>Anu & Saru Forever 💍</p>
-        <button onclick="location.reload()">Restart 🔄</button>
+        <p>This page is our little secret corner. Whenever you miss me or want to smile, just open this again. You are my forever, Anu. 💍</p>
+        <button onclick="location.reload()">Watch Memories Again 🔄</button>
     </div>
 </div>
 
@@ -192,9 +181,12 @@ const music=document.getElementById("music");
 const slide=document.getElementById("slide");
 const caption=document.getElementById("caption");
 const pgrid=document.getElementById("pgrid");
+const bgTrack=document.getElementById("bgTrack");
 
 let images=["WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg","WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg","WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg","WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"];
 let captions=["The most beautiful girl! 😍","Meri cute smile! 💖","Special moments ✨","Jitna dekhu utna kam 👀","Tera chehra meri dua 🤲","Favourite person 🫂","Ek ladki ko dekha... 🎶","My heart belongs to you ❤️","Hayee adayein! 😉","Perfect way 💍","Shining star ⭐","Tu hai toh sab hai 🌎","Love you moon & back! 🌛"];
+
+images.concat(images).forEach(src=>{let img=document.createElement("img"); img.src=src; bgTrack.appendChild(img);});
 
 function start(){ music.play(); show('s2'); slide.src=images[0]; caption.innerHTML=captions[0]; }
 
@@ -221,19 +213,15 @@ function showGallery(){
     });
 }
 
-function openEnvelope(n){
+function openEnv(n){
     document.getElementById('env'+n).classList.add('open');
-    setTimeout(()=>document.getElementById('paper'+n).classList.add('visible'), 600);
+    setTimeout(()=>document.getElementById('paper'+n).classList.add('visible'), 500);
 }
 
 function show(id){
     document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('show'); s.classList.add('hidden');});
     let el=document.getElementById(id); el.classList.remove('hidden');
     setTimeout(()=>el.classList.add('show'),20);
-    
-    // Background Mood Shifting
-    if(id==='letter2') document.body.style.background = "#4a148c";
-    if(id==='letter3') document.body.style.background = "#f57f17";
     if(id==='message') typeWriter("Abhi toh baaki hai meri princess... 💖", "typedMsg");
 }
 
@@ -245,7 +233,10 @@ function typeWriter(text, elementId) {
 function updateTimer() {
     const diff=new Date()-new Date("2024-01-14T00:00:00");
     const d=Math.floor(diff/86400000);
-    document.getElementById("togetherTimer").innerHTML=`Hum Saath Hain: ${d} Din Se ❤️`;
+    const h=Math.floor((diff/3600000)%24);
+    const m=Math.floor((diff/60000)%60);
+    const s=Math.floor((diff/1000)%60);
+    document.getElementById("togetherTimer").innerHTML=`Hum Saath Hain: ${d} Din, ${h} Ghante, ${m} Mins ❤️`;
 }
 setInterval(updateTimer,1000);
 
@@ -258,36 +249,41 @@ function nextVideo(){ curV++; if(curV<vids.length) loadV(); else show('letter1')
 function signLetter(){ document.getElementById("signatureArea").style.opacity="1"; document.getElementById("signBtn").classList.add('hidden'); document.getElementById("nextBtn").classList.remove('hidden'); }
 
 function openHeart(){ 
-    typeWriter("MERA DILL CHURA LIYA ❤️", "heartText"); 
+    typeWriter("YEH KAUN HAI JISNE MERA DILL CHURA LIYA ❤️", "heartText"); 
     setTimeout(()=>{ document.getElementById("heartPhoto").src=images[1]; document.getElementById("heartPhoto").style.display="block"; document.getElementById("heartBtn").classList.remove('hidden'); },1500);
 }
 
 function openFinal(){
     document.getElementById("envFinal").style.display="none";
     let g=document.getElementById("magicGif"); g.style.display="block"; g.play();
-    setTimeout(()=>{ document.getElementById("proposalArea").style.display="block"; typeWriter("Will you stay forever, Anu? 💍", "proposalHeading"); },2000);
+    setTimeout(()=>{ document.getElementById("proposalArea").style.display="block"; typeWriter("Will you stay with me forever, Anu? 💍", "proposalHeading"); },2000);
 }
 
 function celebrate(){
-    if(navigator.vibrate) navigator.vibrate([100,50,100]);
     document.getElementById("proposalArea").style.display="none";
     document.getElementById("finalKeepsake").style.display="block";
-    confettiRain();
-}
-
-function confettiRain(){
-    for(let i=0; i<50; i++){
-        let c=document.createElement("div"); c.innerHTML="💖"; c.style.position="fixed"; c.style.left=Math.random()*100+"vw";
-        c.style.top="-10px"; c.style.animation=`fall ${Math.random()*3+2}s linear forwards`;
+    for(let i=0; i<60; i++){
+        let c=document.createElement("div"); c.innerHTML=["💖","✨","💍","💕"][Math.floor(Math.random()*4)];
+        c.style.position="fixed"; c.style.left=Math.random()*100+"vw";
+        c.style.top="-10px"; c.style.fontSize=(Math.random()*20+15)+"px";
+        c.style.animation=`fall ${Math.random()*3+2}s linear forwards`;
         document.body.appendChild(c);
+        setTimeout(()=>c.remove(), 5000);
     }
 }
+
+document.addEventListener('mousemove', (e) => {
+    const s = document.createElement("div"); s.className = "sparkle";
+    s.innerHTML = "✨"; s.style.left = e.clientX + "px"; s.style.top = e.clientY + "px";
+    document.body.appendChild(s);
+    setTimeout(() => { s.style.opacity = "0"; s.style.transform = "scale(0.5)"; }, 50);
+    setTimeout(() => s.remove(), 800);
+});
 
 setInterval(()=>{
     const h=document.createElement("div"); h.className="heart-rain"; 
     const isName=Math.random()>0.8; h.innerHTML=isName?"Anu❤️Saru":"💗";
-    h.style.left=Math.random()*100+"vw"; h.style.fontSize=isName?"20px":"15px";
-    if(isName) h.style.color="#ffe066";
+    h.style.left=Math.random()*100+"vw"; h.style.fontSize=isName?"18px":"14px";
     h.style.animationDuration=(Math.random()*3+2)+"s"; document.body.appendChild(h);
     setTimeout(()=>h.remove(),5000);
 }, 300);
