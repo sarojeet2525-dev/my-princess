@@ -460,49 +460,18 @@ function showGallery(){
 
 let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4","WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4","WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4","WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"];
 let curV=0;
+function startVideos(){ curV=0; show('videos'); loadV(); }
+function loadV(){ let v=document.getElementById("mainVideo"); curV<4?music.pause():music.play(); v.src=vids[curV]; v.load(); }
+function nextVideo() { curV++; if(curV < vids.length) { loadV(); } else { transitionTo('letter1', 'PEHLE KUCH BAATIEN'); } }
 
-function startVideos(){ 
-    curV=0; 
-    show('videos'); 
-    
-    // Deep reset for the video element
-    const v = document.getElementById("mainVideo");
-    v.pause();
-    v.src = ""; 
-    v.load();
-    
-    // Small delay to ensure the "videos" screen is fully visible before loading
-    setTimeout(() => {
-        loadV();
-    }, 300);
-}
+function signLetter(){ document.getElementById("signatureArea").style.opacity="1"; document.getElementById("signBtn").style.display="none"; document.getElementById("nextBtn").classList.remove("hidden"); }
 
-function loadV(){ 
-    let v=document.getElementById("mainVideo"); 
-    
-    // Music logic
-    if(curV < 4) {
-        music.pause();
-    } else {
-        music.play();
-    }
-
-    // Assign the source
-    v.src = vids[curV];
-    v.load(); 
-
-    // The Fix: Use a Promise to play and a fallback if it fails
-    var playPromise = v.play();
-
-    if (playPromise !== undefined) {
-        playPromise.then(_ => {
-            // Video started playing successfully
-        }).catch(error => {
-            // Auto-play was prevented, show controls so she can tap it
-            v.controls = true;
-            console.log("Playback prevented: ", error);
-        });
-    }
+function openHeart(){
+    typeWriter("YEH KAUN HAI JISNE MERA DILL CHURA LIYA ❤️", "heartText");
+    setTimeout(()=>{
+        const p=document.getElementById("heartPhoto"); p.src=images[1]; p.style.display="block";
+        setTimeout(()=>document.getElementById("heartBtn").classList.remove("hidden"), 2000);
+    }, 1500);
 }
 
 function openLetter(){
@@ -566,7 +535,3 @@ setInterval(()=>{
 </script>
 </body>
 </html>
-
-
-
-
