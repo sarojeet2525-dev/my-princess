@@ -47,9 +47,26 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 }
 .credit-job { color: #aaa; font-size: 0.8rem; letter-spacing: 3px; margin-top: 40px; }
 .credit-name { color: #fff; font-size: 1.6rem; margin-top: 5px; }
+
 #finalEnd {
     opacity: 0; font-family: 'Cinzel', serif; font-size: 3rem; color: #ff4d6d;
     margin: auto; transition: opacity 3s ease;
+}
+
+/* --- SECRET POST-CREDIT PHOTO --- */
+#secretScene {
+    position: fixed; inset: 0; background: black; z-index: 10000;
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 2s ease;
+}
+#secretPhoto {
+    width: 250px; border: 5px solid white; border-radius: 15px;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3); transform: scale(0.8);
+    transition: transform 2s ease;
+}
+#secretQuote {
+    margin-top: 25px; font-family: 'Dancing Script', cursive; font-size: 1.8rem;
+    padding: 0 20px; opacity: 0; transition: opacity 2s ease 1s;
 }
 
 /* --- BACKGROUND ANIMATION --- */
@@ -76,25 +93,15 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 
 /* --- FIRST PAGE: GLASSMORPHISM --- */
 .welcome-box {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    padding: 30px;
-    border-radius: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    max-width: 320px;
+    background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);
+    padding: 30px; border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 320px;
 }
 
 .pulse-heart {
-    font-size: 80px;
-    cursor: pointer;
-    filter: drop-shadow(0 0 15px #fff);
-    animation: heartBeat 1.2s infinite;
-    display: inline-block;
-    user-select: none;
-    margin: 20px 0;
+    font-size: 80px; cursor: pointer; filter: drop-shadow(0 0 15px #fff);
+    animation: heartBeat 1.2s infinite; display: inline-block; user-select: none; margin: 20px 0;
 }
-
 @keyframes heartBeat {
     0% { transform: scale(1); }
     15% { transform: scale(1.25); }
@@ -105,76 +112,36 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 
 .hint-text { font-size: 0.8rem; opacity: 0.8; font-style: italic; }
 
-/* --- SLIDESHOW: BLOOM & TILT --- */
 #slide {
-    width: 260px; 
-    border-radius: 15px; 
-    border: 4px solid white;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    width: 260px; border-radius: 15px; border: 4px solid white;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .photo-transition {
-    opacity: 0 !important;
-    transform: scale(1.1) rotate(10deg) !important;
-    filter: blur(8px);
+    opacity: 0 !important; transform: scale(1.1) rotate(10deg) !important; filter: blur(8px);
 }
 
 #caption {
-    margin-top: 15px;
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.5rem;
-    height: 30px;
-    transition: opacity 0.4s;
-    text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+    margin-top: 15px; font-family: 'Dancing Script', cursive; font-size: 1.5rem;
+    height: 30px; transition: opacity 0.4s; text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
 }
 
-/* --- UPGRADED GALLERY GRID --- */
 .pgrid { 
-    display: grid; 
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 12px; 
-    width: 100%; 
-    max-width: 340px; 
-    margin: 20px auto; 
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; 
+    width: 100%; max-width: 340px; margin: 20px auto; 
 }
-
 .pgrid img { 
-    width: 100%; 
-    height: 100px; 
-    object-fit: cover; 
-    border: 4px solid white; 
-    border-bottom: 12px solid white; /* Polaroid Style */
-    border-radius: 2px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    opacity: 0;
-    cursor: zoom-in;
+    width: 100%; height: 100px; object-fit: cover; border: 4px solid white; 
+    border-bottom: 12px solid white; border-radius: 2px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0; cursor: zoom-in;
 }
+.pop-in { animation: polaroidPop 0.6s ease forwards; }
+@keyframes polaroidPop { from { opacity: 0; transform: translateY(30px) scale(0.8) rotate(var(--r)); } to { opacity: 1; transform: translateY(0) scale(1) rotate(var(--r)); } }
+.pgrid img:active { transform: scale(1.8) rotate(0deg) !important; z-index: 100; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
 
-/* Staggered pop-in animation */
-.pop-in {
-    animation: polaroidPop 0.6s ease forwards;
-}
-
-@keyframes polaroidPop {
-    from { opacity: 0; transform: translateY(30px) scale(0.8) rotate(var(--r)); }
-    to { opacity: 1; transform: translateY(0) scale(1) rotate(var(--r)); }
-}
-
-/* Zoom effect when tapped */
-.pgrid img:active {
-    transform: scale(1.8) rotate(0deg) !important;
-    z-index: 100;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-}
-
-/* --- SCREENS --- */
 .screen{
     min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
-    padding:20px; box-sizing:border-box; 
-    background: rgba(255, 255, 255, 0.12); 
-    backdrop-filter: blur(4px); 
+    padding:20px; box-sizing:border-box; background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(4px); 
     opacity:0; transform:translateY(30px); transition:.8s ease;
 }
 .screen.show{opacity:1; transform:translateY(0)}
@@ -190,12 +157,10 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 
 #signatureArea { font-family: 'Great Vibes', cursive; font-size: 3rem; color: #ffe066; height: 60px; opacity: 0; transition: 1.5s; }
 
-/* --- FINAL KEEPSAKE --- */
 .final-keepsake {
     display: none; background: rgba(255, 255, 255, 0.2); border: 2px solid white;
     padding: 30px 20px; border-radius: 20px; backdrop-filter: blur(10px);
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.4); animation: zoomIn 1s ease forwards;
-    max-width: 300px;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.4); animation: zoomIn 1s ease forwards; max-width: 300px;
 }
 @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
@@ -233,6 +198,12 @@ button{
         <div class="credit-name">PERFECT - ED SHEERAN</div>
     </div>
     <div id="finalEnd">THE END</div>
+</div>
+
+<div id="secretScene">
+    <img id="secretPhoto" src="WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg">
+    <div id="secretQuote">"Every love story is beautiful, but ours is my favorite." ❤️</div>
+    <button style="margin-top: 40px; font-size: 0.8rem; background: rgba(255,255,255,0.2); color: white;" onclick="restart()">Watch Memories Again 🔄</button>
 </div>
 
 <div id="s1" class="screen show">
@@ -421,10 +392,7 @@ function startIntro() {
 }
 
 function start(){ 
-    show('s2'); 
-    slide.src=images[0]; 
-    caption.innerHTML = captions[0];
-    idx=0; 
+    show('s2'); slide.src=images[0]; caption.innerHTML = captions[0]; idx=0; 
 }
 
 let idx=0;
@@ -436,8 +404,7 @@ function next(){
         slideImg.classList.add("photo-transition");
         capText.style.opacity = "0";
         setTimeout(() => {
-            slideImg.src = images[idx];
-            capText.innerHTML = captions[idx];
+            slideImg.src = images[idx]; capText.innerHTML = captions[idx];
             const randomTilt = (Math.random() * 8 - 4).toFixed(2);
             slideImg.style.transform = `rotate(${randomTilt}deg)`;
             slideImg.classList.remove("photo-transition");
@@ -447,16 +414,12 @@ function next(){
 }
 
 function showGallery(){ 
-    show('gallery'); 
-    pgrid.innerHTML=""; 
+    show('gallery'); pgrid.innerHTML=""; 
     images.forEach((src, i) => {
-        let img = document.createElement("img");
-        img.src = src;
+        let img = document.createElement("img"); img.src = src;
         const randomRot = (Math.random() * 10 - 5).toFixed(2);
         img.style.setProperty('--r', randomRot + 'deg');
-        setTimeout(() => {
-            img.classList.add("pop-in");
-        }, i * 120); 
+        setTimeout(() => { img.classList.add("pop-in"); }, i * 120); 
         pgrid.appendChild(img);
     }); 
 }
@@ -491,8 +454,7 @@ function celebrate(){
     document.body.style.background = "radial-gradient(circle, #ff9a9e 0%, #fad0c4 100%)";
     
     for(let i=0; i<80; i++){
-        let c = document.createElement("div"); 
-        c.className="confetti";
+        let c = document.createElement("div"); c.className="confetti";
         c.innerHTML = ["💖","✨","🌸","🎉","💕","💍"][Math.floor(Math.random()*6)];
         c.style.left = Math.random()*100+"vw";
         c.style.animationDuration = (Math.random()*3+2)+"s";
@@ -502,13 +464,24 @@ function celebrate(){
     }
 }
 
-/* --- OUTRO LOGIC --- */
+/* --- OUTRO & SECRET SCENE LOGIC --- */
 function playOutro() {
-    const screen = document.getElementById("outroScreen");
-    screen.style.display = "flex";
+    document.getElementById("outroScreen").style.display = "flex";
     setTimeout(() => {
         document.getElementById("finalEnd").style.opacity = "1";
+        // After "The End" shows for 4 seconds, fade into Secret Scene
+        setTimeout(showSecretScene, 4000);
     }, 13000);
+}
+
+function showSecretScene() {
+    const scene = document.getElementById("secretScene");
+    scene.style.display = "flex";
+    setTimeout(() => {
+        scene.style.opacity = "1";
+        document.getElementById("secretPhoto").style.transform = "scale(1)";
+        document.getElementById("secretQuote").style.opacity = "1";
+    }, 100);
 }
 
 function restart() { location.reload(); }
