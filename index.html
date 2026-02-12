@@ -38,7 +38,7 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
     100% { transform: translateY(120vh) rotate(720deg); opacity: 0; } 
 }
 
-/* --- FIRST PAGE UPGRADES --- */
+/* --- FIRST PAGE: GLASSMORPHISM --- */
 .welcome-box {
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
@@ -69,14 +69,13 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 
 .hint-text { font-size: 0.8rem; opacity: 0.8; font-style: italic; }
 
-/* --- SLIDESHOW ANIMATION --- */
+/* --- SLIDESHOW: BLOOM & TILT --- */
 #slide {
     width: 260px; 
     border-radius: 15px; 
     border: 4px solid white;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-    transform: scale(1) rotate(0deg);
 }
 
 .photo-transition {
@@ -91,9 +90,10 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
     font-size: 1.5rem;
     height: 30px;
     transition: opacity 0.4s;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
 }
 
-/* --- SCREEN OVERLAYS --- */
+/* --- SCREENS --- */
 .screen{
     min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
     padding:20px; box-sizing:border-box; 
@@ -104,7 +104,6 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 .screen.show{opacity:1; transform:translateY(0)}
 .hidden{display:none}
 
-/* --- CONTENT STYLING --- */
 .pgrid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; width:100%; max-width:320px; margin: 0 auto; }
 .pgrid img{ width:100%; height:100px; object-fit:cover; border-radius:8px; border:2px solid white; }
 
@@ -118,7 +117,7 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 
 #signatureArea { font-family: 'Great Vibes', cursive; font-size: 3rem; color: #ffe066; height: 60px; opacity: 0; transition: 1.5s; }
 
-/* --- FINAL PAGE UPGRADES --- */
+/* --- FINAL KEEPSAKE --- */
 .final-keepsake {
     display: none; background: rgba(255, 255, 255, 0.2); border: 2px solid white;
     padding: 30px 20px; border-radius: 20px; backdrop-filter: blur(10px);
@@ -157,9 +156,7 @@ button{
 
 <div id="s2" class="screen hidden">
     <h2>Kuch acchii yaadien 📸</h2>
-    <div style="position: relative;">
-        <img id="slide">
-    </div>
+    <img id="slide">
     <div id="caption"></div>
     <button onclick="next()">MERI CUTIEE💖</button>
 </div>
@@ -245,7 +242,6 @@ const bgTrack=document.getElementById("bgTrack");
 
 let images=["WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg","WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg","WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg","WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"];
 
-// Add captions for each image here (Total 13 to match your image list)
 let captions = [
     "The most beautiful girl in the world! 😍",
     "Meri cute si smile wali... 💖",
@@ -261,6 +257,11 @@ let captions = [
     "Tu hai toh sab kuch hai. 🌎",
     "Love you to the moon and back! 🌛"
 ];
+
+function preloadImages() {
+    images.forEach(src => { const img = new Image(); img.src = src; });
+}
+window.onload = preloadImages;
 
 images.concat(images).forEach(src=>{let img=document.createElement("img"); img.src=src; bgTrack.appendChild(img);});
 
@@ -315,27 +316,17 @@ function next(){
     if(idx < images.length){
         const slideImg = document.getElementById("slide");
         const capText = document.getElementById("caption");
-        
-        // Exit
         slideImg.classList.add("photo-transition");
         capText.style.opacity = "0";
-        
         setTimeout(() => {
-            // Update
             slideImg.src = images[idx];
             capText.innerHTML = captions[idx];
-            
-            // Random Tilt
             const randomTilt = (Math.random() * 8 - 4).toFixed(2);
             slideImg.style.transform = `rotate(${randomTilt}deg)`;
-            
-            // Enter
             slideImg.classList.remove("photo-transition");
             capText.style.opacity = "1";
         }, 300);
-    } else {
-        showGallery();
-    } 
+    } else { showGallery(); } 
 }
 
 function showGallery(){ show('gallery'); pgrid.innerHTML=""; images.forEach(src=>{let img=document.createElement("img"); img.src=src; pgrid.appendChild(img);}); }
@@ -363,6 +354,7 @@ function openLetter(){
 }
 
 function celebrate(){
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100]); 
     document.getElementById("preYesButtons").style.display="none";
     document.getElementById("proposalHeading").style.display="none";
     document.getElementById("finalKeepsake").style.display="block";
@@ -382,9 +374,18 @@ function celebrate(){
 
 function restart() { location.reload(); }
 
+/* --- PERSONALIZED RAIN: Anu & SARU --- */
 setInterval(()=>{
-    const h=document.createElement("div"); h.className="heart-rain"; h.innerHTML="💗";
-    h.style.left=Math.random()*100+"vw"; h.style.fontSize=(Math.random()*15+10)+"px";
+    const h=document.createElement("div"); h.className="heart-rain"; 
+    const isName = Math.random() > 0.8;
+    h.innerHTML = isName ? "Anu & SARU" : "💗";
+    h.style.left=Math.random()*100+"vw"; 
+    h.style.fontSize= isName ? "20px" : (Math.random()*15+10)+"px";
+    h.style.fontWeight = isName ? "bold" : "normal";
+    if(isName) {
+        h.style.color = "#ffe066";
+        h.style.textShadow = "0 0 12px #ff69b4";
+    }
     h.style.animationDuration=(Math.random()*3+2)+"s"; document.body.appendChild(h);
     setTimeout(()=>h.remove(), 5000);
 }, 250);
