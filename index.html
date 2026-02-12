@@ -69,6 +69,30 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
 
 .hint-text { font-size: 0.8rem; opacity: 0.8; font-style: italic; }
 
+/* --- SLIDESHOW ANIMATION --- */
+#slide {
+    width: 260px; 
+    border-radius: 15px; 
+    border: 4px solid white;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    transform: scale(1) rotate(0deg);
+}
+
+.photo-transition {
+    opacity: 0 !important;
+    transform: scale(1.1) rotate(10deg) !important;
+    filter: blur(8px);
+}
+
+#caption {
+    margin-top: 15px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.5rem;
+    height: 30px;
+    transition: opacity 0.4s;
+}
+
 /* --- SCREEN OVERLAYS --- */
 .screen{
     min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
@@ -133,7 +157,10 @@ button{
 
 <div id="s2" class="screen hidden">
     <h2>Kuch acchii yaadien 📸</h2>
-    <img id="slide" style="width:260px; border-radius:15px; border:4px solid white;">
+    <div style="position: relative;">
+        <img id="slide">
+    </div>
+    <div id="caption"></div>
     <button onclick="next()">MERI CUTIEE💖</button>
 </div>
 
@@ -212,10 +239,28 @@ button{
 <script>
 const music=document.getElementById("music");
 const slide=document.getElementById("slide");
+const caption=document.getElementById("caption");
 const pgrid=document.getElementById("pgrid");
 const bgTrack=document.getElementById("bgTrack");
 
 let images=["WhatsApp Image 2026-02-03 at 11.51.40 AM (1).jpeg","WhatsApp Image 2026-02-03 at 11.51.41 AM.jpeg","WhatsApp Image 2026-02-03 at 11.51.40 AM.jpeg","WhatsApp Image 2026-02-03 at 1.37.15 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.15 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.16 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.16 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM (2).jpeg","WhatsApp Image 2026-02-03 at 1.37.17 PM.jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM (1).jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM (2).jpeg","WhatsApp Image 2026-02-03 at 1.37.18 PM.jpeg"];
+
+// Add captions for each image here (Total 13 to match your image list)
+let captions = [
+    "The most beautiful girl in the world! 😍",
+    "Meri cute si smile wali... 💖",
+    "Every moment with you is special. ✨",
+    "Jitna dekhu utna kam hai... 👀",
+    "Tera chehra meri har dua mein... 🤲",
+    "You are my favourite person! 🫂",
+    "Ek ladki ko dekha toh aisa laga... 🎶",
+    "My heart belongs to you only. ❤️",
+    "Hayee... yeh adayein! 😉",
+    "Perfect in every single way. 💍",
+    "Shining brighter than the stars. ⭐",
+    "Tu hai toh sab kuch hai. 🌎",
+    "Love you to the moon and back! 🌛"
+];
 
 images.concat(images).forEach(src=>{let img=document.createElement("img"); img.src=src; bgTrack.appendChild(img);});
 
@@ -256,9 +301,43 @@ function show(id){
     if(id==='message') typeWriter("Abhi kahani khatam nahi hui meri princess… 💖", "typedMsg");
 }
 
-function start(){ music.play().catch(()=>{}); show('s2'); slide.src=images[0]; idx=0; }
+function start(){ 
+    music.play().catch(()=>{}); 
+    show('s2'); 
+    slide.src=images[0]; 
+    caption.innerHTML = captions[0];
+    idx=0; 
+}
+
 let idx=0;
-function next(){ idx++; if(idx<images.length){slide.src=images[idx];} else{showGallery();} }
+function next(){ 
+    idx++; 
+    if(idx < images.length){
+        const slideImg = document.getElementById("slide");
+        const capText = document.getElementById("caption");
+        
+        // Exit
+        slideImg.classList.add("photo-transition");
+        capText.style.opacity = "0";
+        
+        setTimeout(() => {
+            // Update
+            slideImg.src = images[idx];
+            capText.innerHTML = captions[idx];
+            
+            // Random Tilt
+            const randomTilt = (Math.random() * 8 - 4).toFixed(2);
+            slideImg.style.transform = `rotate(${randomTilt}deg)`;
+            
+            // Enter
+            slideImg.classList.remove("photo-transition");
+            capText.style.opacity = "1";
+        }, 300);
+    } else {
+        showGallery();
+    } 
+}
+
 function showGallery(){ show('gallery'); pgrid.innerHTML=""; images.forEach(src=>{let img=document.createElement("img"); img.src=src; pgrid.appendChild(img);}); }
 
 let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4","WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4","WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4","WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"];
