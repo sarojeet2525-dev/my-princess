@@ -16,7 +16,7 @@ body {
 
 h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
 
-/* --- NEW CINEMATIC TRANSITION STYLES --- */
+/* --- CINEMATIC TRANSITION STYLES --- */
 #pageTransition {
     position: fixed; inset: 0; background: black; z-index: 99999;
     display: none; flex-direction: column; align-items: center; justify-content: center;
@@ -104,7 +104,7 @@ h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; text-shadow: 2px
     100% { transform: translateY(120vh) rotate(720deg); opacity: 0; } 
 }
 
-/* --- FIRST PAGE: GLASSMORPHISM --- */
+/* --- GLASSMORPHISM --- */
 .welcome-box {
     background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);
     padding: 30px; border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.4);
@@ -212,7 +212,7 @@ button{
         <div class="credit-job">LOCATION</div>
         <div class="credit-name">IN OUR HEARTS</div>
         <div class="credit-job">SOUNDTRACK</div>
-        <div class="credit-name">PERFECT - ED SHEERAN</div>
+        <div class="credit-name">PERFECT - MY WIFEEE</div>
     </div>
     <div id="finalEnd">THE END</div>
 </div>
@@ -253,7 +253,7 @@ button{
 <div id="message" class="screen hidden">
     <h2 id="typedMsg"></h2>
     <div id="togetherTimer" style="background:rgba(255,255,255,0.3); padding:15px; border-radius:15px; font-size:0.9rem; font-weight:600;"></div>
-    <button onclick="transitionTo('videos', 'OUR MOMENTS IN MOTION')">Videos 🎬</button>
+    <button onclick="startVideos()">Videos 🎬</button>
 </div>
 
 <div id="videos" class="screen hidden">
@@ -311,7 +311,7 @@ button{
             <p style="font-size: 0.9rem; line-height: 1.5; color: #fff; margin-bottom: 20px;">
                 This page is our little secret corner. Whenever you miss me or want to smile, just open this again. You are my forever, Anu. 💍
             </p>
-            <button onclick="playOutro()" style="background: gold; color: black; border: 2px solid white;">The End ✨</button>
+            <button onclick="playOutro()" style="background: gold; color: black; border: 2px solid white;">Tap to see the Perfect End✨</button>
             <button id="restartBtn" style="background:#ff4e50; color:white; border: 2px solid white; font-size: 0.8rem;" onclick="restart()">Watch Memories Again 🔄</button>
         </div>
     </div>
@@ -342,7 +342,6 @@ let captions = [
     "Love you to the moon and back! 🌛"
 ];
 
-// --- NEW TRANSITION LOGIC ---
 function transitionTo(nextScreenId, text) {
     const trans = document.getElementById("pageTransition");
     const transText = document.getElementById("transitionText");
@@ -402,7 +401,6 @@ function show(id){
     if(id==='message') typeWriter("Abhi kahani khatam nahi hui meri princess… 💖", "typedMsg");
 }
 
-/* --- MOVIE INTRO LOGIC --- */
 function startIntro() {
     music.play().catch(()=>{});
     document.body.style.background = "#000";
@@ -458,10 +456,46 @@ function showGallery(){
     }); 
 }
 
-let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4","WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4","WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4","WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"];
+// --- UPDATED VIDEO LOGIC ---
+let vids=["WhatsApp Video 2026-02-03 at 2.06.15 PM.mp4","WhatsApp Video 2026-02-03 at 2.07.12 PM.mp4","WhatsApp Video 2026-02-03 at 2.06.17 PM.mp4","WhatsApp Video 2026-02-09 at 1.15.25 AM.mp4","WhatsApp Video 2026-02-03 at 2.23.03 PM.mp4"];
 let curV=0;
-function startVideos(){ curV=0; show('videos'); loadV(); }
-function loadV(){ let v=document.getElementById("mainVideo"); curV<4?music.pause():music.play(); v.src=vids[curV]; v.load(); }
+
+function startVideos(){ 
+    curV=0; 
+    show('videos'); // Show video screen instantly (No Transition)
+    
+    let v=document.getElementById("mainVideo");
+    v.pause();
+    v.src = ""; // Clear existing
+    v.load();
+    
+    // Tiny delay to ensure screen is active before playing
+    setTimeout(() => {
+        loadV();
+    }, 150);
+}
+
+function loadV(){ 
+    let v=document.getElementById("mainVideo"); 
+    // Handle background music
+    if(curV < 4) {
+        music.pause();
+    } else {
+        music.play();
+    }
+
+    v.src = vids[curV];
+    v.load(); 
+    
+    // Explicitly play with a promise check
+    let playPromise = v.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(() => {
+            v.controls = true; // Show controls if autoplay is blocked
+        });
+    }
+}
+
 function nextVideo() { curV++; if(curV < vids.length) { loadV(); } else { transitionTo('letter1', 'PEHLE KUCH BAATIEN'); } }
 
 function signLetter(){ document.getElementById("signatureArea").style.opacity="1"; document.getElementById("signBtn").style.display="none"; document.getElementById("nextBtn").classList.remove("hidden"); }
@@ -535,4 +569,3 @@ setInterval(()=>{
 </script>
 </body>
 </html>
-
